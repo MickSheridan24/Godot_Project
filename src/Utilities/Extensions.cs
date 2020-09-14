@@ -26,4 +26,27 @@ public static class Extensions
     {
         return vector.InBounds(new Vector2(-1 * mapSize, -1 * mapSize), new Vector2(mapSize, mapSize));
     }
+
+
+    public static int? GetKeyJustPressed(this InputEvent e)
+    {
+        var keyEvent = (e as InputEventKey);
+        if (keyEvent != null && keyEvent.Pressed && !keyEvent.IsEcho())
+        {
+            return keyEvent.Scancode;
+        }
+        return -1;
+    }
+
+    public static int? GetAlphaOrSpaceJustPressed(this InputEvent e)
+    {
+        var key = e.GetKeyJustPressed();
+
+        if ((key >= 65 && key <= 90) || key == 32)
+        {
+            GD.Print(key);
+            return key;
+        }
+        else return -1;
+    }
 }

@@ -19,6 +19,14 @@ public class World : Node2D
         mapHandler.tiles.ForEach(t => tilemap.SetCellv(t.coordsM, GetTileId(t.tileType)));
     }
 
+    public override void _Process(float delta)
+    {
+        var globalPosition = GetGlobalMousePosition();
+        var corner = tilemap.MapToWorld(tilemap.WorldToMap(globalPosition));
+
+        runtime.hoveredCell = corner;
+    }
+
     public override void _UnhandledInput(InputEvent @event)
     {
         if ((@event as InputEventMouseButton)?.ButtonIndex == (int)ButtonList.Left

@@ -51,6 +51,8 @@
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="src\Nodes\Main.cs" />
+    <Compile Include="src\Nodes\SpellHandler.cs" />
+    <Compile Include="src\Nodes\UI.cs" />
     <Compile Include="src\Nodes\Wizard.cs" />
     <Compile Include="src\Nodes\World.cs" />
     <Compile Include="src\Nodes\PhysicsHelpers\Moveable.cs" />
@@ -60,9 +62,11 @@
     <Compile Include="src\Utilities\Extensions.cs" />
     <Compile Include="src\StateManagement\Runtime.cs" />
     <Compile Include="src\StateManagement\WizardState.cs" />
+    <Compile Include="src\StateManagement\UIState.cs" />
     <Compile Include="src\Interfaces\ISelectable.cs" />
     <Compile Include="src\Interfaces\IHaveRuntime.cs" />
     <Compile Include="src\Interfaces\IMove.cs" />
+    <Compile Include="src\UILogic\UITheme.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
 </Project>

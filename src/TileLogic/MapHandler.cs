@@ -67,18 +67,21 @@ public class MapHandler
         {
             return tiles.Find(t => t.coordsM == v);
         });
-
-        foreach (var tile in grassyTiles)
+        if (grassyTiles.Count() > 0)
         {
-            tile.tileType = eTileType.GRASS;
+            foreach (var tile in grassyTiles)
+            {
+                tile.tileType = eTileType.GRASS;
+            }
         }
+
     }
 
     private List<Vector2> GetRandomizedExpandedTerrain(Vector2 o)
     {
         var retList = new List<Vector2>();
 
-        var certainty = 10000;
+        var certainty = 1000;
 
         var current = o;
         while (certainty > 0)
