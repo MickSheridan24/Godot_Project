@@ -11,6 +11,8 @@ public class Runtime
     public Vector2 hoveredCell;
     public CastManager castManager { get; set; }
 
+    public SpellTarget currentTarget { get; set; }
+
     public bool IsCasting;
 
     public Runtime()
@@ -56,7 +58,7 @@ public class Runtime
         }
     }
 
-    public Spell GetCurrentSpell()
+    public ISpell GetCurrentSpell()
     {
         return castManager?.currentSpell ?? null;
     }
@@ -65,9 +67,15 @@ public class Runtime
         var result = castManager.UpdateCast(key);
         if (result.complete)
         {
-            GD.Print(result.Spell.name + " Cast");
-            ToggleCasting(false);
+            CompleteCast(result);
+
         }
         return result;
+    }
+    private void CompleteCast(SpellCastResult result)
+    {
+        GD.Print(result.Spell.name + " Cast");
+        ToggleCasting(false);
+        result.Spell.Cast(wizardNode, currentTarget);
     }
 }

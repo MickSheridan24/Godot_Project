@@ -51,6 +51,7 @@
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="src\Nodes\Main.cs" />
+    <Compile Include="src\Nodes\SimpleProjectile.cs" />
     <Compile Include="src\Nodes\SpellHandler.cs" />
     <Compile Include="src\Nodes\UI.cs" />
     <Compile Include="src\Nodes\Wizard.cs" />
@@ -65,11 +66,17 @@
     <Compile Include="src\StateManagement\UIState.cs" />
     <Compile Include="src\StateManagement\CastManager.cs" />
     <Compile Include="src\Models\Spell.cs" />
+    <Compile Include="src\Models\Spells\FireballSpell.cs" />
     <Compile Include="src\Models\SpellCastResult.cs" />
+    <Compile Include="src\Models\SpellTarget.cs" />
+    <Compile Include="src\Models\ProjectileEntity.cs" />
     <Compile Include="src\Interfaces\ISelectable.cs" />
+    <Compile Include="src\Interfaces\ISpells.cs" />
     <Compile Include="src\Interfaces\IHaveRuntime.cs" />
     <Compile Include="src\Interfaces\IMove.cs" />
+    <Compile Include="src\Interfaces\ITarget.cs" />
     <Compile Include="src\UILogic\UITheme.cs" />
+    <Compile Include="src\UILogic\SpriteTheme.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
 </Project>

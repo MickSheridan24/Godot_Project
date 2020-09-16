@@ -6,26 +6,16 @@ public class WizardState
 {
     internal Vector2 moveSpeed;
 
-    public List<Spell> KnownSpells { get; set; }
+    public List<ISpell> KnownSpells { get; set; }
 
     public WizardState()
     {
         moveSpeed = new Vector2(5, 5);
-        KnownSpells = new List<Spell>();
-        KnownSpells.Add(new Spell
-        {
-            text = "HELLO SPELLBOOK",
-            name = "Test"
-        });
+        KnownSpells = new List<ISpell>();
 
-        KnownSpells.Add(new Spell
-        {
-            text = "HELLOO SPELLBOOK",
-            name = "Test2"
-        });
+        KnownSpells.Add(new FireballSpell());
     }
-
-    internal List<Spell> GetAllUnlockedSpells()
+    internal List<ISpell> GetAllUnlockedSpells()
     {
         return KnownSpells;
     }

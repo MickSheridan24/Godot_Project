@@ -5,8 +5,8 @@ public class CastManager
 {
     public string currentCast { get; set; }
     public WizardState wizard { get; set; }
-    public Spell currentSpell { get; set; }
-    public List<Spell> currentSpells { get; set; }
+    public ISpell currentSpell { get; set; }
+    public List<ISpell> currentSpells { get; set; }
 
     public CastManager(WizardState wiz)
     {
@@ -41,14 +41,14 @@ public class CastManager
         };
     }
 
-    private void UpdateCurrentSpellState(IEnumerable<Spell> proposedSpells, string proposedCast)
+    private void UpdateCurrentSpellState(IEnumerable<ISpell> proposedSpells, string proposedCast)
     {
         currentSpells = proposedSpells.ToList();
         currentSpell = currentSpells.Contains(currentSpell) ? currentSpell : currentSpells.First();
         currentCast = proposedCast;
     }
 
-    private IEnumerable<Spell> NarrowSpells(string proposedCast)
+    private IEnumerable<ISpell> NarrowSpells(string proposedCast)
     {
         return currentSpells.Where(s => s.text.Contains(proposedCast));
     }

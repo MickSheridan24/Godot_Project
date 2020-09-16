@@ -9,7 +9,7 @@ public class SpellHandler : Control
     public Label spellName => GetNode<Label>("SpellName");
     public Label entireText => GetNode<Label>("SpellText/EntireText");
     public Label completedText => GetNode<Label>("SpellText/EntireText/CompletedText");
-    public Spell currentSpell => runtime.GetCurrentSpell();
+    public ISpell currentSpell => runtime.GetCurrentSpell();
     public UITheme theme;
 
     public override void _Ready()

@@ -10,7 +10,7 @@ public class Moveable
 
     public void HandleMove()
     {
-        if (subject.Position != subject.destination)
+        if (subject.Position != subject.destination && subject.CanMove())
         {
             if (subject.Position.WithinRange(subject.destination, subject.speed))
             {
