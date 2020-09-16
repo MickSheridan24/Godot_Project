@@ -6,21 +6,32 @@ public class SpellHandler : Control
 
     public Runtime runtime => GetParent<IHaveRuntime>().runtime;
     public ColorRect panel => GetNode<ColorRect>("ColorRect");
-    public Label textPanel => GetNode<Label>("SpellText");
+    public Label spellName => GetNode<Label>("SpellName");
+    public Label entireText => GetNode<Label>("SpellText/EntireText");
+    public Label completedText => GetNode<Label>("SpellText/EntireText/CompletedText");
+    public Spell currentSpell => runtime.GetCurrentSpell();
     public UITheme theme;
 
     public override void _Ready()
     {
         theme = new UITheme();
         panel.Color = theme.cPrimary;
-        textPanel.Set("custom_colors/font_color", theme.cAccent);
+
+        entireText.Set("custom_colors/font_color", theme.cAccent);
+        completedText.Set("custom_colors/font_color", theme.cBlue);
     }
 
     public override void _Process(float f)
     {
-        if (runtime.IsCasting != Visible)
+        Visible = runtime.IsCasting;
+        if (Visible)
         {
-            Visible = runtime.IsCasting;
+            entireText.Text = currentSpell.text;
+            spellName.Text = currentSpell.name;
+        }
+        else
+        {
+            completedText.Text = "";
         }
     }
 
@@ -31,10 +42,25 @@ public class SpellHandler : Control
             var key = e.GetAlphaOrSpaceJustPressed();
             if (key != -1)
             {
-                GD.Print(e.AsText());
-                textPanel.Text += key == (int)KeyList.Space ? " " : e.AsText();
+                HandleKeyPress(GetKey(key, e));
             }
         }
+    }
 
+    private string GetKey(int keyCode, InputEvent e)
+    {
+        return keyCode == (int)KeyList.Space ? " " : e.AsText();
+    }
+    private void HandleKeyPress(string key)
+    {
+        var result = runtime.UpdateCast(key);
+        if (result.success)
+        {
+            completedText.Text = result.text;
+        }
+        if (result.complete)
+        {
+            completedText.Text = "";
+        }
     }
 }

@@ -9,6 +9,8 @@ public class Runtime
     public UIState UIState { get; }
     public UI UINode;
     public Vector2 hoveredCell;
+    public CastManager castManager { get; set; }
+
     public bool IsCasting;
 
     public Runtime()
@@ -33,9 +35,39 @@ public class Runtime
         UINode = ui;
     }
 
+    public void InitCast()
+    {
+        castManager = new CastManager(WizardState);
+    }
     public void ToggleCasting()
     {
-        IsCasting = !IsCasting;
-        GD.Print("TOGGLE ", IsCasting);
+        ToggleCasting(!IsCasting);
+    }
+    public void ToggleCasting(bool value)
+    {
+        IsCasting = value;
+        if (IsCasting)
+        {
+            InitCast();
+        }
+        if (!IsCasting)
+        {
+            castManager = null;
+        }
+    }
+
+    public Spell GetCurrentSpell()
+    {
+        return castManager?.currentSpell ?? null;
+    }
+    public SpellCastResult UpdateCast(string key)
+    {
+        var result = castManager.UpdateCast(key);
+        if (result.complete)
+        {
+            GD.Print(result.Spell.name + " Cast");
+            ToggleCasting(false);
+        }
+        return result;
     }
 }

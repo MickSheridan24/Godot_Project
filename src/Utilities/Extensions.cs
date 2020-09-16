@@ -28,7 +28,7 @@ public static class Extensions
     }
 
 
-    public static int? GetKeyJustPressed(this InputEvent e)
+    public static int GetKeyJustPressed(this InputEvent e)
     {
         var keyEvent = (e as InputEventKey);
         if (keyEvent != null && keyEvent.Pressed && !keyEvent.IsEcho())
@@ -38,13 +38,13 @@ public static class Extensions
         return -1;
     }
 
-    public static int? GetAlphaOrSpaceJustPressed(this InputEvent e)
+    public static int GetAlphaOrSpaceJustPressed(this InputEvent e)
     {
         var key = e.GetKeyJustPressed();
 
         if ((key >= 65 && key <= 90) || key == 32)
         {
-            GD.Print(key);
+            GD.Print(key + "--" + e.AsText());
             return key;
         }
         else return -1;

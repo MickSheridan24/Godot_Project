@@ -63,6 +63,9 @@
     <Compile Include="src\StateManagement\Runtime.cs" />
     <Compile Include="src\StateManagement\WizardState.cs" />
     <Compile Include="src\StateManagement\UIState.cs" />
+    <Compile Include="src\StateManagement\CastManager.cs" />
+    <Compile Include="src\Models\Spell.cs" />
+    <Compile Include="src\Models\SpellCastResult.cs" />
     <Compile Include="src\Interfaces\ISelectable.cs" />
     <Compile Include="src\Interfaces\IHaveRuntime.cs" />
     <Compile Include="src\Interfaces\IMove.cs" />
