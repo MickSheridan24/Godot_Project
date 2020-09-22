@@ -9,14 +9,13 @@ public class FireballSpell : Spell, ISpell
         type = eSpell.FIREBALL;
         text = "FIREBALL";
     }
-    public void Cast(Wizard caster, SpellTarget target)
+    public void Cast(Wizard caster, ITarget target)
     {
-        var projectileDetails = new ProjectileEntity()
+        var targetPos = target?.GetTargetPosition() ?? caster.position + new Vector2(1, 1);
+        var projectileDetails = new FireballProjectile()
         {
-            projectileType = eProjectileType.FIREBALL,
-            speed = new Vector2(5, 5),
-            direction = caster.position.DirectionTo(target.GetPosition()),
-            maxDistance = new Vector2(200, 200)
+            direction = caster.Position.GetDirectionTo(target.GetTargetPosition()),
+            start = caster.position
         };
         caster.CreateProjectile(projectileDetails);
     }

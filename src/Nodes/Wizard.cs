@@ -10,11 +10,9 @@ public class Wizard : Node2D, ISelectable, IMove
     public WizardState state => runtime.WizardState;
     public Moveable moveable;
     private Sprite sprite => GetNode<Sprite>("Sprite");
-
     public Vector2 position => sprite.Position;
     private Color unselected => new Color("#a822dd");
     private Color selected => new Color("a866ff");
-
     public Vector2 destination { get; set; }
     public Vector2 speed => state.moveSpeed;
 
@@ -52,10 +50,8 @@ public class Wizard : Node2D, ISelectable, IMove
     public void RightClick(InputEventMouseButton mouse)
     {
         SetDestination(mouse.Position);
-        SetTarget(mouse.Position);
+        SetTarget(new VectorTarget(mouse.Position));
     }
-
-
 
     //IMove
     public void HandleMove()
@@ -70,7 +66,7 @@ public class Wizard : Node2D, ISelectable, IMove
 
     //Projectile Creation
 
-    public void CreateProjectile(ProjectileEntity projectileDetails)
+    public void CreateProjectile(IProjectile projectileDetails)
     {
         switch (projectileDetails.projectileType)
         {
@@ -82,12 +78,13 @@ public class Wizard : Node2D, ISelectable, IMove
         }
     }
 
-    private void CreateSimpleProjectile(ProjectileEntity projectileDetails)
+    private void CreateSimpleProjectile(IProjectile projectileDetails)
     {
         var projectile = (SimpleProjectile)snSimpleProjectile.Instance();
-        projectile.Config(Position, projectileDetails);
+        projectile.Config(projectileDetails);
         AddChild(projectile);
     }
+
 
     //private
     private void OverrideSpriteColor(Color c)
@@ -98,13 +95,8 @@ public class Wizard : Node2D, ISelectable, IMove
     {
         destination = position;
     }
-    private void SetTarget(Vector2 position)
+    private void SetTarget(ITarget t)
     {
-        runtime.currentTarget = new SpellTarget()
-        {
-            vTarget = position,
-            isVTarget = true
-        };
+        runtime.currentTarget = t;
     }
-
 }

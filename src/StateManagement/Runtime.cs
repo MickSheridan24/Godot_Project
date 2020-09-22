@@ -9,9 +9,17 @@ public class Runtime
     public UIState UIState { get; }
     public UI UINode;
     public Vector2 hoveredCell;
+    public Vector2 MousePosition { get; set; }
     public CastManager castManager { get; set; }
 
-    public SpellTarget currentTarget { get; set; }
+    public EnemyState CreateEnemyState(Enemy enemy)
+    {
+        var AI = new PatrolAI(enemy, new Vector2(-1, 0), new Vector2(300, 300));
+        return new EnemyState(AI, enemy);
+    }
+
+    public ITarget currentTarget { get; set; }
+    public Debug Debug { get; set; }
 
     public bool IsCasting;
 
@@ -25,6 +33,11 @@ public class Runtime
     public void SelectWizard()
     {
         currentSelection = wizardNode;
+    }
+
+    internal string GetMousePos()
+    {
+        throw new NotImplementedException();
     }
 
     public void RegisterWizard(Wizard wizard)

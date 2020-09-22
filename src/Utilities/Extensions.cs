@@ -6,7 +6,7 @@ public static class Extensions
         return new Vector2(32, 32);
     }
 
-    public static Vector2 DirectionTo(this Vector2 vector, Vector2 dest)
+    public static Vector2 GetDirectionTo(this Vector2 vector, Vector2 dest)
     {
         return (dest - vector).Normalized();
     }
