@@ -18,6 +18,7 @@ public class Main : Node2D, IHaveRuntime
     {
         runtime.MousePosition = GetGlobalMousePosition();
     }
+
     public override void _Input(InputEvent @event)
     {
         if ((@event as InputEventMouseButton)?.ButtonIndex == (int)ButtonList.Right && @event.IsPressed() &&

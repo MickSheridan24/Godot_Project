@@ -36,15 +36,6 @@ public class Wizard : Node2D, ISelectable, IMove, IHaveRuntime
         HandleMove();
     }
 
-    //signal handlers
-    public void _onInputEvent(Node n, InputEvent @event, int idx)
-    {
-        if (@event is InputEventMouseButton && (@event as InputEventMouseButton).ButtonIndex == (int)ButtonList.Left)
-        {
-            runtime.currentSelection = this;
-        }
-    }
-
     //ISelectable
     public void Select()
     {
@@ -77,6 +68,9 @@ public class Wizard : Node2D, ISelectable, IMove, IHaveRuntime
             case eProjectileType.FIREBALL:
                 CreateSimpleProjectile(projectileDetails);
                 break;
+            case eProjectileType.LIGHTNING:
+                CreateSimpleProjectile(projectileDetails);
+                break;
             default:
                 break;
         }
@@ -85,7 +79,7 @@ public class Wizard : Node2D, ISelectable, IMove, IHaveRuntime
     private void CreateSimpleProjectile(IProjectile projectileDetails)
     {
         var projectile = (SimpleProjectile)snSimpleProjectile.Instance();
-        projectile.Config(projectileDetails);
+        projectile.Config(projectileDetails, this);
         AddChild(projectile);
     }
 

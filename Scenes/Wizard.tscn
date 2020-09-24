@@ -24,4 +24,3 @@ shape = SubResource( 1 )
 [node name="AimLine" type="Node2D" parent="."]
 z_index = 1
 script = ExtResource( 3 )
-[connection signal="input_event" from="Area2D" to="." method="_onInputEvent"]

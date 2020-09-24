@@ -8,6 +8,5 @@ public class Spell
 public enum eSpell
 {
     FIREBALL,
-    TEST1,
-    TEST2
+    LIGHTNING
 }

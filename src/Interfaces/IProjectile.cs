@@ -8,9 +8,12 @@ public interface IProjectile
     Vector2 start { get; set; }
     Vector2 maxDistance { get; set; }
 
+    void HandleImpact(Area2D area, IProjectileNode node);
+
 }
 
 public enum eProjectileType
 {
-    FIREBALL
+    FIREBALL,
+    LIGHTNING
 }
