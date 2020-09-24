@@ -19,6 +19,12 @@ config/name="Mavisithor_Beaconizath"
 run/main_scene="res://Scenes/Main.tscn"
 config/icon="res://icon.png"
 
+[display]
+
+window/size/width=1800
+window/size/height=1000
+window/size/resizable=false
+
 [rendering]
 
 environment/default_environment="res://default_env.tres"

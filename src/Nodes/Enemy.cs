@@ -1,7 +1,7 @@
 using Godot;
 using System;
 
-public class Enemy : Node2D, IMove, IProjectileTarget
+public class Enemy : Node2D, IMove, ITarget, IProjectileTarget, IHaveRuntime
 {
 
     public Sprite sprite => GetNode<Sprite>("Sprite");
@@ -14,12 +14,16 @@ public class Enemy : Node2D, IMove, IProjectileTarget
     public Vector2 destination { get; set; }
 
     public Vector2 speed => new Vector2(5, 5);
+    public bool MovingTarget { get; set; }
+    private Highlight highlight => GetNode<Highlight>("Highlight");
 
     public override void _Ready()
     {
         destination = Position;
         sprite.Modulate = new SpriteTheme().cEnemy;
         moveable = new Moveable(this);
+        MovingTarget = true;
+        highlight.position = Vector2.Zero;
     }
 
     public override void _Process(float d)
@@ -29,6 +33,20 @@ public class Enemy : Node2D, IMove, IProjectileTarget
             state = runtime.CreateEnemyState(this);
         }
         state.RequestAction().Execute();
+        highlight.Visible = runtime.currentTarget == this;
+    }
+
+
+    public override void _Input(InputEvent e)
+    {
+        var rClick = (e as InputEventMouseButton);
+        if (rClick?.ButtonIndex == (int)ButtonList.Right && rClick.IsPressed() &&
+        runtime.currentSelection != null && !rClick.IsEcho() && rClick.Position.InBounds(Position - new Vector2(16, 16), Position + new Vector2(16, 16)))
+        {
+            runtime.currentTarget = this;
+            GetTree().SetInputAsHandled();
+        }
+
     }
 
     public void HandleMove()
@@ -72,4 +90,10 @@ public class Enemy : Node2D, IMove, IProjectileTarget
         }
     }
 
+
+    //ITarget
+    public Vector2 GetTargetPosition()
+    {
+        return Position;
+    }
 }

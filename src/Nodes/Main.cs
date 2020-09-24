@@ -5,14 +5,13 @@ public class Main : Node2D, IHaveRuntime
 {
     public Runtime runtime { get; set; }
     public Wizard wizard => GetNode<Wizard>("Wizard");
-    public UI UI => GetNode<UI>("UI");
-    public Debug debug => GetNode<Debug>("Debug");
+    public World World => GetNode<World>("World");
+
     public override void _Ready()
     {
         runtime = new Runtime();
         runtime.RegisterWizard(wizard);
-        runtime.RegisterUI(UI);
-        runtime.Debug = debug;
+        runtime.RegisterWorld(World);
     }
 
     public override void _Process(float d)
@@ -21,12 +20,14 @@ public class Main : Node2D, IHaveRuntime
     }
     public override void _Input(InputEvent @event)
     {
-        if ((@event as InputEventMouseButton)?.ButtonIndex == (int)ButtonList.Right &&
-            runtime.currentSelection != null)
+        if ((@event as InputEventMouseButton)?.ButtonIndex == (int)ButtonList.Right && @event.IsPressed() &&
+      runtime.currentSelection != null && !@event.IsEcho())
         {
+            runtime.currentTarget = null;
             runtime.currentSelection.RightClick(@event as InputEventMouseButton);
         }
-        else if (@event.GetKeyJustPressed() == (int)KeyList.Space && !runtime.IsCasting)
+
+        if (@event.GetKeyJustPressed() == (int)KeyList.Space && !runtime.IsCasting)
         {
             runtime.SelectWizard();
         }

@@ -2,13 +2,15 @@ using Godot;
 using System;
 using System.Linq;
 
-public class World : Node2D
+public class World : Node2D, IHaveRuntime
 {
     private TileMap tilemap => GetNode("TileMap") as TileMap;
     private TileSet tileSet => tilemap.Get("tile_set") as TileSet;
     public Runtime runtime => GetParent<IHaveRuntime>().runtime;
     private TileTheme theme;
     private MapHandler mapHandler;
+    public VectorTarget targetPosition { get; set; }
+    private Highlight highlight => GetNode<Highlight>("Highlight");
     public override void _Ready()
     {
         mapHandler = new MapHandler();
@@ -25,6 +27,15 @@ public class World : Node2D
         var corner = tilemap.MapToWorld(tilemap.WorldToMap(globalPosition));
 
         runtime.hoveredCell = corner;
+
+        highlight.Visible = runtime?.currentTarget == targetPosition;
+
+        if (highlight.position != targetPosition?.GetTargetPosition())
+        {
+            highlight.position = targetPosition?.GetTargetPosition() ?? Vector2.Zero;
+            highlight.Update();
+        }
+
     }
 
     public override void _UnhandledInput(InputEvent @event)

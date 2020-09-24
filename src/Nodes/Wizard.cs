@@ -1,13 +1,14 @@
 using Godot;
 using System;
 
-public class Wizard : Node2D, ISelectable, IMove
+public class Wizard : Node2D, ISelectable, IMove, IHaveRuntime
 {
 
     //props
 
     public Runtime runtime => GetParent<IHaveRuntime>().runtime;
     public WizardState state => runtime.WizardState;
+    public AimLine aimLine => GetNode<AimLine>("AimLine");
     public Moveable moveable;
     private Sprite sprite => GetNode<Sprite>("Sprite");
     public Vector2 position => sprite.Position;
@@ -30,6 +31,8 @@ public class Wizard : Node2D, ISelectable, IMove
 
         OverrideSpriteColor(runtime.currentSelection == this ? selected : unselected);
 
+        aimLine.dest = runtime?.currentTarget?.GetTargetPosition() ?? Vector2.Zero;
+        aimLine.Update();
         HandleMove();
     }
 
@@ -49,8 +52,9 @@ public class Wizard : Node2D, ISelectable, IMove
     }
     public void RightClick(InputEventMouseButton mouse)
     {
-        SetDestination(mouse.Position);
-        SetTarget(new VectorTarget(mouse.Position));
+        var dest = GetGlobalMousePosition();
+        SetDestination(dest);
+        runtime.SetWorldTarget(dest);
     }
 
     //IMove

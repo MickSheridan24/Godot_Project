@@ -12,14 +12,10 @@ public class Runtime
     public Vector2 MousePosition { get; set; }
     public CastManager castManager { get; set; }
 
-    public EnemyState CreateEnemyState(Enemy enemy)
-    {
-        var AI = new PatrolAI(enemy, new Vector2(-1, 0), new Vector2(300, 300));
-        return new EnemyState(AI, enemy);
-    }
 
     public ITarget currentTarget { get; set; }
-    public Debug Debug { get; set; }
+    public DebugInfo Debug { get; set; }
+    public World World { get; private set; }
 
     public bool IsCasting;
 
@@ -29,15 +25,14 @@ public class Runtime
         this.UIState = new UIState();
     }
 
-
+    public EnemyState CreateEnemyState(Enemy enemy)
+    {
+        var AI = new PatrolAI(enemy, new Vector2(-1, 0), new Vector2(300, 300));
+        return new EnemyState(AI, enemy);
+    }
     public void SelectWizard()
     {
         currentSelection = wizardNode;
-    }
-
-    internal string GetMousePos()
-    {
-        throw new NotImplementedException();
     }
 
     public void RegisterWizard(Wizard wizard)
@@ -71,6 +66,17 @@ public class Runtime
         }
     }
 
+    public void RegisterWorld(World world)
+    {
+        this.World = world;
+    }
+
+    public void SetWorldTarget(Vector2 position)
+    {
+        currentTarget = new VectorTarget(position);
+        World.targetPosition = (VectorTarget)currentTarget;
+    }
+
     public ISpell GetCurrentSpell()
     {
         return castManager?.currentSpell ?? null;
@@ -85,6 +91,7 @@ public class Runtime
         }
         return result;
     }
+
     private void CompleteCast(SpellCastResult result)
     {
         GD.Print(result.Spell.name + " Cast");

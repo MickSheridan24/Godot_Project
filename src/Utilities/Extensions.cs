@@ -22,6 +22,7 @@ public static class Extensions
         return vector.x >= low.x && vector.y >= low.y && vector.x < high.x && vector.y < high.y;
     }
 
+
     public static bool InMap(this Vector2 vector, int mapSize)
     {
         return vector.InBounds(new Vector2(-1 * mapSize, -1 * mapSize), new Vector2(mapSize, mapSize));

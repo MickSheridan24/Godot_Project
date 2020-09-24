@@ -66,8 +66,8 @@ public class MapHandler
         var grassyTiles = grassyVectors.Select(v =>
         {
             return tiles.Find(t => t.coordsM == v);
-        });
-        if (grassyTiles.Count() > 0)
+        }).ToList();
+        if (grassyTiles.Count > 0)
         {
             foreach (var tile in grassyTiles)
             {
