@@ -11,11 +11,13 @@ public class Runtime
     public Vector2 hoveredCell;
     public Vector2 MousePosition { get; set; }
     public CastManager castManager { get; set; }
-
-
-    public ITarget currentTarget { get; set; }
+    public ITarget currentTarget => targeting.target;
     public DebugInfo Debug { get; set; }
     public World World { get; private set; }
+
+
+
+    private TargetingSystem targeting;
 
     public bool IsCasting;
 
@@ -23,6 +25,12 @@ public class Runtime
     {
         this.WizardState = new WizardState();
         this.UIState = new UIState();
+        targeting = new TargetingSystem();
+    }
+
+    public void ClearTarget()
+    {
+        targeting.RemoveTarget();
     }
 
     public EnemyState CreateEnemyState(Enemy enemy)
@@ -38,6 +46,7 @@ public class Runtime
     public void RegisterWizard(Wizard wizard)
     {
         wizardNode = wizard;
+        targeting.targeter = wizardNode;
     }
 
     public void RegisterUI(UI ui)
@@ -45,9 +54,22 @@ public class Runtime
         UINode = ui;
     }
 
+    public Vector2? currentTargetPosition()
+    {
+        if (currentTarget != null)
+        {
+            return currentTarget.GetTargetPosition();
+        }
+        else
+        {
+            return null;
+        }
+    }
+
     public void InitCast()
     {
         castManager = new CastManager(WizardState);
+        wizardNode.destination = wizardNode.Position;
     }
     public void ToggleCasting()
     {
@@ -73,8 +95,12 @@ public class Runtime
 
     public void SetWorldTarget(Vector2 position)
     {
-        currentTarget = new VectorTarget(position);
-        World.targetPosition = (VectorTarget)currentTarget;
+        targeting.SetTarget(new VectorTarget(position));
+    }
+
+    public void SetTarget(ITarget t)
+    {
+        targeting.SetTarget(t);
     }
 
     public ISpell GetCurrentSpell()
@@ -98,4 +124,15 @@ public class Runtime
         ToggleCasting(false);
         result.Spell.Cast(wizardNode, currentTarget);
     }
+
+
+}
+
+public enum eCollisionLayers
+{
+    ENTITY = 0,
+    HOSTILE = 1,
+    FRIENDLY = 2,
+    INERT = 3,
+    INTANGIBLE = 4
 }

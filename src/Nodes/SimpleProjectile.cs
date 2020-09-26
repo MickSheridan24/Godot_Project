@@ -1,48 +1,76 @@
 using Godot;
 using System;
 
-public class SimpleProjectile : Area2D, IProjectileNode
+public class SimpleProjectile : KinematicBody2D, IProjectileNode, IMove
 {
-    private IProjectile details;
-    private Wizard caster;
+    private IProjectile state;
+    public ICaster caster { get; set; }
+    public Runtime runtime => GetParent<IHaveRuntime>().runtime;
     public eProjectileType projectileType { get; private set; }
-    public Vector2 speed => details.speed;
-    public Vector2 direction => details.direction;
-    public Vector2 maxDistance => details.maxDistance;
+    public Vector2 speed { get; set; }
+    public Vector2 direction { get; set; }
+    public Vector2 range { get; set; }
     public Sprite sprite => GetNode<Sprite>("Sprite");
+    public RayCast2D raycast => GetNode<RayCast2D>("RayCast2D");
     public SpriteTheme theme => new SpriteTheme();
+
+    public Vector2 destination { get; set; }
+
+
     private Vector2 remainingDistance;
+    private Moveable moveable;
 
-    public void Config(IProjectile projectileDetails, Wizard wiz)
+    public void Config(IProjectile projectileDetails, ICaster wiz)
     {
+        projectileDetails.node = this;
+
+
+
         Position = projectileDetails.start;
-        details = projectileDetails;
+        state = projectileDetails;
+
+        speed = state.speed;
+        direction = state.direction;
+        range = state.range;
+
         projectileType = projectileDetails.projectileType;
-        remainingDistance = maxDistance;
+        remainingDistance = range;
+
         caster = wiz;
-        UpdateSprite();
+
+        projectileDetails.ConfigureNode();
+
     }
 
-    public override void _Process(float d)
+    public override void _PhysicsProcess(float d)
     {
+        destination = speed * direction;
         HandleMove();
+        HandleRayCast();
+        HandleOther();
     }
 
-    private void UpdateSprite()
+    private void HandleOther()
     {
-        switch (details.projectileType)
+        state.HandleProcess();
+    }
+
+    private void HandleRayCast()
+    {
+        if (raycast.IsColliding())
         {
-            case eProjectileType.FIREBALL:
-                sprite.Set("modulate", theme.cFireball);
-                break;
-            case eProjectileType.LIGHTNING:
-                sprite.Set("modulate", theme.cFireball);
-                break;
+            state.HandleRayCollision();
         }
     }
+
     private void HandleMove()
     {
-        Position = Position + (direction * speed);
+        var move = MoveAndCollide(destination);
+
+        if (move is KinematicCollision2D)
+        {
+            HandleCollision(move);
+        }
         remainingDistance -= speed;
         if (remainingDistance <= Vector2.Zero)
         {
@@ -51,13 +79,36 @@ public class SimpleProjectile : Area2D, IProjectileNode
     }
 
     //Signal Handlers 
-
-    public void _onAreaEntered(Area2D node)
+    public void HandleCollision(KinematicCollision2D collision)
     {
-        var isWizard = node.GetParent() as Wizard;
+        var isWizard = (collision.Collider as Area2D).GetParent() as Wizard;
         if (isWizard != caster)
         {
-            details.HandleImpact(node, this);
+            state.HandleImpact(collision.Collider as Area2D);
         }
+    }
+    public void _onBodyEntered(Area2D area)
+    {
+        var isWizard = area.GetParent() as Wizard;
+        if (isWizard != caster)
+        {
+            state.HandleImpact(area);
+        }
+    }
+
+
+    public void ExecQueueFree()
+    {
+        CallDeferred("free");
+    }
+
+    void IMove.HandleMove()
+    {
+        throw new NotImplementedException();
+    }
+
+    public bool CanMove()
+    {
+        return true;
     }
 }

@@ -1,7 +1,7 @@
 using Godot;
 using System;
 
-public class Wizard : Node2D, ISelectable, IMove, IHaveRuntime
+public class Wizard : Node2D, ISelectable, IMove, IHaveRuntime, ICaster
 {
 
     //props
@@ -11,11 +11,13 @@ public class Wizard : Node2D, ISelectable, IMove, IHaveRuntime
     public AimLine aimLine => GetNode<AimLine>("AimLine");
     public Moveable moveable;
     private Sprite sprite => GetNode<Sprite>("Sprite");
-    public Vector2 position => sprite.Position;
+    public Area2D body => GetNode<Area2D>("Area2D");
+    public Vector2 spritePosition => sprite.Position;
     private Color unselected => new Color("#a822dd");
     private Color selected => new Color("a866ff");
     public Vector2 destination { get; set; }
     public Vector2 speed => state.moveSpeed;
+
 
     private PackedScene snSimpleProjectile => (PackedScene)ResourceLoader.Load("res://scenes/SimpleProjectile.tscn");
 
@@ -31,7 +33,7 @@ public class Wizard : Node2D, ISelectable, IMove, IHaveRuntime
 
         OverrideSpriteColor(runtime.currentSelection == this ? selected : unselected);
 
-        aimLine.dest = runtime?.currentTarget?.GetTargetPosition() ?? Vector2.Zero;
+        aimLine.dest = runtime?.currentTargetPosition() ?? aimLine.dest;
         aimLine.Update();
         HandleMove();
     }
@@ -95,6 +97,6 @@ public class Wizard : Node2D, ISelectable, IMove, IHaveRuntime
     }
     private void SetTarget(ITarget t)
     {
-        runtime.currentTarget = t;
+        runtime.SetTarget(t);
     }
 }

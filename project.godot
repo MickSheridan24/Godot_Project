@@ -25,6 +25,19 @@ window/size/width=1800
 window/size/height=1000
 window/size/resizable=false
 
+[layer_names]
+
+2d_render/layer_1="Entities"
+2d_physics/layer_1="Entities"
+2d_render/layer_2="Hostile"
+2d_physics/layer_2="Hostile"
+2d_render/layer_3="Friendly"
+2d_physics/layer_3="Friendly"
+2d_render/layer_4="Inert"
+2d_physics/layer_4="Inert"
+2d_render/layer_5="Intangible"
+2d_physics/layer_5="Intangible"
+
 [rendering]
 
 environment/default_environment="res://default_env.tres"

@@ -6,6 +6,5 @@ public interface IMove
     Vector2 destination { get; set; }
     Vector2 speed { get; }
     void HandleMove();
-
     bool CanMove();
 }

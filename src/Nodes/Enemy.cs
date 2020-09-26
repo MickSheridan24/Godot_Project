@@ -1,7 +1,9 @@
 using Godot;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 
-public class Enemy : Node2D, IMove, ITarget, IProjectileTarget, IHaveRuntime
+public class Enemy : Node2D, IMove, ITarget, IProjectileTarget, IHaveRuntime, IConductElectricity, IFreeable, ISufferStatusEffects
 {
     public Sprite sprite => GetNode<Sprite>("Sprite");
     public Runtime runtime => GetParent<IHaveRuntime>().runtime;
@@ -10,7 +12,9 @@ public class Enemy : Node2D, IMove, ITarget, IProjectileTarget, IHaveRuntime
     public Vector2 destination { get; set; }
     public Vector2 speed => new Vector2(5, 5);
     public bool MovingTarget { get; set; }
+    public Area2D body => GetNode<Area2D>("Area2D");
     private Highlight highlight => GetNode<Highlight>("Highlight");
+    private int DamageStateCounter;
 
     public override void _Ready()
     {
@@ -19,16 +23,42 @@ public class Enemy : Node2D, IMove, ITarget, IProjectileTarget, IHaveRuntime
         moveable = new Moveable(this);
         MovingTarget = true;
         highlight.position = Vector2.Zero;
+        DamageStateCounter = 0;
+
     }
 
     public override void _Process(float d)
+    {
+        highlight.Visible = runtime.currentTarget == this;
+        InitState();
+        state.HandleStatuses();
+        HandleDamageCounter();
+        state.RequestAction().Execute();
+    }
+
+    private void InitState()
     {
         if (state == null)
         {
             state = runtime.CreateEnemyState(this);
         }
-        state.RequestAction().Execute();
-        highlight.Visible = runtime.currentTarget == this;
+    }
+
+    private void HandleDamageCounter()
+    {
+        if (DamageStateCounter > 0)
+        {
+
+            DamageStateCounter--;
+            if (DamageStateCounter <= 0)
+            {
+                body.SetCollisionLayerBit((int)eCollisionLayers.ENTITY, true);
+                body.SetCollisionLayerBit((int)eCollisionLayers.HOSTILE, true);
+                body.SetCollisionLayerBit((int)eCollisionLayers.INTANGIBLE, false);
+                sprite.Modulate = new SpriteTheme().cEnemy;
+            }
+
+        }
     }
 
     public override void _Input(InputEvent e)
@@ -38,7 +68,7 @@ public class Enemy : Node2D, IMove, ITarget, IProjectileTarget, IHaveRuntime
         if (rClick?.ButtonIndex == (int)ButtonList.Right && rClick.IsPressed() &&
         runtime.currentSelection != null && !rClick.IsEcho() && pos.InBounds(Position - new Vector2(25, 25), Position + new Vector2(25, 25)))
         {
-            runtime.currentTarget = this;
+            runtime.SetTarget(this);
             GetTree().SetInputAsHandled();
         }
     }
@@ -50,7 +80,7 @@ public class Enemy : Node2D, IMove, ITarget, IProjectileTarget, IHaveRuntime
 
     public bool CanMove()
     {
-        return true;
+        return state.CanMove();
     }
 
     //IProjectileTarget
@@ -70,18 +100,16 @@ public class Enemy : Node2D, IMove, ITarget, IProjectileTarget, IHaveRuntime
     }
 
 
-    private void TakeDamage(int damage)
+    public void TakeDamage(int damage)
     {
         if (!state.HandleDamage(damage))
         {
-            QueueFree();
+            ExecQueueFree();
         }
     }
     //SignalHandlers
-
-    public void _onBodyEntered(Area2D body)
+    public void _onBodyEntered(PhysicsBody2D body)
     {
-        GD.Print("HIT");
         if (body is SimpleProjectile)
         {
             HandleImpact(body as SimpleProjectile);
@@ -94,4 +122,33 @@ public class Enemy : Node2D, IMove, ITarget, IProjectileTarget, IHaveRuntime
     {
         return Position;
     }
+
+
+    //IConductElectricity
+
+    public void EnterDamageState(int amount = 5)
+    {
+        body.SetCollisionLayerBit((int)eCollisionLayers.ENTITY, false);
+        body.SetCollisionLayerBit((int)eCollisionLayers.HOSTILE, false);
+        body.SetCollisionLayerBit((int)eCollisionLayers.INTANGIBLE, true);
+        sprite.Modulate = new SpriteTheme().cEnemyHit;
+        DamageStateCounter = amount;
+    }
+
+    public void AddStatusEffect(IStatusEffect effect)
+    {
+        state.AddStatusEffect(effect);
+    }
+
+
+    public void ExecQueueFree()
+    {
+        if (runtime.currentTarget == this)
+        {
+            runtime.ClearTarget();
+        }
+
+        CallDeferred("free");
+    }
+
 }

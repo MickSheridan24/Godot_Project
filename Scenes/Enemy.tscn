@@ -5,7 +5,7 @@
 [ext_resource path="res://src/Nodes/Highlight.cs" type="Script" id=3]
 
 [sub_resource type="CircleShape2D" id=1]
-radius = 15.9796
+radius = 19.0432
 
 [node name="Enemy" type="Node2D"]
 script = ExtResource( 1 )
@@ -17,11 +17,13 @@ texture = ExtResource( 2 )
 region_enabled = true
 region_rect = Rect2( 0, 0, 32, 32 )
 
+[node name="Highlight" type="Node2D" parent="."]
+script = ExtResource( 3 )
+
 [node name="Area2D" type="Area2D" parent="."]
+collision_layer = 3
+collision_mask = 0
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
 shape = SubResource( 1 )
-
-[node name="Highlight" type="Node2D" parent="."]
-script = ExtResource( 3 )
-[connection signal="area_entered" from="Area2D" to="." method="_onBodyEntered"]
+[connection signal="body_entered" from="Area2D" to="." method="_onBodyEntered"]

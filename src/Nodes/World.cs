@@ -1,5 +1,6 @@
 using Godot;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 
 public class World : Node2D, IHaveRuntime
@@ -9,12 +10,17 @@ public class World : Node2D, IHaveRuntime
     public Runtime runtime => GetParent<IHaveRuntime>().runtime;
     private TileTheme theme;
     private MapHandler mapHandler;
-    public VectorTarget targetPosition { get; set; }
+    public ITarget targetPosition => runtime.currentTarget;
     private Highlight highlight => GetNode<Highlight>("Highlight");
+
+    public List<SimpleProjectile> projectileQueue { get; set; }
+    private PackedScene snSimpleProjectile => (PackedScene)ResourceLoader.Load("res://scenes/SimpleProjectile.tscn");
+
     public override void _Ready()
     {
         mapHandler = new MapHandler();
         theme = new TileTheme();
+        projectileQueue = new List<SimpleProjectile>();
         OverrideTileSet();
         mapHandler.GenerateTiles(50);
         mapHandler.AddGrass();
@@ -36,6 +42,14 @@ public class World : Node2D, IHaveRuntime
             highlight.Update();
         }
 
+        if (projectileQueue.Count > 0)
+        {
+            foreach (var projectile in projectileQueue)
+            {
+                AddChild(projectile);
+            }
+        }
+        projectileQueue = new List<SimpleProjectile>();
     }
 
     public override void _UnhandledInput(InputEvent @event)
@@ -57,5 +71,28 @@ public class World : Node2D, IHaveRuntime
     {
         var tile = tileSet.FindTileByName(tileType.ToString());
         return tile;
+    }
+
+
+    public void CreateProjectile(IProjectile projectileDetails, ICaster caster)
+    {
+        switch (projectileDetails.projectileType)
+        {
+            case eProjectileType.FIREBALL:
+                CreateSimpleProjectile(projectileDetails, caster);
+                break;
+            case eProjectileType.LIGHTNING:
+                CreateSimpleProjectile(projectileDetails, caster);
+                break;
+            default:
+                break;
+        }
+    }
+
+    private void CreateSimpleProjectile(IProjectile projectileDetails, ICaster caster)
+    {
+        var projectile = (SimpleProjectile)snSimpleProjectile.Instance();
+        projectile.Config(projectileDetails, caster);
+        projectileQueue.Add(projectile);
     }
 }

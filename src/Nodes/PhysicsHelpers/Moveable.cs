@@ -14,13 +14,18 @@ public class Moveable
         {
             if (subject.Position.WithinRange(subject.destination, subject.speed))
             {
-                subject.Position = subject.destination;
+                TryMove(subject.destination);
             }
             else
             {
                 var dir = subject.Position.DirectionTo(subject.destination);
-                subject.Position += dir * subject.speed;
+                TryMove(subject.Position + dir * subject.speed);
             }
         }
+    }
+
+    public void TryMove(Vector2 dest)
+    {
+        subject.Position = dest;
     }
 }

@@ -24,7 +24,7 @@ public class Main : Node2D, IHaveRuntime
         if ((@event as InputEventMouseButton)?.ButtonIndex == (int)ButtonList.Right && @event.IsPressed() &&
       runtime.currentSelection != null && !@event.IsEcho())
         {
-            runtime.currentTarget = null;
+            runtime.ClearTarget();
             runtime.currentSelection.RightClick(@event as InputEventMouseButton);
         }
 

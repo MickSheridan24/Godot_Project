@@ -1,21 +1,30 @@
 using Godot;
 
-public class FireballProjectile : IProjectile
+public class FireballProjectile : ProjectileBase, IProjectile
 {
-    public eProjectileType projectileType { get => eProjectileType.FIREBALL; }
-    public Vector2 start { get; set; }
-    public Vector2 direction { get; set; }
-    public Vector2 speed { get; set; }
-    public Vector2 maxDistance { get; set; }
-
     public FireballProjectile()
     {
+        projectileType = eProjectileType.FIREBALL;
         speed = new Vector2(10, 10);
-        maxDistance = new Vector2(300, 300);
+        range = new Vector2(300, 300);
+    }
+    public void HandleImpact(Area2D area)
+    {
+        node.ExecQueueFree();
     }
 
-    public void HandleImpact(Area2D area, IProjectileNode node)
+    public void ConfigureNode()
     {
-        node.QueueFree();
+        node.sprite.Set("modulate", theme.cFireball);
+    }
+
+    public void HandleRayCollision()
+    {
+
+    }
+
+    public void HandleProcess()
+    {
+
     }
 }
