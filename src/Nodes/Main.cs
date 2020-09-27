@@ -25,11 +25,18 @@ public class Main : Node2D, IHaveRuntime
 
     public override void _Input(InputEvent @event)
     {
-        if ((@event as InputEventMouseButton)?.ButtonIndex == (int)ButtonList.Right && @event.IsPressed() &&
-      runtime.currentSelection != null && !@event.IsEcho())
+        if (@event.RightClickJustPressed())
         {
-            runtime.ClearTarget();
-            runtime.currentSelection.RightClick(@event as InputEventMouseButton);
+            runtime.SetRightTarget(new VectorTarget(GetGlobalMousePosition()));
+            if (runtime.currentSelection != null)
+            {
+                runtime.currentSelection.RightClick(@event as InputEventMouseButton);
+            }
+        }
+
+        if (@event.LeftClickJustPressed())
+        {
+            runtime.SetLeftTarget(new VectorTarget(GetGlobalMousePosition()));
         }
 
         if (@event.GetKeyJustPressed() == (int)KeyList.Space && !runtime.IsCasting)

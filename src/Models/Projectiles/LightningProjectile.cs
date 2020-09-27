@@ -83,7 +83,8 @@ public class LightningProjectile : ProjectileBase, IProjectile
         var newProj = new LightningProjectile(5)
         {
             direction = v,
-            start = p
+            start = p,
+            damage = damage / 3
         };
         node.runtime.World.CreateProjectile(newProj, node.caster);
     }
@@ -97,7 +98,7 @@ public class LightningProjectile : ProjectileBase, IProjectile
 
         if (collider != null && isConductable)
         {
-            node.speed = new Vector2(1000, 1000);
+            node.speed = new Vector2(1500, 1500);
             isLaunching = true;
         }
     }

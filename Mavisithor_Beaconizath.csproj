@@ -82,6 +82,7 @@
     <Compile Include="src\Models\ProjectileBase.cs" />
     <Compile Include="src\Models\Spells\FireballSpell.cs" />
     <Compile Include="src\Models\Spells\LightningSpell.cs" />
+    <Compile Include="src\Models\Spells\WallSpell.cs" />
     <Compile Include="src\Models\Projectiles\FireballProjectile.cs" />
     <Compile Include="src\Models\Projectiles\LightningProjectile.cs" />
     <Compile Include="src\Models\StatusEffects\JoltedEffect.cs" />

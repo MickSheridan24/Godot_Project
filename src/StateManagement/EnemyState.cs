@@ -21,9 +21,9 @@ public class EnemyState
         statuses = new List<IStatusEffect>();
     }
 
-    public IOrder RequestAction()
+    public IOrder RequestAction(float d)
     {
-        return ai.Request(this);
+        return ai.Request(this, d);
     }
 
     public bool HandleDamage(int d)

@@ -15,6 +15,26 @@ public static class Extensions
     {
         return (dest - vector).Abs();
     }
+    public static Vector2 Rounded(this Vector2 vector2)
+    {
+        var x = (int)vector2.x;
+        var y = (int)vector2.y;
+
+        return new Vector2(x, y);
+    }
+
+    public static Vector2 ClosestInRange(this Vector2 origin, Vector2 dest, Vector2 length)
+    {
+        if (origin.Abs() - dest.Abs() < length.Abs())
+        {
+            return origin;
+        }
+        else
+        {
+            return dest + dest.DirectionTo(origin) * length;
+        }
+    }
+
 
     public static float GetScale(this Vector2 vector)
     {
@@ -38,6 +58,14 @@ public static class Extensions
         return vector.InBounds(new Vector2(-1 * mapSize, -1 * mapSize), new Vector2(mapSize, mapSize));
     }
 
+    public static bool RightClickJustPressed(this InputEvent e)
+    {
+        return (e as InputEventMouseButton)?.ButtonIndex == (int)ButtonList.Right && e.IsPressed() && !e.IsEcho();
+    }
+    public static bool LeftClickJustPressed(this InputEvent e)
+    {
+        return (e as InputEventMouseButton)?.ButtonIndex == (int)ButtonList.Left && e.IsPressed() && !e.IsEcho();
+    }
 
     public static int GetKeyJustPressed(this InputEvent e)
     {

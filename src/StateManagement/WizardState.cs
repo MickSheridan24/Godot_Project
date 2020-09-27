@@ -10,11 +10,12 @@ public class WizardState
 
     public WizardState()
     {
-        moveSpeed = new Vector2(3, 3);
+        moveSpeed = new Vector2(75, 75);
         KnownSpells = new List<ISpell>();
 
         KnownSpells.Add(new FireballSpell());
         KnownSpells.Add(new LightningSpell());
+        KnownSpells.Add(new WallSpell());
     }
     internal List<ISpell> GetAllUnlockedSpells()
     {

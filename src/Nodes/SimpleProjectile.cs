@@ -1,7 +1,7 @@
 using Godot;
 using System;
 
-public class SimpleProjectile : KinematicBody2D, IProjectileNode, IMove
+public class SimpleProjectile : KinematicBody2D, IProjectileNode
 {
     private IProjectile state;
     public ICaster caster { get; set; }
@@ -96,10 +96,6 @@ public class SimpleProjectile : KinematicBody2D, IProjectileNode, IMove
         CallDeferred("free");
     }
 
-    void IMove.HandleMove()
-    {
-        throw new NotImplementedException();
-    }
 
     public bool CanMove()
     {

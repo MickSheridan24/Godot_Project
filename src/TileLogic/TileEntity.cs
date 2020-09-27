@@ -18,8 +18,3 @@ public class TileEntity
 
 }
 
-public enum eTileType
-{
-    DIRT = 1,
-    GRASS = 2
-}

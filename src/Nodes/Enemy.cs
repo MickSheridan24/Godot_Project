@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-public class Enemy : Node2D, IMove, ITarget, IDamageable, IHaveRuntime, IConductElectricity, IFreeable, ISufferStatusEffects, IHaveHealth
+public class Enemy : KinematicBody2D, IMove, ITarget, IDamageable, IHaveRuntime, IConductElectricity, IFreeable, ISufferStatusEffects, IHaveHealth
 {
     public string name { get; set; }
     public Sprite sprite => GetNode<Sprite>("Sprite");
@@ -11,11 +11,14 @@ public class Enemy : Node2D, IMove, ITarget, IDamageable, IHaveRuntime, IConduct
     public EnemyState state { get; private set; }
     private Moveable moveable;
     public Vector2 destination { get; set; }
-    public Vector2 speed => new Vector2(5, 5);
+    public Vector2 speed => new Vector2(100, 100);
     public bool MovingTarget { get; set; }
     public Area2D body => GetNode<Area2D>("Area2D");
-    private Highlight highlight => GetNode<Highlight>("Highlight");
     private int DamageStateCounter;
+
+    private IOrder order;
+    private Highlight rightHighlight => GetNode<Highlight>("RightHighlight");
+    private Highlight leftHighlight => GetNode<Highlight>("LeftHighlight");
 
     public int Health => state.health;
     public int MaxHealth => state.maxHealth;
@@ -25,24 +28,32 @@ public class Enemy : Node2D, IMove, ITarget, IDamageable, IHaveRuntime, IConduct
         sprite.Modulate = new SpriteTheme().cEnemy;
         moveable = new Moveable(this);
         MovingTarget = true;
-        highlight.position = Vector2.Zero;
+        rightHighlight.position = Vector2.Zero;
+        leftHighlight.position = Vector2.Zero;
         DamageStateCounter = 0;
 
-
+        rightHighlight.color = new UITheme().cAccent;
+        leftHighlight.color = new UITheme().cBlue;
 
     }
 
 
-
     public override void _Process(float d)
     {
-        highlight.Visible = runtime.currentTarget == this;
+        rightHighlight.Visible = runtime.RightTarget == this;
+        leftHighlight.Visible = runtime.LeftTarget == this;
         InitState();
         state.HandleStatuses();
         HandleDamageCounter();
-        state.RequestAction().Execute();
-
-
+        order = state.RequestAction(d);
+    }
+    public override void _PhysicsProcess(float d)
+    {
+        if (order != null)
+        {
+            order.Execute();
+            order = null;
+        }
     }
 
     private void InitState()
@@ -74,17 +85,22 @@ public class Enemy : Node2D, IMove, ITarget, IDamageable, IHaveRuntime, IConduct
     {
         var pos = GetGlobalMousePosition();
         var rClick = (e as InputEventMouseButton);
-        if (rClick?.ButtonIndex == (int)ButtonList.Right && rClick.IsPressed() &&
-        runtime.currentSelection != null && !rClick.IsEcho() && pos.InBounds(Position - new Vector2(25, 25), Position + new Vector2(25, 25)))
+        if (e.RightClickJustPressed() && pos.InBounds(Position - new Vector2(25, 25), Position + new Vector2(25, 25)))
         {
-            runtime.SetTarget(this);
+            runtime.SetRightTarget(this);
+            GetTree().SetInputAsHandled();
+        }
+
+        if (e.LeftClickJustPressed() && pos.InBounds(Position - new Vector2(25, 25), Position + new Vector2(25, 25)))
+        {
+            runtime.SetLeftTarget(this);
             GetTree().SetInputAsHandled();
         }
     }
 
-    public void HandleMove()
+    public void HandleMove(float d)
     {
-        moveable.HandleMove();
+        MoveAndCollide(d * destination * speed);
     }
 
     public bool CanMove()
@@ -146,10 +162,16 @@ public class Enemy : Node2D, IMove, ITarget, IDamageable, IHaveRuntime, IConduct
 
     public void ExecQueueFree()
     {
-        if (runtime.currentTarget == this)
+        if (runtime.LeftTarget == this)
         {
-            runtime.ClearTarget();
+            runtime.ClearLeftTarget();
         }
+
+        if (runtime.RightTarget == this)
+        {
+            runtime.ClearRightTarget();
+        }
+
 
         CallDeferred("free");
     }

@@ -2,11 +2,7 @@ using System;
 using Godot;
 public class PatrolAI : IAI
 {
-    public PatrolAI(IMove node)
-    {
-        this.node = node;
 
-    }
     public IMove node { get; set; }
 
     private Vector2 dir;
@@ -21,11 +17,11 @@ public class PatrolAI : IAI
         flip = false;
     }
 
-    public IOrder Request(EnemyState enemyState)
+    public IOrder Request(EnemyState enemyState, float d)
     {
         if (node.destination != node.Position && node.CanMove())
         {
-            return new MoveOrder(node);
+            return new MoveOrder(node, d);
         }
         else if (node.CanMove())
         {

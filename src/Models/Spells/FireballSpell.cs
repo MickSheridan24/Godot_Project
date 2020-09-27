@@ -9,8 +9,9 @@ public class FireballSpell : Spell, ISpell
         type = eSpell.FIREBALL;
         text = "FIREBALL";
     }
-    public void Cast(Wizard caster, ITarget target)
+    public void Cast(Wizard caster)
     {
+        var target = caster.runtime.RightTarget;
         var targetPos = target?.GetTargetPosition() ?? caster.spritePosition + new Vector2(1, 1);
         var projectileDetails = new FireballProjectile()
         {

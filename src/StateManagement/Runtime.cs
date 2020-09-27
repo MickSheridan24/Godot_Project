@@ -11,11 +11,11 @@ public class Runtime
     public Vector2 hoveredCell;
     public Vector2 MousePosition { get; set; }
     public CastManager castManager { get; set; }
-    public ITarget currentTarget => targeting.target;
+    public ITarget currentTarget => targeting.rightTarget;
     public DebugInfo Debug { get; set; }
     public World World { get; private set; }
-
-
+    public ITarget RightTarget => targeting.rightTarget;
+    public ITarget LeftTarget => targeting.leftTarget;
 
     private TargetingSystem targeting;
 
@@ -28,9 +28,14 @@ public class Runtime
         targeting = new TargetingSystem();
     }
 
-    public void ClearTarget()
+    public void ClearRightTarget()
     {
-        targeting.RemoveTarget();
+        targeting.RemoveRightTarget();
+    }
+
+    public void ClearLeftTarget()
+    {
+        targeting.RemoveLeftTarget();
     }
 
     public EnemyState CreateEnemyState(Enemy enemy)
@@ -38,6 +43,18 @@ public class Runtime
         var AI = new PatrolAI(enemy, new Vector2(-1, 0), new Vector2(300, 300));
         return new EnemyState(AI, enemy);
     }
+
+    public void SetLeftTarget(ITarget t)
+    {
+        targeting.SetLeftTarget(t);
+    }
+
+    internal void SetRightTarget(ITarget t)
+    {
+        targeting.SetRightTarget(t);
+    }
+
+
     public void SelectWizard()
     {
         currentSelection = wizardNode;
@@ -56,9 +73,9 @@ public class Runtime
 
     public Vector2? currentTargetPosition()
     {
-        if (targeting.target != null)
+        if (targeting.rightTarget != null)
         {
-            return targeting.target.GetTargetPosition();
+            return targeting.rightTarget.GetTargetPosition();
         }
         else
         {
@@ -95,12 +112,12 @@ public class Runtime
 
     public void SetWorldTarget(Vector2 position)
     {
-        targeting.SetTarget(new VectorTarget(position));
+        targeting.SetRightTarget(new VectorTarget(position));
     }
 
     public void SetTarget(ITarget t)
     {
-        targeting.SetTarget(t);
+        targeting.SetRightTarget(t);
     }
 
     public ISpell GetCurrentSpell()
@@ -122,8 +139,6 @@ public class Runtime
     {
         GD.Print(result.Spell.name + " Cast");
         ToggleCasting(false);
-        result.Spell.Cast(wizardNode, targeting.target);
+        result.Spell.Cast(wizardNode);
     }
-
-
 }

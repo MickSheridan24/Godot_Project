@@ -1,7 +1,7 @@
 using Godot;
 using System;
 
-public class Wizard : Node2D, ISelectable, IMove, IHaveRuntime, ICaster
+public class Wizard : KinematicBody2D, ISelectable, IMove, IHaveRuntime, ICaster
 {
 
     //props
@@ -28,14 +28,17 @@ public class Wizard : Node2D, ISelectable, IMove, IHaveRuntime, ICaster
         moveable = new Moveable(this);
         destination = Position;
     }
-    public override void _Process(float delta)
-    {
 
+    public override void _Process(float d)
+    {
         OverrideSpriteColor(runtime.currentSelection == this ? selected : unselected);
 
         aimLine.dest = runtime?.currentTargetPosition() ?? aimLine.dest;
         aimLine.Update();
-        HandleMove();
+    }
+    public override void _PhysicsProcess(float delta)
+    {
+        HandleMove(delta);
     }
 
     //ISelectable
@@ -47,13 +50,13 @@ public class Wizard : Node2D, ISelectable, IMove, IHaveRuntime, ICaster
     {
         var dest = GetGlobalMousePosition();
         SetDestination(dest);
-        runtime.SetWorldTarget(dest);
+        //   runtime.SetWorldTarget(dest);
     }
 
     //IMove
-    public void HandleMove()
+    public void HandleMove(float d)
     {
-        moveable.HandleMove();
+        MoveAndCollide(d * destination * speed);
     }
 
     public bool CanMove()
@@ -98,5 +101,10 @@ public class Wizard : Node2D, ISelectable, IMove, IHaveRuntime, ICaster
     private void SetTarget(ITarget t)
     {
         runtime.SetTarget(t);
+    }
+
+    public void HandleMove()
+    {
+        throw new NotImplementedException();
     }
 }
