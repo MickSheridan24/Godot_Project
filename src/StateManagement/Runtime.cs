@@ -23,7 +23,7 @@ public class Runtime
 
     public Runtime()
     {
-        this.WizardState = new WizardState();
+
         this.UIState = new UIState();
         targeting = new TargetingSystem();
     }
@@ -64,6 +64,7 @@ public class Runtime
     {
         wizardNode = wizard;
         targeting.targeter = wizardNode;
+        WizardState = new WizardState(wizardNode);
     }
 
     public void RegisterUI(UI ui)

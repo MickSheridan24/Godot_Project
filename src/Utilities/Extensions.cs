@@ -1,4 +1,6 @@
+using System.Collections.Generic;
 using Godot;
+using System.Linq;
 public static class Extensions
 {
     public static Vector2 SPACE_SIZE(this Vector2 v)
@@ -13,6 +15,33 @@ public static class Extensions
     public static Vector2 GetDirectionToCoords(this Vector2 vector, Vector2 dest)
     {
         return (dest - vector).Normalized();
+    }
+
+    public static IEnumerable<Vector2> FillOutCoords(this IEnumerable<Vector2> vectors)
+    {
+        var toAdd = new List<Vector2>();
+
+        foreach (var v in vectors)
+        {
+            toAdd.AddRange(v.GetAdjacent());
+        }
+        toAdd.AddRange(vectors);
+        return toAdd.Distinct().ToList();
+    }
+
+
+    public static List<Vector2> GetAdjacent(this Vector2 v)
+    {
+        return new List<Vector2>{
+            v + Vector2.Up,
+            v + Vector2.Down,
+            v + Vector2.Left,
+            v + Vector2.Right,
+            v + Vector2.Up + Vector2.Right,
+            v + Vector2.Down + Vector2.Left,
+            v + Vector2.Left + Vector2.Up,
+            v + Vector2.Right + Vector2.Down
+        };
     }
     public static Vector2 ProximityTo(this Vector2 vector, Vector2 dest)
     {

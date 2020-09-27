@@ -27,11 +27,11 @@ public class WallSpell : Spell, ISpell
         SetVectors(rightPosition, leftPosition);
         if (V2 == null)
         {
-            caster.runtime.World.AlterTile(V1, eTileType.EARTH_WALL);
+            caster.runtime.World.CreateEarthWall(V1);
         }
         else
         {
-            caster.runtime.World.CreateTileLine(V1, V2, eTileType.EARTH_WALL);
+            caster.runtime.World.CreateEarthWall(V1, V2);
         }
     }
 

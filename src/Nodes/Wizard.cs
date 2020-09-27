@@ -1,7 +1,7 @@
 using Godot;
 using System;
 
-public class Wizard : KinematicBody2D, ISelectable, IMove, IHaveRuntime, ICaster
+public class Wizard : KinematicBody2D, ISelectable, IMove, IHaveRuntime, ICaster, IElevatable
 {
 
     //props
@@ -31,8 +31,8 @@ public class Wizard : KinematicBody2D, ISelectable, IMove, IHaveRuntime, ICaster
 
     public override void _Process(float d)
     {
+        state.elevationHandler.HandleElevation();
         OverrideSpriteColor(runtime.currentSelection == this ? selected : unselected);
-
         aimLine.dest = runtime?.RightTarget?.GetTargetPosition() ?? aimLine.dest;
         aimLine.Update();
     }

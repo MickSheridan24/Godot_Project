@@ -5,7 +5,14 @@ public enum eCollisionLayers
     HOSTILE = 1,
     FRIENDLY = 2,
     INERT = 3,
-    INTANGIBLE = 4
+    INTANGIBLE = 4,
+
+
+    LEVEL1 = 5,
+    LEVEL2 = 6,
+    LEVEL3 = 7,
+    LEVEL4 = 8,
+    LEVEL5 = 9
 }
 
 

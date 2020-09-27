@@ -65,6 +65,7 @@
     <Compile Include="src\Nodes\Wizard.cs" />
     <Compile Include="src\Nodes\World.cs" />
     <Compile Include="src\Nodes\PhysicsHelpers\Moveable.cs" />
+    <Compile Include="src\Nodes\PhysicsHelpers\ElevationHandler.cs" />
     <Compile Include="src\TileLogic\TileEntity.cs" />
     <Compile Include="src\TileLogic\MapHandler.cs" />
     <Compile Include="src\TileLogic\TileTheme.cs" />
@@ -104,6 +105,7 @@
     <Compile Include="src\Interfaces\ISufferStatusEffects.cs" />
     <Compile Include="src\Interfaces\IHaveHealth.cs" />
     <Compile Include="src\Interfaces\ICaster.cs" />
+    <Compile Include="src\Interfaces\IElevatable.cs" />
     <Compile Include="src\Interfaces\IDamageable.cs" />
     <Compile Include="src\UILogic\UITheme.cs" />
     <Compile Include="src\UILogic\SpriteTheme.cs" />

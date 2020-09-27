@@ -12,6 +12,8 @@ public class EnemyState
     private List<IStatusEffect> statuses;
     internal int maxHealth;
 
+    public ElevationHandler elevationHandler;
+
     public EnemyState(IAI AI, Enemy enemy)
     {
         ai = AI;
@@ -19,6 +21,7 @@ public class EnemyState
         health = 400;
         maxHealth = 400;
         statuses = new List<IStatusEffect>();
+        elevationHandler = new ElevationHandler(node, node.runtime);
     }
 
     public IOrder RequestAction(float d)

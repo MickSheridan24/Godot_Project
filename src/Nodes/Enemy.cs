@@ -3,7 +3,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-public class Enemy : KinematicBody2D, IMove, ITarget, IDamageable, IHaveRuntime, IConductElectricity, IFreeable, ISufferStatusEffects, IHaveHealth
+public class Enemy : KinematicBody2D, IElevatable, IMove, ITarget, IDamageable, IHaveRuntime,
+                     IConductElectricity, IFreeable, ISufferStatusEffects, IHaveHealth
 {
     public string name { get; set; }
     public Sprite sprite => GetNode<Sprite>("Sprite");
@@ -22,6 +23,9 @@ public class Enemy : KinematicBody2D, IMove, ITarget, IDamageable, IHaveRuntime,
 
     public int Health => state.health;
     public int MaxHealth => state.maxHealth;
+
+
+
     public override void _Ready()
     {
         destination = Position;
@@ -35,6 +39,8 @@ public class Enemy : KinematicBody2D, IMove, ITarget, IDamageable, IHaveRuntime,
         rightHighlight.color = new UITheme().cAccent;
         leftHighlight.color = new UITheme().cBlue;
 
+
+
     }
 
 
@@ -43,6 +49,7 @@ public class Enemy : KinematicBody2D, IMove, ITarget, IDamageable, IHaveRuntime,
         rightHighlight.Visible = runtime.RightTarget == this;
         leftHighlight.Visible = runtime.LeftTarget == this;
         InitState();
+        state.elevationHandler.HandleElevation();
         state.HandleStatuses();
         HandleDamageCounter();
         order = state.RequestAction(d);

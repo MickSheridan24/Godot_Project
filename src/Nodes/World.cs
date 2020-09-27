@@ -5,12 +5,26 @@ using System.Linq;
 
 public class World : Node2D, IHaveRuntime
 {
-    private TileMap tilemap => GetNode("TileMap") as TileMap;
-    private TileSet tileSet => tilemap.Get("tile_set") as TileSet;
+
+    private TileMap level2 => GetNode("Level2") as TileMap;
+    private TileSet L2tileset => level2.Get("tile_set") as TileSet;
+    private TileMap level3 => GetNode("Level3") as TileMap;
+    private TileSet L3tileset => level3.Get("tile_set") as TileSet;
+    private TileMap level4 => GetNode("Level4") as TileMap;
+    private TileSet L4tileset => level4.Get("tile_set") as TileSet;
+
+    private List<TileMap> AllLevels;
+
     public Runtime runtime => GetParent<IHaveRuntime>().runtime;
     private TileTheme theme;
+
+
+
     private MapHandler mapHandler;
     public ITarget rightTarget => runtime.RightTarget;
+
+
+
     public ITarget leftTarget => runtime.LeftTarget;
     private Highlight rightHighlight => GetNode<Highlight>("RightHighlight");
     private Highlight leftHighlight => GetNode<Highlight>("LeftHighlight");
@@ -27,10 +41,21 @@ public class World : Node2D, IHaveRuntime
         mapHandler = new MapHandler();
         theme = new TileTheme();
         projectileQueue = new List<SimpleProjectile>();
+
+
+
+        AllLevels = new List<TileMap>()
+        {
+            level2, level3, level4
+        };
+
+
         OverrideTileSet();
         mapHandler.GenerateTiles(50);
         mapHandler.AddGrass();
-        mapHandler.tiles.ForEach(t => tilemap.SetCellv(t.coordsM, GetTileId(t.tileType)));
+        mapHandler.tiles.ForEach(t => level3.SetCellv(t.coordsM, GetTileId(level3, t.tileType)));
+
+
     }
 
     public override void _Process(float delta)
@@ -45,18 +70,51 @@ public class World : Node2D, IHaveRuntime
         HandleProjectileSpawn();
     }
 
-    public void AlterTile(Vector2 pos, eTileType type)
+
+    public void CreateEarthWall(Vector2 v1)
     {
-        var tileCoords = tilemap.WorldToMap(pos);
-        tilemap.SetCellv(tileCoords, (int)type);
+        var coord = level3.WorldToMap(v1);
+        TryElevateTile(coord, level3, level4, eTileType.EARTH_WALL);
+    }
+    public void CreateEarthWall(Vector2 v1, Vector2 v2)
+    {
+        var v1Coords = level3.WorldToMap(v1);
+        var v2Coords = level3.WorldToMap(v2);
+
+        var coords = GetLineCoords(v1Coords, v2Coords);
+
+        foreach (var coord in coords)
+        {
+            TryElevateTile(coord, level3, level4, eTileType.EARTH_WALL);
+        }
     }
 
-    public void CreateTileLine(Vector2 v1, Vector2 v2, eTileType type)
+    public eCollisionLayers GetElevation(Vector2 v)
     {
-        var v1Coords = tilemap.WorldToMap(v1);
-        var v2Coords = tilemap.WorldToMap(v2);
+        var coord = level3.WorldToMap(v);
 
-        var dir = v1Coords.GetDirectionTo(v2Coords);
+        return level4.GetCellv(coord) != -1 ? eCollisionLayers.LEVEL4
+             : level3.GetCellv(coord) != -1 ? eCollisionLayers.LEVEL3
+             : eCollisionLayers.LEVEL2;
+    }
+
+    private void TryElevateTile(Vector2 coord, TileMap from, TileMap to, eTileType type)
+    {
+        var inFrom = from.GetCellv(coord);
+
+        var inTo = to.GetCellv(coord);
+        if (inFrom != -1 && inTo == -1)
+        {
+            to.SetCellv(coord, (int)eTileType.EARTH_WALL);
+        }
+    }
+
+    public IEnumerable<Vector2> GetLineCoords(Vector2 v1, Vector2 v2)
+    {
+        var dir = v1.GetDirectionTo(v2);
+        var ret = new List<Vector2>(){
+            v1, v2
+        };
         Vector2 primary;
         Vector2 alt;
 
@@ -71,46 +129,49 @@ public class World : Node2D, IHaveRuntime
             alt = primary + (dir * new Vector2(1, 0)).Normalized();
         }
 
-        var diff = (v1Coords - v2Coords).Abs();
+        var diff = (v1 - v2).Abs();
         var maxLength = diff.x > diff.y ? diff.x : diff.y;
 
-        if (maxLength > 10)
+        if (maxLength > 5)
         {
-            maxLength = 10;
+            maxLength = 5;
         }
 
-        tilemap.SetCellv(v1Coords, (int)type);
-        var dx = v1Coords;
-
+        var dx = v1;
         for (var x = 0; x < maxLength; x++)
         {
             var dx1 = dx + primary;
             var dx2 = dx + alt;
 
-            if (dx1.ProximityTo(v2Coords) <= dx2.ProximityTo(v2Coords))
+
+            if (dx1.ProximityTo(v2) <= dx2.ProximityTo(v2))
             {
-                tilemap.SetCellv(dx1, (int)type);
+                ret.Add(dx1);
                 dx = dx1;
             }
             else
             {
-                tilemap.SetCellv(dx2, (int)type);
+                ret.Add(dx2);
                 dx = dx2;
             }
         }
-        tilemap.SetCellv(v2Coords, (int)type);
+        return ret.FillOutCoords();
     }
 
     private void OverrideTileSet()
     {
-        tileSet.TileSetModulate(tileSet.FindTileByName("DIRT"), theme.cDirt);
-        tileSet.TileSetModulate(tileSet.FindTileByName("GRASS"), theme.cGrass);
-        tileSet.TileSetModulate(tileSet.FindTileByName("EARTH_WALL"), theme.cEarthWall);
+        foreach (var level in AllLevels)
+        {
+            level.TileSet.TileSetModulate(level.TileSet.FindTileByName("DIRT"), theme.cDirt);
+            level.TileSet.TileSetModulate(level.TileSet.FindTileByName("GRASS"), theme.cGrass);
+            level.TileSet.TileSetModulate(level.TileSet.FindTileByName("EARTH_WALL"), theme.cEarthWall);
+        }
+
     }
 
-    private int GetTileId(eTileType tileType)
+    private int GetTileId(TileMap map, eTileType tileType)
     {
-        var tile = tileSet.FindTileByName(tileType.ToString());
+        var tile = map.TileSet.FindTileByName(tileType.ToString());
         return tile;
     }
 
