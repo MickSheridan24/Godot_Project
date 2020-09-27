@@ -6,4 +6,6 @@ public interface IConductElectricity
     void EnterDamageState(int amount);
 
     void AddStatusEffect(IStatusEffect status);
+
+    bool HasStatusEffect(eStatusEffect effect);
 }

@@ -12,5 +12,7 @@ public interface IProjectileNode
 
     Vector2 Position { get; set; }
     RayCast2D raycast { get; }
+
+    Area2D effectRadius { get; }
     void ExecQueueFree();
 }

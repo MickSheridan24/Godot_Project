@@ -10,14 +10,10 @@ public interface IProjectile
     Vector2 start { get; set; }
     Vector2 range { get; set; }
 
+    int damage { get; set; }
+
     void HandleImpact(Area2D area);
     void HandleRayCollision();
     void ConfigureNode();
     void HandleProcess();
-}
-
-public enum eProjectileType
-{
-    FIREBALL,
-    LIGHTNING
 }

@@ -14,11 +14,13 @@ public class SimpleProjectile : KinematicBody2D, IProjectileNode, IMove
     public RayCast2D raycast => GetNode<RayCast2D>("RayCast2D");
     public SpriteTheme theme => new SpriteTheme();
 
+    public Area2D effectRadius => GetNode<Area2D>("EffectRadius");
+
+
     public Vector2 destination { get; set; }
 
 
     private Vector2 remainingDistance;
-    private Moveable moveable;
 
     public void Config(IProjectile projectileDetails, ICaster wiz)
     {
@@ -42,12 +44,14 @@ public class SimpleProjectile : KinematicBody2D, IProjectileNode, IMove
 
     }
 
+    public override void _Process(float d)
+    {
+        HandleOther();
+        HandleRayCast();
+    }
     public override void _PhysicsProcess(float d)
     {
-        destination = speed * direction;
-        HandleMove();
-        HandleRayCast();
-        HandleOther();
+        HandleMove(d);
     }
 
     private void HandleOther()
@@ -63,15 +67,12 @@ public class SimpleProjectile : KinematicBody2D, IProjectileNode, IMove
         }
     }
 
-    private void HandleMove()
+    private void HandleMove(float d)
     {
+        destination = speed * direction * d;
         var move = MoveAndCollide(destination);
 
-        if (move is KinematicCollision2D)
-        {
-            HandleCollision(move);
-        }
-        remainingDistance -= speed;
+        remainingDistance -= speed * d;
         if (remainingDistance <= Vector2.Zero)
         {
             QueueFree();
@@ -79,14 +80,7 @@ public class SimpleProjectile : KinematicBody2D, IProjectileNode, IMove
     }
 
     //Signal Handlers 
-    public void HandleCollision(KinematicCollision2D collision)
-    {
-        var isWizard = (collision.Collider as Area2D).GetParent() as Wizard;
-        if (isWizard != caster)
-        {
-            state.HandleImpact(collision.Collider as Area2D);
-        }
-    }
+
     public void _onBodyEntered(Area2D area)
     {
         var isWizard = area.GetParent() as Wizard;

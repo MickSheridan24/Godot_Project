@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+using System.Linq;
 using Godot;
 
 public class ProjectileBase
@@ -7,8 +9,32 @@ public class ProjectileBase
     public Vector2 direction { get; set; }
     public Vector2 speed { get; set; }
     public Vector2 range { get; set; }
+
+    public int damage { get; set; }
     public IProjectileNode node { get; set; }
 
     public SpriteTheme theme => new SpriteTheme();
 
+    protected void TryDamage(Node target, eDamageType type)
+    {
+        if (target != null && target is IDamageable)
+        {
+            var damageable = target as IDamageable;
+            damageable.Damage(damage, type);
+        }
+    }
+
+    protected void SetEffectRadius(int r)
+    {
+        (node.effectRadius.GetNode<CollisionShape2D>("CollisionShape2D").GetShape() as CircleShape2D).Radius = r;
+    }
+
+    protected IEnumerable<Node> FindEffected<T>(Area2D exclude = null)
+    {
+        var areas = node.effectRadius.GetOverlappingAreas();
+
+
+        return areas.Where(a => a != exclude && ((Node)a).GetParent() is T)
+                    .Select(t => ((Node)t).GetParent());
+    }
 }

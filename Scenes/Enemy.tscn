@@ -1,8 +1,9 @@
-[gd_scene load_steps=5 format=2]
+[gd_scene load_steps=6 format=2]
 
 [ext_resource path="res://src/Nodes/Enemy.cs" type="Script" id=1]
 [ext_resource path="res://assets/Blank.png" type="Texture" id=2]
 [ext_resource path="res://src/Nodes/Highlight.cs" type="Script" id=3]
+[ext_resource path="res://Scenes/HealthBar.tscn" type="PackedScene" id=4]
 
 [sub_resource type="CircleShape2D" id=1]
 radius = 19.0432
@@ -26,4 +27,7 @@ collision_mask = 0
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
 shape = SubResource( 1 )
+
+[node name="HealthBar" parent="." instance=ExtResource( 4 )]
+position = Vector2( -17.9868, 17.8291 )
 [connection signal="body_entered" from="Area2D" to="." method="_onBodyEntered"]

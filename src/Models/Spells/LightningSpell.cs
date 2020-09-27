@@ -14,7 +14,8 @@ public class LightningSpell : Spell, ISpell
         var projectileDetails = new LightningProjectile(20)
         {
             direction = caster.Position.GetDirectionTo(target.GetTargetPosition()),
-            start = caster.spritePosition
+            start = caster.spritePosition,
+            damage = 50
         };
         caster.CreateProjectile(projectileDetails);
     }

@@ -11,6 +11,16 @@ public static class Extensions
         return (dest - vector).Normalized();
     }
 
+    public static Vector2 ProximityTo(this Vector2 vector, Vector2 dest)
+    {
+        return (dest - vector).Abs();
+    }
+
+    public static float GetScale(this Vector2 vector)
+    {
+        return vector.x + vector.y;
+    }
+
     public static bool WithinRange(this Vector2 pos, Vector2 dest, Vector2 range)
     {
         var diff = (pos.Abs() - dest.Abs()).Abs();

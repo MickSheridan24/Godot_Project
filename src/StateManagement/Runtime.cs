@@ -56,9 +56,9 @@ public class Runtime
 
     public Vector2? currentTargetPosition()
     {
-        if (currentTarget != null)
+        if (targeting.target != null)
         {
-            return currentTarget.GetTargetPosition();
+            return targeting.target.GetTargetPosition();
         }
         else
         {
@@ -122,17 +122,8 @@ public class Runtime
     {
         GD.Print(result.Spell.name + " Cast");
         ToggleCasting(false);
-        result.Spell.Cast(wizardNode, currentTarget);
+        result.Spell.Cast(wizardNode, targeting.target);
     }
 
 
-}
-
-public enum eCollisionLayers
-{
-    ENTITY = 0,
-    HOSTILE = 1,
-    FRIENDLY = 2,
-    INERT = 3,
-    INTANGIBLE = 4
 }

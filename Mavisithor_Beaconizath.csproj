@@ -52,6 +52,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="src\Nodes\AimLine.cs" />
     <Compile Include="src\Nodes\Cursor.cs" />
+    <Compile Include="src\Nodes\HealthBar.cs" />
     <Compile Include="src\Nodes\HUD.cs" />
     <Compile Include="src\Nodes\Debug.cs" />
     <Compile Include="src\Nodes\Enemy.cs" />
@@ -68,6 +69,7 @@
     <Compile Include="src\TileLogic\MapHandler.cs" />
     <Compile Include="src\TileLogic\TileTheme.cs" />
     <Compile Include="src\Utilities\Extensions.cs" />
+    <Compile Include="src\Utilities\Enums.cs" />
     <Compile Include="src\StateManagement\Runtime.cs" />
     <Compile Include="src\StateManagement\WizardState.cs" />
     <Compile Include="src\StateManagement\UIState.cs" />
@@ -98,8 +100,10 @@
     <Compile Include="src\Interfaces\IProjectileNode.cs" />
     <Compile Include="src\Interfaces\IConductElectricity.cs" />
     <Compile Include="src\Interfaces\IStatusEffect.cs" />
-     <Compile Include="src\Interfaces\ISufferStatusEffects.cs" />
+    <Compile Include="src\Interfaces\ISufferStatusEffects.cs" />
+    <Compile Include="src\Interfaces\IHaveHealth.cs" />
     <Compile Include="src\Interfaces\ICaster.cs" />
+    <Compile Include="src\Interfaces\IDamageable.cs" />
     <Compile Include="src\UILogic\UITheme.cs" />
     <Compile Include="src\UILogic\SpriteTheme.cs" />
     <Compile Include="src\AI\PatrolAI.cs" />

@@ -3,8 +3,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-public class Enemy : Node2D, IMove, ITarget, IProjectileTarget, IHaveRuntime, IConductElectricity, IFreeable, ISufferStatusEffects
+public class Enemy : Node2D, IMove, ITarget, IDamageable, IHaveRuntime, IConductElectricity, IFreeable, ISufferStatusEffects, IHaveHealth
 {
+    public string name { get; set; }
     public Sprite sprite => GetNode<Sprite>("Sprite");
     public Runtime runtime => GetParent<IHaveRuntime>().runtime;
     public EnemyState state { get; private set; }
@@ -16,6 +17,8 @@ public class Enemy : Node2D, IMove, ITarget, IProjectileTarget, IHaveRuntime, IC
     private Highlight highlight => GetNode<Highlight>("Highlight");
     private int DamageStateCounter;
 
+    public int Health => state.health;
+    public int MaxHealth => state.maxHealth;
     public override void _Ready()
     {
         destination = Position;
@@ -25,7 +28,11 @@ public class Enemy : Node2D, IMove, ITarget, IProjectileTarget, IHaveRuntime, IC
         highlight.position = Vector2.Zero;
         DamageStateCounter = 0;
 
+
+
     }
+
+
 
     public override void _Process(float d)
     {
@@ -34,6 +41,8 @@ public class Enemy : Node2D, IMove, ITarget, IProjectileTarget, IHaveRuntime, IC
         state.HandleStatuses();
         HandleDamageCounter();
         state.RequestAction().Execute();
+
+
     }
 
     private void InitState()
@@ -83,22 +92,17 @@ public class Enemy : Node2D, IMove, ITarget, IProjectileTarget, IHaveRuntime, IC
         return state.CanMove();
     }
 
-    //IProjectileTarget
-    public void HandleImpact(SimpleProjectile projectile)
+    //IDamageable
+    public void Damage(int power, eDamageType type)
     {
-        switch (projectile.projectileType)
+        switch (type)
         {
-            case eProjectileType.FIREBALL:
-                TakeDamage(300);
+            default:
+                EnterDamageState(10);
+                TakeDamage(power);
                 break;
-            case eProjectileType.LIGHTNING:
-                TakeDamage(100);
-                break;
-            default: break;
         }
-
     }
-
 
     public void TakeDamage(int damage)
     {
@@ -107,14 +111,7 @@ public class Enemy : Node2D, IMove, ITarget, IProjectileTarget, IHaveRuntime, IC
             ExecQueueFree();
         }
     }
-    //SignalHandlers
-    public void _onBodyEntered(PhysicsBody2D body)
-    {
-        if (body is SimpleProjectile)
-        {
-            HandleImpact(body as SimpleProjectile);
-        }
-    }
+
 
 
     //ITarget
@@ -133,6 +130,8 @@ public class Enemy : Node2D, IMove, ITarget, IProjectileTarget, IHaveRuntime, IC
         body.SetCollisionLayerBit((int)eCollisionLayers.INTANGIBLE, true);
         sprite.Modulate = new SpriteTheme().cEnemyHit;
         DamageStateCounter = amount;
+
+
     }
 
     public void AddStatusEffect(IStatusEffect effect)
@@ -140,6 +139,10 @@ public class Enemy : Node2D, IMove, ITarget, IProjectileTarget, IHaveRuntime, IC
         state.AddStatusEffect(effect);
     }
 
+    public bool HasStatusEffect(eStatusEffect e)
+    {
+        return state.HasStatus(e);
+    }
 
     public void ExecQueueFree()
     {
@@ -150,5 +153,6 @@ public class Enemy : Node2D, IMove, ITarget, IProjectileTarget, IHaveRuntime, IC
 
         CallDeferred("free");
     }
+
 
 }

@@ -10,12 +10,14 @@ public class EnemyState
     public int health { get; set; }
 
     private List<IStatusEffect> statuses;
+    internal int maxHealth;
 
     public EnemyState(IAI AI, Enemy enemy)
     {
         ai = AI;
         node = enemy;
         health = 400;
+        maxHealth = 400;
         statuses = new List<IStatusEffect>();
     }
 
@@ -46,7 +48,7 @@ public class EnemyState
         return statuses.Where(s => s.type == effect).FirstOrDefault();
     }
 
-    private bool HasStatus(eStatusEffect effect)
+    public bool HasStatus(eStatusEffect effect)
     {
         return statuses.Where(s => s.type == effect).FirstOrDefault() != null;
     }
