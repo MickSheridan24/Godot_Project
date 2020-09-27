@@ -100,7 +100,7 @@ public class Enemy : KinematicBody2D, IMove, ITarget, IDamageable, IHaveRuntime,
 
     public void HandleMove(float d)
     {
-        MoveAndCollide(d * destination * speed);
+        moveable.HandleMove(d);
     }
 
     public bool CanMove()

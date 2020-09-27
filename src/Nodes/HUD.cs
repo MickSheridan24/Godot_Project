@@ -18,9 +18,9 @@ public class HUD : Node2D, IHaveRuntime
         var c = bounds.Position + bounds.Size / 2;
         runtime.Debug = new DebugInfo()
         {
-            D1 = "Mouse: " + c.ToString(),
-            D2 = "Bounds1: " + bounds.Position,
-            D3 = "Camera: " + camera.Position
+            D1 = "Wiz: " + runtime.wizardNode.Position,
+            D2 = "dest: " + runtime.wizardNode.destination.ToString(),
+            D3 = "Right: " + runtime.RightTarget?.GetTargetPosition().ToString()
         };
 
         var pos = GetGlobalMousePosition();

@@ -56,39 +56,49 @@ public class World : Node2D, IHaveRuntime
         var v1Coords = tilemap.WorldToMap(v1);
         var v2Coords = tilemap.WorldToMap(v2);
 
-        var dir1 = v1Coords.DirectionTo(v2Coords).Normalized();
-        var dir2 = dir1 * new Vector2(0, 1);
-        var dir3 = dir2 * new Vector2(1, 0);
+        var dir = v1Coords.GetDirectionTo(v2Coords);
+        Vector2 primary;
+        Vector2 alt;
+
+        if (dir.Abs().x > dir.Abs().y)
+        {
+            primary = (dir * new Vector2(1, 0)).Normalized();
+            alt = primary + (dir * new Vector2(0, 1)).Normalized();
+        }
+        else
+        {
+            primary = (dir * new Vector2(0, 1)).Normalized();
+            alt = primary + (dir * new Vector2(1, 0)).Normalized();
+        }
 
         var diff = (v1Coords - v2Coords).Abs();
         var maxLength = diff.x > diff.y ? diff.x : diff.y;
 
+        if (maxLength > 10)
+        {
+            maxLength = 10;
+        }
 
         tilemap.SetCellv(v1Coords, (int)type);
         var dx = v1Coords;
 
         for (var x = 0; x < maxLength; x++)
         {
-            var dx1 = dx + dir1;
-            var dx2 = dx + dir2;
-            var dx3 = dx + dir3;
+            var dx1 = dx + primary;
+            var dx2 = dx + alt;
 
-            if (dx1 >= dx2 && dx1 >= dx3)
+            if (dx1.ProximityTo(v2Coords) <= dx2.ProximityTo(v2Coords))
             {
                 tilemap.SetCellv(dx1, (int)type);
                 dx = dx1;
             }
-            else if (dx2 >= dx1 && dx2 >= dx3)
+            else
             {
                 tilemap.SetCellv(dx2, (int)type);
                 dx = dx2;
             }
-            else if (dx3 >= dx1 && dx3 >= dx2)
-            {
-                tilemap.SetCellv(dx3, (int)type);
-                dx = dx3;
-            }
         }
+        tilemap.SetCellv(v2Coords, (int)type);
     }
 
     private void OverrideTileSet()

@@ -13,9 +13,9 @@ public class Main : Node2D, IHaveRuntime
         runtime.RegisterWizard(wizard);
         runtime.RegisterWorld(World);
 
-        GetNode<Enemy>("Enemy").Name = "Beevis";
-        GetNode<Enemy>("Enemy2").Name = "Goonie";
-        GetNode<Enemy>("Enemy3").Name = "Grubley";
+        // GetNode<Enemy>("Enemy").Name = "Beevis";
+        // GetNode<Enemy>("Enemy2").Name = "Goonie";
+        // GetNode<Enemy>("Enemy3").Name = "Grubley";
     }
 
     public override void _Process(float d)

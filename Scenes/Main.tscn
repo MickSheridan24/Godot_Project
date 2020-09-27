@@ -16,9 +16,4 @@ script = ExtResource( 1 )
 [node name="HUD" parent="." instance=ExtResource( 4 )]
 
 [node name="Enemy" parent="." instance=ExtResource( 5 )]
-
-[node name="Enemy2" parent="." instance=ExtResource( 5 )]
-position = Vector2( 40, 0 )
-
-[node name="Enemy3" parent="." instance=ExtResource( 5 )]
-position = Vector2( -10, 50 )
+position = Vector2( 213.486, -124.319 )

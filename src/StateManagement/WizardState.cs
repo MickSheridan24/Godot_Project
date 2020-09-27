@@ -10,7 +10,7 @@ public class WizardState
 
     public WizardState()
     {
-        moveSpeed = new Vector2(75, 75);
+        moveSpeed = new Vector2(125, 125);
         KnownSpells = new List<ISpell>();
 
         KnownSpells.Add(new FireballSpell());

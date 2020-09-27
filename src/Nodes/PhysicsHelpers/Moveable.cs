@@ -10,16 +10,21 @@ public class Moveable
 
     public void HandleMove(float d)
     {
-        if (subject.Position != subject.destination && subject.CanMove())
+        if (subject.Position != subject.destination)
         {
-            if (subject.Position.WithinRange(subject.destination, subject.speed * d))
+            var delta = (subject.Position.DirectionTo(subject.destination)) * d * subject.speed;
+
+            if ((subject.destination.Rounded() - (subject.Position + delta).Rounded()).Abs() <= new Vector2(1, 1))
             {
-                TryMove(subject.destination);
+                subject.MoveAndCollide(subject.destination - subject.Position);
+                if (subject.Position != subject.destination)
+                {
+                    subject.Position = subject.destination;
+                }
             }
             else
             {
-                var dir = subject.Position.DirectionTo(subject.destination);
-                TryMove(dir * subject.speed * d);
+                subject.MoveAndCollide(delta);
             }
         }
     }

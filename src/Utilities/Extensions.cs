@@ -10,7 +10,10 @@ public static class Extensions
     {
         return (dest - vector).Normalized();
     }
-
+    public static Vector2 GetDirectionToCoords(this Vector2 vector, Vector2 dest)
+    {
+        return (dest - vector).Normalized();
+    }
     public static Vector2 ProximityTo(this Vector2 vector, Vector2 dest)
     {
         return (dest - vector).Abs();

@@ -33,7 +33,7 @@ public class Wizard : KinematicBody2D, ISelectable, IMove, IHaveRuntime, ICaster
     {
         OverrideSpriteColor(runtime.currentSelection == this ? selected : unselected);
 
-        aimLine.dest = runtime?.currentTargetPosition() ?? aimLine.dest;
+        aimLine.dest = runtime?.RightTarget?.GetTargetPosition() ?? aimLine.dest;
         aimLine.Update();
     }
     public override void _PhysicsProcess(float delta)
@@ -56,7 +56,7 @@ public class Wizard : KinematicBody2D, ISelectable, IMove, IHaveRuntime, ICaster
     //IMove
     public void HandleMove(float d)
     {
-        MoveAndCollide(d * destination * speed);
+        moveable.HandleMove(d);
     }
 
     public bool CanMove()
