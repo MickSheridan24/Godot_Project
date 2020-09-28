@@ -9,7 +9,7 @@
 radius = 19.0432
 
 [sub_resource type="CircleShape2D" id=2]
-radius = 18.7473
+radius = 19.3627
 
 [node name="Enemy" type="KinematicBody2D"]
 collision_layer = 3

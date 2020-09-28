@@ -24,11 +24,12 @@ public class Enemy : KinematicBody2D, IElevatable, IMove, ITarget, IDamageable, 
     public int Health => state.health;
     public int MaxHealth => state.maxHealth;
 
-
+    public bool isFallDisabled { get; set; }
 
     public override void _Ready()
     {
         destination = Position;
+        isFallDisabled = false;
         sprite.Modulate = new SpriteTheme().cEnemy;
         moveable = new Moveable(this);
         MovingTarget = true;
@@ -38,11 +39,7 @@ public class Enemy : KinematicBody2D, IElevatable, IMove, ITarget, IDamageable, 
 
         rightHighlight.color = new UITheme().cAccent;
         leftHighlight.color = new UITheme().cBlue;
-
-
-
     }
-
 
     public override void _Process(float d)
     {
@@ -56,6 +53,7 @@ public class Enemy : KinematicBody2D, IElevatable, IMove, ITarget, IDamageable, 
     }
     public override void _PhysicsProcess(float d)
     {
+        state?.Tick();
         if (order != null)
         {
             order.Execute();
@@ -183,5 +181,41 @@ public class Enemy : KinematicBody2D, IElevatable, IMove, ITarget, IDamageable, 
         CallDeferred("free");
     }
 
+    public void HandleCollision(KinematicCollision2D collision)
+    {
+        var collider = collision.GetCollider();
 
+        if (collider is TileMap)
+        {
+            HandleTileCollision(collision);
+        }
+    }
+
+    private void HandleTileCollision(KinematicCollision2D collision)
+    {
+        var collider = collision.GetCollider() as TileMap;
+
+        var level = runtime.World.GetLayer(collider);
+
+        if ((int)level == (int)state.elevationHandler.Level + 1 && !state.isClimbing)
+        {
+            state.InitClimbing(level);
+        }
+    }
+
+    public void CompleteClimb()
+    {
+        state.StopClimbing();
+    }
+
+    public void Elevate(eCollisionLayers level)
+    {
+        state.elevationHandler.HandleElevation((int)level);
+    }
+
+    public void DisableFall(int v)
+    {
+
+        state.DisableFall(v);
+    }
 }

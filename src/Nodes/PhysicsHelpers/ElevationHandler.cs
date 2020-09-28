@@ -1,18 +1,17 @@
 
+using System;
 using System.Collections.Generic;
 
 public class ElevationHandler
 {
     public IElevatable subject { get; set; }
-
     public eCollisionLayers Level { get; set; }
-
     private List<eCollisionLayers> AllLevels;
-
     private Runtime runtime;
 
     public ElevationHandler(IElevatable sub, Runtime runtime, eCollisionLayers startingLevel = eCollisionLayers.LEVEL3)
     {
+
         this.subject = sub;
         this.Level = startingLevel;
         this.runtime = runtime;
@@ -43,11 +42,12 @@ public class ElevationHandler
         }
     }
 
-    public void HandleElevation()
+    public void HandleElevation(int customLevel = -1)
     {
-        var currentElev = runtime.World.GetElevation(subject.Position);
+        var currentElev = customLevel == -1 ? runtime.World.GetElevation(subject.Position)
+                                            : (eCollisionLayers)customLevel;
 
-        if (Level != currentElev)
+        if (Level != currentElev && !subject.isFallDisabled)
         {
             Level = currentElev;
             SetElevationLayers();

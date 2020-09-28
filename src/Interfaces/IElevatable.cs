@@ -10,5 +10,11 @@ public interface IElevatable
     bool GetCollisionLayerBit(int n);
 
     bool GetCollisionMaskBit(int n);
-    Vector2 Position { get; }
+    Vector2 Position { get; set; }
+
+    void Elevate(eCollisionLayers level);
+
+    bool isFallDisabled { get; set; }
+    void CompleteClimb();
+    void DisableFall(int v);
 }

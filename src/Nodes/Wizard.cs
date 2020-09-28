@@ -21,6 +21,8 @@ public class Wizard : KinematicBody2D, ISelectable, IMove, IHaveRuntime, ICaster
 
     private PackedScene snSimpleProjectile => (PackedScene)ResourceLoader.Load("res://scenes/SimpleProjectile.tscn");
 
+    public bool isFallDisabled { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+
 
     //overrides
     public override void _Ready()
@@ -106,5 +108,25 @@ public class Wizard : KinematicBody2D, ISelectable, IMove, IHaveRuntime, ICaster
     public void HandleMove()
     {
         throw new NotImplementedException();
+    }
+
+    public void HandleCollision(KinematicCollision2D collision)
+    {
+        var collider = collision.GetCollider();
+    }
+
+    public void CompleteClimb()
+    {
+        return;
+    }
+
+    public void Elevate(eCollisionLayers level)
+    {
+        state.elevationHandler.HandleElevation((int)level);
+    }
+
+    public void DisableFall(int v)
+    {
+        return;
     }
 }

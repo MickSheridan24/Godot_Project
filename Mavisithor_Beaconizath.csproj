@@ -79,6 +79,7 @@
     <Compile Include="src\StateManagement\DebugInfo.cs" />
     <Compile Include="src\StateManagement\StatusEffect.cs" />
     <Compile Include="src\StateManagement\TargetingSystem.cs" />
+    <Compile Include="src\StateManagement\TickHandler.cs" />
     <Compile Include="src\Models\Spell.cs" />
     <Compile Include="src\Models\ProjectileBase.cs" />
     <Compile Include="src\Models\Spells\FireballSpell.cs" />
@@ -113,6 +114,8 @@
     <Compile Include="src\AI\Orders\MoveOrder.cs" />
     <Compile Include="src\AI\Orders\SetDestinationOrder.cs" />
     <Compile Include="src\AI\Orders\StandByOrder.cs" />
+    <Compile Include="src\AI\Orders\ClimbOrder.cs" />
+    <Compile Include="src\AI\Orders\ReEnableFallOrder.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
 </Project>

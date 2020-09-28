@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Godot;
 
 public class EnemyState
 {
@@ -14,14 +15,27 @@ public class EnemyState
 
     public ElevationHandler elevationHandler;
 
+    private TickHandler tickHandler;
+
+    public bool isClimbing;
+
+
+
     public EnemyState(IAI AI, Enemy enemy)
     {
+        isClimbing = false;
         ai = AI;
         node = enemy;
         health = 400;
         maxHealth = 400;
         statuses = new List<IStatusEffect>();
         elevationHandler = new ElevationHandler(node, node.runtime);
+        tickHandler = new TickHandler();
+    }
+
+    public void Tick()
+    {
+        tickHandler.Tick();
     }
 
     public IOrder RequestAction(float d)
@@ -74,5 +88,22 @@ public class EnemyState
     internal bool CanMove()
     {
         return !HasStatus(eStatusEffect.JOLTED);
+    }
+
+    internal void InitClimbing(eCollisionLayers level)
+    {
+        isClimbing = true;
+        tickHandler.AddOrder(new ClimbOrder(node, level), 5);
+    }
+
+    internal void StopClimbing()
+    {
+        isClimbing = false;
+    }
+
+    internal void DisableFall(int v)
+    {
+        node.isFallDisabled = true;
+        tickHandler.AddOrder(new ReEnableFallOrder(node), v);
     }
 }

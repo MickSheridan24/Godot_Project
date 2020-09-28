@@ -17,14 +17,8 @@ public class World : Node2D, IHaveRuntime
 
     public Runtime runtime => GetParent<IHaveRuntime>().runtime;
     private TileTheme theme;
-
-
-
     private MapHandler mapHandler;
     public ITarget rightTarget => runtime.RightTarget;
-
-
-
     public ITarget leftTarget => runtime.LeftTarget;
     private Highlight rightHighlight => GetNode<Highlight>("RightHighlight");
     private Highlight leftHighlight => GetNode<Highlight>("LeftHighlight");
@@ -56,6 +50,15 @@ public class World : Node2D, IHaveRuntime
         mapHandler.tiles.ForEach(t => level3.SetCellv(t.coordsM, GetTileId(level3, t.tileType)));
 
 
+    }
+
+
+    public eCollisionLayers GetLayer(TileMap t)
+    {
+        return t == level2 ? eCollisionLayers.LEVEL2 :
+               t == level3 ? eCollisionLayers.LEVEL3 :
+               t == level4 ? eCollisionLayers.LEVEL4 :
+               eCollisionLayers.ENTITY;
     }
 
     public override void _Process(float delta)

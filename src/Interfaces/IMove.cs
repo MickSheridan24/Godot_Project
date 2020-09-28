@@ -8,4 +8,5 @@ public interface IMove
     void HandleMove(float delta);
     KinematicCollision2D MoveAndCollide(Vector2 d, bool i = true, bool j = true, bool k = false);
     bool CanMove();
+    void HandleCollision(KinematicCollision2D collision);
 }
