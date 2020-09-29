@@ -2,22 +2,23 @@
 public class JoltedEffect : StatusEffect, IStatusEffect
 {
 
-    public JoltedEffect(int duration) : base(eStatusEffect.JOLTED, duration)
+    private int tick = 60;
+    public JoltedEffect() : base(eStatusEffect.JOLTED)
     {
-
+        maxDuration = 10;
     }
     public void Enact(ISufferStatusEffects target)
     {
-        target.TakeDamage(5);
+        tick--;
+        if (tick <= 0)
+        {
+            target.TakeDamage(5);
+        }
+        tick = 60;
     }
 
-    public void Increase(int dur)
+    public void Reverse(ISufferStatusEffects target)
     {
-        duration += dur;
-
-        if (duration > 10)
-        {
-            duration = 10;
-        }
+        return;
     }
 }

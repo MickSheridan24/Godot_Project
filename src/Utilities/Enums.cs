@@ -26,7 +26,8 @@ public enum eSpell
 public enum eDamageType
 {
     FIRE,
-    ELECTRIC
+    ELECTRIC,
+    PHYSICAL
 }
 
 
@@ -46,5 +47,13 @@ public enum eTileType
 
 public enum eStat
 {
-    SPEED
+    SPEED,
+    HEALTH
+}
+
+public enum eStatusEffect
+{
+    JOLTED,
+    BURNING,
+    INTANGIBLE
 }

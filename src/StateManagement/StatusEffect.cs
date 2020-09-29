@@ -1,25 +1,32 @@
 
+using System;
+
 public class StatusEffect
 {
 
     public eStatusEffect type { get; set; }
 
-    public int duration { get; set; }
+    public int maxDuration { get; set; }
+    bool enacted;
 
-    public StatusEffect(eStatusEffect type, int duration)
+    public StatusEffect(eStatusEffect type)
     {
         this.type = type;
-        this.duration = duration;
+        enacted = false;
     }
-    public void Reduce()
+
+    internal static IStatusEffect Create(eStatusEffect s)
     {
-        duration -= 1;
+        switch (s)
+        {
+            case eStatusEffect.INTANGIBLE:
+                return new IntangibleEffect();
+            case eStatusEffect.JOLTED:
+                return new JoltedEffect();
+            default:
+                return null;
+        }
     }
-
 }
 
-public enum eStatusEffect
-{
-    JOLTED,
-    BURNING
-}
+

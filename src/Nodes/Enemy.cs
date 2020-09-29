@@ -21,8 +21,8 @@ public class Enemy : KinematicBody2D, IElevatable, IMove, ITarget, IDamageable, 
     private Highlight rightHighlight => GetNode<Highlight>("RightHighlight");
     private Highlight leftHighlight => GetNode<Highlight>("LeftHighlight");
 
-    public int Health => state.health;
-    public int MaxHealth => state.maxHealth;
+    public int Health => state.health.current;
+    public int MaxHealth => state.health.standard;
 
     public bool isFallDisabled { get; set; }
 
@@ -48,7 +48,7 @@ public class Enemy : KinematicBody2D, IElevatable, IMove, ITarget, IDamageable, 
         leftHighlight.Visible = runtime.LeftTarget == this;
         InitState();
         state.elevationHandler.HandleElevation();
-        state.HandleStatuses();
+        state.statusHandler.HandleStatuses();
         HandleDamageCounter();
         order = state.RequestAction(d);
     }
@@ -78,12 +78,8 @@ public class Enemy : KinematicBody2D, IElevatable, IMove, ITarget, IDamageable, 
             DamageStateCounter--;
             if (DamageStateCounter <= 0)
             {
-                body.SetCollisionLayerBit((int)eCollisionLayers.ENTITY, true);
-                body.SetCollisionLayerBit((int)eCollisionLayers.HOSTILE, true);
-                body.SetCollisionLayerBit((int)eCollisionLayers.INTANGIBLE, false);
-                sprite.Modulate = new SpriteTheme().cEnemy;
-            }
 
+            }
         }
     }
 
@@ -120,7 +116,7 @@ public class Enemy : KinematicBody2D, IElevatable, IMove, ITarget, IDamageable, 
         switch (type)
         {
             default:
-                EnterDamageState(10);
+                state.AddStatus(eStatusEffect.INTANGIBLE, 1);
                 TakeDamage(power);
                 break;
         }
@@ -145,26 +141,22 @@ public class Enemy : KinematicBody2D, IElevatable, IMove, ITarget, IDamageable, 
 
     //IConductElectricity
 
-    public void EnterDamageState(int amount = 5)
+    public void BecomeIntangible()
     {
         body.SetCollisionLayerBit((int)eCollisionLayers.ENTITY, false);
         body.SetCollisionLayerBit((int)eCollisionLayers.HOSTILE, false);
         body.SetCollisionLayerBit((int)eCollisionLayers.INTANGIBLE, true);
         sprite.Modulate = new SpriteTheme().cEnemyHit;
-        DamageStateCounter = amount;
-
-
     }
 
-    public void AddStatusEffect(IStatusEffect effect)
+    public void EndIntangible()
     {
-        state.AddStatusEffect(effect);
+        body.SetCollisionLayerBit((int)eCollisionLayers.ENTITY, true);
+        body.SetCollisionLayerBit((int)eCollisionLayers.HOSTILE, true);
+        body.SetCollisionLayerBit((int)eCollisionLayers.INTANGIBLE, false);
+        sprite.Modulate = new SpriteTheme().cEnemy;
     }
 
-    public bool HasStatusEffect(eStatusEffect e)
-    {
-        return state.HasStatus(e);
-    }
 
     public void ExecQueueFree()
     {
@@ -177,7 +169,6 @@ public class Enemy : KinematicBody2D, IElevatable, IMove, ITarget, IDamageable, 
         {
             runtime.ClearRightTarget();
         }
-
 
         CallDeferred("free");
     }
@@ -218,5 +209,23 @@ public class Enemy : KinematicBody2D, IElevatable, IMove, ITarget, IDamageable, 
     {
 
         state.DisableFall(v);
+    }
+    public void AddStatusEffect(IStatusEffect effect)
+    {
+        state.statusHandler.AddStatus(effect);
+    }
+
+    public bool HasStatusEffect(eStatusEffect e)
+    {
+        return state.statusHandler.HasStatus(e);
+    }
+    public void RemoveEffect(eStatusEffect eff)
+    {
+        state.statusHandler.RemoveStatus(eff);
+    }
+
+    public void AddJoltedEffect(int d)
+    {
+        state.AddStatus(eStatusEffect.JOLTED, d);
     }
 }

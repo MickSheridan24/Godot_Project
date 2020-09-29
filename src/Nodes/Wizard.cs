@@ -1,7 +1,7 @@
 using Godot;
 using System;
 
-public class Wizard : KinematicBody2D, ISelectable, IMove, IHaveRuntime, ICaster, IElevatable, ITarget
+public class Wizard : KinematicBody2D, ISelectable, IMove, IHaveRuntime, ICaster, IElevatable, ITarget, IDamageable, ISufferStatusEffects
 {
 
     //props
@@ -13,11 +13,12 @@ public class Wizard : KinematicBody2D, ISelectable, IMove, IHaveRuntime, ICaster
     private Sprite sprite => GetNode<Sprite>("Sprite");
     public Area2D body => GetNode<Area2D>("Area2D");
     public Vector2 spritePosition => sprite.Position;
-    private Color unselected => new Color("#a822dd");
-    private Color selected => new Color("a866ff");
+
+    public SpriteTheme theme => new SpriteTheme();
     public Vector2 destination { get; set; }
     public Vector2 speed => state.speed.current.ToVector();
     public bool MovingTarget { get; set; }
+
 
 
     public bool isFallDisabled { get; set; }
@@ -38,7 +39,7 @@ public class Wizard : KinematicBody2D, ISelectable, IMove, IHaveRuntime, ICaster
     public override void _Process(float d)
     {
         state.elevationHandler.HandleElevation();
-        OverrideSpriteColor(runtime.currentSelection == this ? selected : unselected);
+        OverrideSpriteColor();
         aimLine.dest = runtime?.RightTarget?.GetTargetPosition() ?? aimLine.dest;
         aimLine.Update();
     }
@@ -96,9 +97,10 @@ public class Wizard : KinematicBody2D, ISelectable, IMove, IHaveRuntime, ICaster
 
 
     //private
-    private void OverrideSpriteColor(Color c)
+    private void OverrideSpriteColor()
     {
-        sprite.Modulate = c;
+        var defaultColor = runtime.currentSelection == this ? theme.selected : theme.unselected;
+        sprite.Modulate = state.statusHandler.HasStatus(eStatusEffect.INTANGIBLE) ? theme.cEnemyHit : defaultColor;
     }
     private void SetDestination(Vector2 position)
     {
@@ -111,26 +113,81 @@ public class Wizard : KinematicBody2D, ISelectable, IMove, IHaveRuntime, ICaster
     public void HandleCollision(KinematicCollision2D collision)
     {
         var collider = collision.GetCollider();
+
+        if (collider is Enemy)
+        {
+            Damage(50, eDamageType.PHYSICAL);
+        }
     }
+
+    public void Damage(int power, eDamageType type)
+    {
+        if (!state.statusHandler.HasStatus(eStatusEffect.INTANGIBLE))
+        {
+            switch (type)
+            {
+                default:
+                    state.AddStatus(eStatusEffect.INTANGIBLE, 2);
+                    TakeDamage(power);
+                    break;
+            }
+        }
+    }
+
+    public void TakeDamage(int damage)
+    {
+        if (!state.HandleDamage(damage))
+        {
+            ExecQueueFree();
+        }
+    }
+
+
+    public void ExecQueueFree()
+    {
+        runtime.wizardNode = null;
+        CallDeferred("free");
+    }
+
 
     public void CompleteClimb()
     {
         return;
     }
 
+    public void DisableFall(int v)
+    {
+        return;
+    }
     public void Elevate(eCollisionLayers level)
     {
         state.elevationHandler.HandleElevation((int)level);
     }
 
-    public void DisableFall(int v)
-    {
-        return;
-    }
 
     public Vector2 GetTargetPosition()
     {
         return Position;
+    }
+    public void BecomeIntangible()
+    {
+        body.SetCollisionLayerBit((int)eCollisionLayers.ENTITY, false);
+        body.SetCollisionLayerBit((int)eCollisionLayers.FRIENDLY, false);
+        body.SetCollisionLayerBit((int)eCollisionLayers.INTANGIBLE, true);
+        sprite.Modulate = new SpriteTheme().cEnemyHit;
+    }
+
+    public void EndIntangible()
+    {
+        body.SetCollisionLayerBit((int)eCollisionLayers.ENTITY, true);
+        body.SetCollisionLayerBit((int)eCollisionLayers.FRIENDLY, true);
+        body.SetCollisionLayerBit((int)eCollisionLayers.INTANGIBLE, false);
+        sprite.Modulate = new SpriteTheme().unselected;
+    }
+
+    public void RemoveEffect(eStatusEffect eff)
+    {
+        state.statusHandler.RemoveStatus(eff);
     }
 }
 

@@ -130,4 +130,10 @@ public static class Extensions
         }
         else return -1;
     }
+
+    public static bool IsFreed(this Node node)
+    {
+        var wr = WeakRef.WeakRef(node);
+        return wr.GetRef() == null;
+    }
 }

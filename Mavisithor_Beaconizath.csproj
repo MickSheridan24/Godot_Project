@@ -86,6 +86,7 @@
     <Compile Include="src\StateManagement\StatusEffect.cs" />
     <Compile Include="src\StateManagement\TargetingSystem.cs" />
     <Compile Include="src\StateManagement\TickHandler.cs" />
+    <Compile Include="src\StateManagement\StatusHandler.cs" />
     <Compile Include="src\Models\Spell.cs" />
     <Compile Include="src\Models\Stat.cs" />
     <Compile Include="src\Models\ProjectileBase.cs" />
@@ -96,6 +97,7 @@
     <Compile Include="src\Models\Projectiles\FireballProjectile.cs" />
     <Compile Include="src\Models\Projectiles\LightningProjectile.cs" />
     <Compile Include="src\Models\StatusEffects\JoltedEffect.cs" />
+    <Compile Include="src\Models\StatusEffects\IntangibleEffect.cs" />
     <Compile Include="src\Models\SpellCastResult.cs" />
     <Compile Include="src\Models\VectorTarget.cs" />
     <Compile Include="src\Interfaces\ISelectable.cs" />
@@ -127,6 +129,7 @@
     <Compile Include="src\AI\Orders\ClimbOrder.cs" />
     <Compile Include="src\AI\Orders\ReEnableFallOrder.cs" />
     <Compile Include="src\AI\Orders\EndBuffOrder.cs" />
+    <Compile Include="src\AI\Orders\RemoveStatusOrder.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
 </Project>

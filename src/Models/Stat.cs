@@ -17,4 +17,9 @@ public class Stat
     {
         return new Stat(v, v, eStat.SPEED);
     }
+
+    public static Stat Health(int h)
+    {
+        return new Stat(h, h, eStat.HEALTH);
+    }
 }

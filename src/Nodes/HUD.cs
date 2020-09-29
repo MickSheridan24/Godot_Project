@@ -16,12 +16,12 @@ public class HUD : Node2D, IHaveRuntime
     public override void _Process(float d)
     {
         var c = bounds.Position + bounds.Size / 2;
-        runtime.Debug = new DebugInfo()
-        {
-            D1 = "Wiz: " + runtime.wizardNode.Position,
-            D2 = "dest: " + runtime.wizardNode.destination.ToString(),
-            D3 = "Right: " + runtime.RightTarget?.GetTargetPosition().ToString()
-        };
+        // runtime.Debug = new DebugInfo()
+        // {
+        //     D1 = "Wiz: " + runtime.wizardNode.Position,
+        //     D2 = "dest: " + runtime.wizardNode.destination.ToString(),
+        //     D3 = "Right: " + runtime.RightTarget?.GetTargetPosition().ToString()
+        // };
 
         var pos = GetGlobalMousePosition();
         var center = GetViewportRect().Size / 2 + Position;

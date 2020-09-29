@@ -7,30 +7,25 @@ public class EnemyState
 {
     public IAI ai { get; set; }
     public Enemy node { get; set; }
-
-    public int health { get; set; }
-
-    private List<IStatusEffect> statuses;
-    internal int maxHealth;
-
-    public ElevationHandler elevationHandler;
-
-    private TickHandler tickHandler;
-
     public bool isClimbing;
 
-
+    public Stat health;
+    public Stat speed;
+    public ElevationHandler elevationHandler;
+    public StatusHandler statusHandler;
+    private TickHandler tickHandler;
 
     public EnemyState(IAI AI, Enemy enemy)
     {
         isClimbing = false;
         ai = AI;
         node = enemy;
-        health = 400;
-        maxHealth = 400;
-        statuses = new List<IStatusEffect>();
+        health = Stat.Health(400);
+        speed = Stat.Speed(85);
+
         elevationHandler = new ElevationHandler(node, node.runtime);
         tickHandler = new TickHandler();
+        statusHandler = new StatusHandler(node);
     }
 
     public void Tick()
@@ -45,49 +40,13 @@ public class EnemyState
 
     public bool HandleDamage(int d)
     {
-        health -= d;
-        return health > 0;
-    }
-
-    internal void HandleStatuses()
-    {
-        foreach (var status in statuses)
-        {
-            status.Enact(node);
-            status.Reduce();
-        }
-        statuses = statuses.Where(s => s.duration > 0).ToList();
-    }
-
-
-    private IStatusEffect GetStatus(eStatusEffect effect)
-    {
-        return statuses.Where(s => s.type == effect).FirstOrDefault();
-    }
-
-    public bool HasStatus(eStatusEffect effect)
-    {
-        return statuses.Where(s => s.type == effect).FirstOrDefault() != null;
-    }
-
-
-    internal void AddStatusEffect(IStatusEffect effect)
-    {
-        var presentStatus = GetStatus(effect.type);
-        if (presentStatus != null)
-        {
-            presentStatus.Increase(effect.duration);
-        }
-        else
-        {
-            statuses.Add(effect);
-        }
-
+        health.current -= d;
+        return health.current > 0;
     }
 
     internal bool CanMove()
     {
-        return !HasStatus(eStatusEffect.JOLTED);
+        return !statusHandler.HasStatus(eStatusEffect.JOLTED);
     }
 
     internal void InitClimbing(eCollisionLayers level)
@@ -105,5 +64,12 @@ public class EnemyState
     {
         node.isFallDisabled = true;
         tickHandler.AddOrder(new ReEnableFallOrder(node), v);
+    }
+
+    internal void AddStatus(eStatusEffect s, int duration)
+    {
+        statusHandler.AddStatus(StatusEffect.Create(s));
+        tickHandler.AddOrder(new RemoveStatusOrder(node, s), duration);
+
     }
 }

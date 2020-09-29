@@ -45,7 +45,7 @@ public class LightningProjectile : ProjectileBase, IProjectile
         {
             var conductor = (target as IConductElectricity);
             var conduit = FindConduit(conductor, area);
-            conductor.AddStatusEffect(new JoltedEffect(4));
+            conductor.AddJoltedEffect(2);
             if (conduit != null)
             {
                 Conduct(conductor, conduit);
