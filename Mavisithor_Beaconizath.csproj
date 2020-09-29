@@ -55,7 +55,7 @@
     <Compile Include="src\Conlanger\Proto\ProtoAncient.cs" />
     <Compile Include="src\Conlanger\Proto\IProto.cs" />
     <Compile Include="src\Conlanger\Conlang\Ancient.cs" />
-     <Compile Include="src\Conlanger\ConsonantList.cs" />
+    <Compile Include="src\Conlanger\ConsonantList.cs" />
     <Compile Include="src\Nodes\AimLine.cs" />
     <Compile Include="src\Nodes\Cursor.cs" />
     <Compile Include="src\Nodes\HealthBar.cs" />
@@ -72,7 +72,6 @@
     <Compile Include="src\Nodes\World.cs" />
     <Compile Include="src\Nodes\PhysicsHelpers\Moveable.cs" />
     <Compile Include="src\Nodes\PhysicsHelpers\ElevationHandler.cs" />
-    
     <Compile Include="src\TileLogic\TileEntity.cs" />
     <Compile Include="src\TileLogic\MapHandler.cs" />
     <Compile Include="src\TileLogic\TileTheme.cs" />
@@ -88,10 +87,12 @@
     <Compile Include="src\StateManagement\TargetingSystem.cs" />
     <Compile Include="src\StateManagement\TickHandler.cs" />
     <Compile Include="src\Models\Spell.cs" />
+    <Compile Include="src\Models\Stat.cs" />
     <Compile Include="src\Models\ProjectileBase.cs" />
     <Compile Include="src\Models\Spells\FireballSpell.cs" />
     <Compile Include="src\Models\Spells\LightningSpell.cs" />
     <Compile Include="src\Models\Spells\WallSpell.cs" />
+    <Compile Include="src\Models\Spells\SpeedSpell.cs" />
     <Compile Include="src\Models\Projectiles\FireballProjectile.cs" />
     <Compile Include="src\Models\Projectiles\LightningProjectile.cs" />
     <Compile Include="src\Models\StatusEffects\JoltedEffect.cs" />
@@ -115,14 +116,17 @@
     <Compile Include="src\Interfaces\ICaster.cs" />
     <Compile Include="src\Interfaces\IElevatable.cs" />
     <Compile Include="src\Interfaces\IDamageable.cs" />
+    <Compile Include="src\Interfaces\IHaveStats.cs" />
     <Compile Include="src\UILogic\UITheme.cs" />
     <Compile Include="src\UILogic\SpriteTheme.cs" />
     <Compile Include="src\AI\PatrolAI.cs" />
+    <Compile Include="src\AI\ZombieAI.cs" />
     <Compile Include="src\AI\Orders\MoveOrder.cs" />
     <Compile Include="src\AI\Orders\SetDestinationOrder.cs" />
     <Compile Include="src\AI\Orders\StandByOrder.cs" />
     <Compile Include="src\AI\Orders\ClimbOrder.cs" />
     <Compile Include="src\AI\Orders\ReEnableFallOrder.cs" />
+    <Compile Include="src\AI\Orders\EndBuffOrder.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
 </Project>

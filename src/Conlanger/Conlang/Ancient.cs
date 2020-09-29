@@ -6,7 +6,7 @@ namespace Conlanger
     {
         private Random random;
 
-        p
+
         public Ancient()
         {
             random = new Random();

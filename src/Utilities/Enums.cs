@@ -20,7 +20,8 @@ public enum eSpell
 {
     FIREBALL,
     LIGHTNING,
-    EARTH_WALL
+    EARTH_WALL,
+    SPEED
 }
 public enum eDamageType
 {
@@ -41,4 +42,9 @@ public enum eTileType
     DIRT = 1,
     GRASS = 2,
     EARTH_WALL = 3,
+}
+
+public enum eStat
+{
+    SPEED
 }

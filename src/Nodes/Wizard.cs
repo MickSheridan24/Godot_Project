@@ -1,7 +1,7 @@
 using Godot;
 using System;
 
-public class Wizard : KinematicBody2D, ISelectable, IMove, IHaveRuntime, ICaster, IElevatable
+public class Wizard : KinematicBody2D, ISelectable, IMove, IHaveRuntime, ICaster, IElevatable, ITarget
 {
 
     //props
@@ -16,12 +16,14 @@ public class Wizard : KinematicBody2D, ISelectable, IMove, IHaveRuntime, ICaster
     private Color unselected => new Color("#a822dd");
     private Color selected => new Color("a866ff");
     public Vector2 destination { get; set; }
-    public Vector2 speed => state.moveSpeed;
+    public Vector2 speed => state.speed.current.ToVector();
+    public bool MovingTarget { get; set; }
 
 
+    public bool isFallDisabled { get; set; }
     private PackedScene snSimpleProjectile => (PackedScene)ResourceLoader.Load("res://scenes/SimpleProjectile.tscn");
 
-    public bool isFallDisabled { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+
 
 
     //overrides
@@ -29,6 +31,8 @@ public class Wizard : KinematicBody2D, ISelectable, IMove, IHaveRuntime, ICaster
     {
         moveable = new Moveable(this);
         destination = Position;
+        MovingTarget = true;
+        isFallDisabled = false;
     }
 
     public override void _Process(float d)
@@ -41,6 +45,7 @@ public class Wizard : KinematicBody2D, ISelectable, IMove, IHaveRuntime, ICaster
     public override void _PhysicsProcess(float delta)
     {
         HandleMove(delta);
+        state.tickHandler.Tick();
     }
 
     //ISelectable
@@ -52,7 +57,6 @@ public class Wizard : KinematicBody2D, ISelectable, IMove, IHaveRuntime, ICaster
     {
         var dest = GetGlobalMousePosition();
         SetDestination(dest);
-        //   runtime.SetWorldTarget(dest);
     }
 
     //IMove
@@ -104,12 +108,6 @@ public class Wizard : KinematicBody2D, ISelectable, IMove, IHaveRuntime, ICaster
     {
         runtime.SetTarget(t);
     }
-
-    public void HandleMove()
-    {
-        throw new NotImplementedException();
-    }
-
     public void HandleCollision(KinematicCollision2D collision)
     {
         var collider = collision.GetCollider();
@@ -129,4 +127,10 @@ public class Wizard : KinematicBody2D, ISelectable, IMove, IHaveRuntime, ICaster
     {
         return;
     }
+
+    public Vector2 GetTargetPosition()
+    {
+        return Position;
+    }
 }
+

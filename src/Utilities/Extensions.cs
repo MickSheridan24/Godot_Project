@@ -84,6 +84,16 @@ public static class Extensions
         return vector.x >= low.x && vector.y >= low.y && vector.x < high.x && vector.y < high.y;
     }
 
+    public static bool WithinAreaOf(this Vector2 vector, Vector2 dest, Vector2 size)
+    {
+        return vector.InBounds(dest - size / 2, dest + size / 2);
+    }
+
+    public static Vector2 ToVector(this int s)
+    {
+        return new Vector2(s, s);
+    }
+
 
     public static bool InMap(this Vector2 vector, int mapSize)
     {

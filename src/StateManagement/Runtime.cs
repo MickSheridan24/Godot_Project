@@ -40,7 +40,7 @@ public class Runtime
 
     public EnemyState CreateEnemyState(Enemy enemy)
     {
-        var AI = new PatrolAI(enemy, new Vector2(-1, 0), new Vector2(300, 300));
+        var AI = new ZombieAI(enemy, wizardNode);
         return new EnemyState(AI, enemy);
     }
 

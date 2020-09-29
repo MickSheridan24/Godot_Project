@@ -2,6 +2,6 @@ using Godot;
 
 public interface ITarget
 {
-    bool MovingTarget { get; set; }
+    bool MovingTarget { get; }
     Vector2 GetTargetPosition();
 }

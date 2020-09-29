@@ -12,7 +12,7 @@ public class Enemy : KinematicBody2D, IElevatable, IMove, ITarget, IDamageable, 
     public EnemyState state { get; private set; }
     private Moveable moveable;
     public Vector2 destination { get; set; }
-    public Vector2 speed => new Vector2(100, 100);
+    public Vector2 speed { get; set; }
     public bool MovingTarget { get; set; }
     public Area2D body => GetNode<Area2D>("Area2D");
     private int DamageStateCounter;
@@ -30,6 +30,7 @@ public class Enemy : KinematicBody2D, IElevatable, IMove, ITarget, IDamageable, 
     {
         destination = Position;
         isFallDisabled = false;
+        speed = new Vector2(80, 80);
         sprite.Modulate = new SpriteTheme().cEnemy;
         moveable = new Moveable(this);
         MovingTarget = true;
