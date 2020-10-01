@@ -1,15 +1,76 @@
-[gd_scene load_steps=7 format=2]
+[gd_scene load_steps=11 format=2]
 
 [ext_resource path="res://src/Nodes/Wizard.cs" type="Script" id=1]
-[ext_resource path="res://assets/Blank.png" type="Texture" id=2]
+[ext_resource path="res://assets/Wizard_All.png" type="Texture" id=2]
 [ext_resource path="res://src/Nodes/AimLine.cs" type="Script" id=3]
 [ext_resource path="res://Scenes/HealthBar.tscn" type="PackedScene" id=4]
 
-[sub_resource type="RectangleShape2D" id=1]
-extents = Vector2( 20, 20 )
+[sub_resource type="Animation" id=3]
+resource_name = "Walk_Down"
+tracks/0/type = "value"
+tracks/0/path = NodePath(".:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.3, 0.6 ),
+"transitions": PoolRealArray( 1, 1, 1 ),
+"update": 1,
+"values": [ 0, 1, 0 ]
+}
+
+[sub_resource type="Animation" id=5]
+resource_name = "Walk_Left"
+tracks/0/type = "value"
+tracks/0/path = NodePath(".:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.3, 0.6 ),
+"transitions": PoolRealArray( 1, 1, 1 ),
+"update": 1,
+"values": [ 6, 7, 6 ]
+}
+
+[sub_resource type="Animation" id=4]
+resource_name = "Walk_Right"
+tracks/0/type = "value"
+tracks/0/path = NodePath(".:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.3, 0.6 ),
+"transitions": PoolRealArray( 1, 1, 1 ),
+"update": 1,
+"values": [ 2, 3, 2 ]
+}
+
+[sub_resource type="Animation" id=6]
+resource_name = "Walk_Up"
+tracks/0/type = "value"
+tracks/0/path = NodePath(".:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.3, 0.6 ),
+"transitions": PoolRealArray( 1, 1, 1 ),
+"update": 1,
+"values": [ 4, 5, 4 ]
+}
+
+[sub_resource type="CapsuleShape2D" id=7]
+radius = 2.44452
+height = 0.917048
 
 [sub_resource type="CircleShape2D" id=2]
-radius = 22.3607
+radius = 30.0
 
 [node name="Wizard" type="KinematicBody2D"]
 collision_layer = 5
@@ -17,17 +78,24 @@ collision_mask = 11
 script = ExtResource( 1 )
 
 [node name="Sprite" type="Sprite" parent="."]
+scale = Vector2( 0.99856, 1 )
 texture = ExtResource( 2 )
-normal_map = ExtResource( 2 )
-region_enabled = true
-region_rect = Rect2( 0, 0, 32, 32 )
+hframes = 8
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="Sprite"]
+anims/Walk_Down = SubResource( 3 )
+anims/Walk_Left = SubResource( 5 )
+anims/Walk_Right = SubResource( 4 )
+anims/Walk_Up = SubResource( 6 )
 
 [node name="Area2D" type="Area2D" parent="."]
+scale = Vector2( 1.59609, 1.63175 )
 collision_layer = 5
 collision_mask = 0
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
-shape = SubResource( 1 )
+scale = Vector2( 7.68898, 6.33307 )
+shape = SubResource( 7 )
 
 [node name="AimLine" type="Node2D" parent="."]
 z_index = 1
@@ -37,4 +105,4 @@ script = ExtResource( 3 )
 shape = SubResource( 2 )
 
 [node name="HealthBar" parent="." instance=ExtResource( 4 )]
-position = Vector2( -16, 20 )
+position = Vector2( -16, 35 )

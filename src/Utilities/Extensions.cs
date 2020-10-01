@@ -1,6 +1,8 @@
 using System.Collections.Generic;
 using Godot;
 using System.Linq;
+using System;
+
 public static class Extensions
 {
     public static Vector2 SPACE_SIZE(this Vector2 v)
@@ -27,6 +29,14 @@ public static class Extensions
         }
         toAdd.AddRange(vectors);
         return toAdd.Distinct().ToList();
+    }
+
+    public static Vector2 ToEightDir(this Vector2 v)
+    {
+        var dir = v.Normalized();
+        var x = (double)dir.x;
+        var y = (double)dir.y;
+        return new Vector2((float)Math.Round(x), (float)Math.Round(y));
     }
 
 

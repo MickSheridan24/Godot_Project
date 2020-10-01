@@ -71,7 +71,8 @@
     <Compile Include="src\Nodes\Wizard.cs" />
     <Compile Include="src\Nodes\World.cs" />
     <Compile Include="src\Nodes\PhysicsHelpers\Moveable.cs" />
-    <Compile Include="src\Nodes\PhysicsHelpers\ElevationHandler.cs" />
+    <Compile Include="src\Nodes\PhysicsHelpers\ElevationHandler.cs" />  
+     <Compile Include="src\Nodes\PhysicsHelpers\MoveAnimationHelper.cs" />
     <Compile Include="src\TileLogic\TileEntity.cs" />
     <Compile Include="src\TileLogic\MapHandler.cs" />
     <Compile Include="src\TileLogic\TileTheme.cs" />

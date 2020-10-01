@@ -14,6 +14,7 @@ public class Wizard : KinematicBody2D, ISelectable, IHaveHealth, IMove, IHaveRun
     private WeakRef weakref;
 
     private Sprite sprite => GetNode<Sprite>("Sprite");
+    private AnimationPlayer animation => sprite.GetNode<AnimationPlayer>("AnimationPlayer");
     public Area2D body => GetNode<Area2D>("Area2D");
     public Vector2 spritePosition => sprite.Position;
 
@@ -41,19 +42,64 @@ public class Wizard : KinematicBody2D, ISelectable, IHaveHealth, IMove, IHaveRun
         MovingTarget = true;
         isFallDisabled = false;
         weakref = WeakRef(this);
+        animation.GetAnimation("Walk_Up").Loop = true;
+        animation.GetAnimation("Walk_Down").Loop = true;
+        animation.GetAnimation("Walk_Left").Loop = true;
+        animation.GetAnimation("Walk_Right").Loop = true;
     }
 
     public override void _Process(float d)
     {
         state.elevationHandler.HandleElevation();
-        OverrideSpriteColor();
-        aimLine.dest = runtime?.RightTarget?.GetTargetPosition() ?? aimLine.dest;
-        aimLine.Update();
+
+        //    OverrideSpriteColor();
+        //aimLine.dest = runtime?.RightTarget?.GetTargetPosition() ?? aimLine.dest;
+        //aimLine.Update();
     }
+
+    private void HandleAnimation()
+    {
+        var dir = Position.DirectionTo(destination).ToEightDir();
+        var anim = "";
+        if (dir == Vector2.Down)
+        {
+            sprite.Frame = 0;
+            anim = "Walk_Down";
+        }
+        else if (dir == Vector2.Right)
+        {
+            sprite.Frame = 2;
+            anim = "Walk_Right";
+        }
+        else if (dir == Vector2.Up)
+        {
+            sprite.Frame = 4;
+            anim = "Walk_Up";
+        }
+        else if (dir == Vector2.Left)
+        {
+            sprite.Frame = 6;
+            anim = "Walk_Left";
+        }
+        if (moveable.moving && animation.CurrentAnimation == "" && anim != "")
+        {
+            GD.Print(anim);
+            animation.Play(anim, -1, 1000);
+        }
+        else if (animation.IsPlaying())
+        {
+            animation.Stop();
+        }
+    }
+
+
+
     public override void _PhysicsProcess(float delta)
     {
         HandleMove(delta);
+
         state.tickHandler.Tick();
+        HandleAnimation();
     }
 
     //ISelectable

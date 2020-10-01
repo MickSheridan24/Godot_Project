@@ -28,7 +28,6 @@ public class HUD : Node2D, IHaveRuntime
 
         if (!pos.InBounds(bounds.Position, bounds.Position + bounds.Size))
         {
-            GD.Print("OUT");
 
             var directi = c.DirectionTo(pos);
 
