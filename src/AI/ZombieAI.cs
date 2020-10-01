@@ -17,11 +17,11 @@ public class ZombieAI : IAI
 
     public IOrder Request(EnemyState enemyState, float d)
     {
-        if ((node as Node).IsFreed() || node == null)
+        if (target.IsFreed() || target == null)
         {
             return new StandByOrder();
         }
-        if (node.destination == null || !node.destination.WithinAreaOf(target.GetTargetPosition(), new Vector2(30, 30)))
+        else if (node.destination == null || !node.destination.WithinAreaOf(target.GetTargetPosition(), new Vector2(30, 30)))
         {
             return new SetDestinationOrder(node, target.GetTargetPosition());
         }

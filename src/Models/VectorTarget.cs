@@ -16,4 +16,10 @@ public class VectorTarget : ITarget
         return position;
     }
 
+    public bool IsFreed()
+    {
+        return false;
+    }
+
+
 }

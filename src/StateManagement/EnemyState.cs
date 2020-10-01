@@ -11,9 +11,11 @@ public class EnemyState
 
     public Stat health;
     public Stat speed;
+    public Stat damage;
     public ElevationHandler elevationHandler;
     public StatusHandler statusHandler;
     private TickHandler tickHandler;
+
 
     public EnemyState(IAI AI, Enemy enemy)
     {
@@ -22,6 +24,7 @@ public class EnemyState
         node = enemy;
         health = Stat.Health(400);
         speed = Stat.Speed(85);
+        damage = Stat.Damage(50);
 
         elevationHandler = new ElevationHandler(node, node.runtime);
         tickHandler = new TickHandler();

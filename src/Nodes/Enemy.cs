@@ -18,13 +18,19 @@ public class Enemy : KinematicBody2D, IElevatable, IMove, ITarget, IDamageable, 
     private int DamageStateCounter;
 
     private IOrder order;
+    private WeakRef weakref;
+
     private Highlight rightHighlight => GetNode<Highlight>("RightHighlight");
     private Highlight leftHighlight => GetNode<Highlight>("LeftHighlight");
 
     public int Health => state.health.current;
     public int MaxHealth => state.health.standard;
 
+    public int GetDamage => state.damage.current;
+
     public bool isFallDisabled { get; set; }
+
+
 
     public override void _Ready()
     {
@@ -40,6 +46,9 @@ public class Enemy : KinematicBody2D, IElevatable, IMove, ITarget, IDamageable, 
 
         rightHighlight.color = new UITheme().cAccent;
         leftHighlight.color = new UITheme().cBlue;
+
+
+        weakref = WeakRef(this);
     }
 
     public override void _Process(float d)
@@ -49,7 +58,6 @@ public class Enemy : KinematicBody2D, IElevatable, IMove, ITarget, IDamageable, 
         InitState();
         state.elevationHandler.HandleElevation();
         state.statusHandler.HandleStatuses();
-        HandleDamageCounter();
         order = state.RequestAction(d);
     }
     public override void _PhysicsProcess(float d)
@@ -67,19 +75,6 @@ public class Enemy : KinematicBody2D, IElevatable, IMove, ITarget, IDamageable, 
         if (state == null)
         {
             state = runtime.CreateEnemyState(this);
-        }
-    }
-
-    private void HandleDamageCounter()
-    {
-        if (DamageStateCounter > 0)
-        {
-
-            DamageStateCounter--;
-            if (DamageStateCounter <= 0)
-            {
-
-            }
         }
     }
 
@@ -135,9 +130,15 @@ public class Enemy : KinematicBody2D, IElevatable, IMove, ITarget, IDamageable, 
     //ITarget
     public Vector2 GetTargetPosition()
     {
-        return Position;
+        if (IsInsideTree()) return Position;
+        else return Vector2.Zero;
     }
 
+
+    public bool IsFreed()
+    {
+        return weakref.GetRef() == null;
+    }
 
     //IConductElectricity
 
@@ -180,6 +181,10 @@ public class Enemy : KinematicBody2D, IElevatable, IMove, ITarget, IDamageable, 
         if (collider is TileMap)
         {
             HandleTileCollision(collision);
+        }
+        if (collider is Wizard)
+        {
+            (collider as Wizard).Damage(GetDamage, eDamageType.PHYSICAL);
         }
     }
 

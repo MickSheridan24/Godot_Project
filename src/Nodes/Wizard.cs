@@ -1,7 +1,8 @@
 using Godot;
 using System;
 
-public class Wizard : KinematicBody2D, ISelectable, IMove, IHaveRuntime, ICaster, IElevatable, ITarget, IDamageable, ISufferStatusEffects
+public class Wizard : KinematicBody2D, ISelectable, IHaveHealth, IMove, IHaveRuntime, ICaster,
+                      IElevatable, ITarget, IDamageable, ISufferStatusEffects
 {
 
     //props
@@ -10,6 +11,8 @@ public class Wizard : KinematicBody2D, ISelectable, IMove, IHaveRuntime, ICaster
     public WizardState state => runtime.WizardState;
     public AimLine aimLine => GetNode<AimLine>("AimLine");
     public Moveable moveable;
+    private WeakRef weakref;
+
     private Sprite sprite => GetNode<Sprite>("Sprite");
     public Area2D body => GetNode<Area2D>("Area2D");
     public Vector2 spritePosition => sprite.Position;
@@ -24,6 +27,9 @@ public class Wizard : KinematicBody2D, ISelectable, IMove, IHaveRuntime, ICaster
     public bool isFallDisabled { get; set; }
     private PackedScene snSimpleProjectile => (PackedScene)ResourceLoader.Load("res://scenes/SimpleProjectile.tscn");
 
+    public int Health => state.health.current;
+    public int MaxHealth => state.health.standard;
+
 
 
 
@@ -34,6 +40,7 @@ public class Wizard : KinematicBody2D, ISelectable, IMove, IHaveRuntime, ICaster
         destination = Position;
         MovingTarget = true;
         isFallDisabled = false;
+        weakref = WeakRef(this);
     }
 
     public override void _Process(float d)
@@ -116,7 +123,7 @@ public class Wizard : KinematicBody2D, ISelectable, IMove, IHaveRuntime, ICaster
 
         if (collider is Enemy)
         {
-            Damage(50, eDamageType.PHYSICAL);
+            Damage((collider as Enemy).GetDamage, eDamageType.PHYSICAL);
         }
     }
 
@@ -146,7 +153,7 @@ public class Wizard : KinematicBody2D, ISelectable, IMove, IHaveRuntime, ICaster
     public void ExecQueueFree()
     {
         runtime.wizardNode = null;
-        CallDeferred("free");
+        CallDeferred("queue_free");
     }
 
 
@@ -165,9 +172,16 @@ public class Wizard : KinematicBody2D, ISelectable, IMove, IHaveRuntime, ICaster
     }
 
 
+    //ITarget
+    public bool IsFreed()
+    {
+        return weakref.GetRef() == null;
+    }
+
     public Vector2 GetTargetPosition()
     {
-        return Position;
+        if (IsInsideTree()) return Position;
+        else return Vector2.Zero;
     }
     public void BecomeIntangible()
     {

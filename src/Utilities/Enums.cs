@@ -48,7 +48,8 @@ public enum eTileType
 public enum eStat
 {
     SPEED,
-    HEALTH
+    HEALTH,
+    DAMAGE
 }
 
 public enum eStatusEffect

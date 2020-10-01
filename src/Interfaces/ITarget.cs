@@ -4,4 +4,5 @@ public interface ITarget
 {
     bool MovingTarget { get; }
     Vector2 GetTargetPosition();
+    bool IsFreed();
 }

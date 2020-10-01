@@ -22,4 +22,9 @@ public class Stat
     {
         return new Stat(h, h, eStat.HEALTH);
     }
+
+    internal static Stat Damage(int v)
+    {
+        return new Stat(v, v, eStat.DAMAGE);
+    }
 }
