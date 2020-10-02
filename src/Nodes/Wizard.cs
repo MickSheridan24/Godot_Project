@@ -152,8 +152,8 @@ public class Wizard : KinematicBody2D, ISelectable, IHaveHealth, IMove, IHaveRun
     //private
     private void OverrideSpriteColor()
     {
-        var defaultColor = runtime.currentSelection == this ? theme.selected : theme.unselected;
-        sprite.Modulate = state.statusHandler.HasStatus(eStatusEffect.INTANGIBLE) ? theme.cEnemyHit : defaultColor;
+        // var defaultColor = runtime.currentSelection == this ? theme.selected : theme.unselected;
+        // sprite.Modulate = state.statusHandler.HasStatus(eStatusEffect.INTANGIBLE) ? theme.cEnemyHit : defaultColor;
     }
     private void SetDestination(Vector2 position)
     {
