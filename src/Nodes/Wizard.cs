@@ -8,7 +8,7 @@ public class Wizard : KinematicBody2D, ISelectable, IHaveHealth, IMove, IHaveRun
     //props
 
     public Runtime runtime => GetParent<IHaveRuntime>().runtime;
-    public WizardState state => runtime.WizardState;
+    public IWizardState state => runtime.WizardState;
     public AimLine aimLine => GetNode<AimLine>("AimLine");
     public Moveable moveable;
     private WeakRef weakref;
@@ -242,7 +242,6 @@ public class Wizard : KinematicBody2D, ISelectable, IHaveHealth, IMove, IHaveRun
         body.SetCollisionLayerBit((int)eCollisionLayers.ENTITY, true);
         body.SetCollisionLayerBit((int)eCollisionLayers.FRIENDLY, true);
         body.SetCollisionLayerBit((int)eCollisionLayers.INTANGIBLE, false);
-        sprite.Modulate = new SpriteTheme().unselected;
     }
 
     public void RemoveEffect(eStatusEffect eff)

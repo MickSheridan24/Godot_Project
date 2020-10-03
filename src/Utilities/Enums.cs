@@ -21,7 +21,8 @@ public enum eSpell
     FIREBALL,
     LIGHTNING,
     EARTH_WALL,
-    SPEED
+    SPEED,
+    CREATE_GRASS
 }
 public enum eDamageType
 {
@@ -40,9 +41,9 @@ public enum eProjectileType
 
 public enum eTileType
 {
-    DIRT = 1,
-    GRASS = 2,
-    EARTH_WALL = 3,
+    DIRT = 0,
+    GRASS = 1,
+    EARTH_WALL = 2,
 }
 
 public enum eStat

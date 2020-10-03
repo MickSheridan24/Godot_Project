@@ -4,11 +4,11 @@ using System.Linq;
 public class CastManager
 {
     public string currentCast { get; set; }
-    public WizardState wizard { get; set; }
+    public IWizardState wizard { get; set; }
     public ISpell currentSpell { get; set; }
     public List<ISpell> currentSpells { get; set; }
 
-    public CastManager(WizardState wiz)
+    public CastManager(IWizardState wiz)
     {
         currentCast = "";
         wizard = wiz;

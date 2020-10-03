@@ -1,7 +1,8 @@
-[gd_scene load_steps=3 format=2]
+[gd_scene load_steps=4 format=2]
 
 [ext_resource path="res://src/Nodes/UI.cs" type="Script" id=1]
 [ext_resource path="res://Scenes/SpellHandler.tscn" type="PackedScene" id=2]
+[ext_resource path="res://Scenes/ResourceSummary.tscn" type="PackedScene" id=3]
 
 [node name="UI" type="Control"]
 anchor_right = 1.0
@@ -13,3 +14,5 @@ margin_left = -3.87268
 margin_top = -0.936401
 margin_right = -123.873
 margin_bottom = -50.9364
+
+[node name="ResourceSummary" parent="." instance=ExtResource( 3 )]

@@ -8,6 +8,7 @@ public class Enemy : KinematicBody2D, IElevatable, IMove, ITarget, IDamageable, 
 {
     public string name { get; set; }
     public Sprite sprite => GetNode<Sprite>("Sprite");
+    public AnimationPlayer animation => sprite.GetNode<AnimationPlayer>("AnimationPlayer");
     public Runtime runtime => GetParent<IHaveRuntime>().runtime;
     public EnemyState state { get; private set; }
     private Moveable moveable;
@@ -37,7 +38,6 @@ public class Enemy : KinematicBody2D, IElevatable, IMove, ITarget, IDamageable, 
         destination = Position;
         isFallDisabled = false;
         speed = new Vector2(80, 80);
-        sprite.Modulate = new SpriteTheme().cEnemy;
         moveable = new Moveable(this);
         MovingTarget = true;
         rightHighlight.position = Vector2.Zero;
@@ -59,6 +59,9 @@ public class Enemy : KinematicBody2D, IElevatable, IMove, ITarget, IDamageable, 
         state.elevationHandler.HandleElevation();
         state.statusHandler.HandleStatuses();
         order = state.RequestAction(d);
+
+
+        HandleAnimation();
     }
     public override void _PhysicsProcess(float d)
     {
@@ -232,5 +235,42 @@ public class Enemy : KinematicBody2D, IElevatable, IMove, ITarget, IDamageable, 
     public void AddJoltedEffect(int d)
     {
         state.AddStatus(eStatusEffect.JOLTED, d);
+    }
+
+
+
+    private void HandleAnimation()
+    {
+        var dir = Position.DirectionTo(destination).ToEightDir();
+        var anim = "";
+        if (dir == Vector2.Down)
+        {
+            sprite.Frame = 0;
+            anim = "Walk_Down";
+        }
+        else if (dir == Vector2.Right)
+        {
+            sprite.Frame = 2;
+            anim = "Walk_Right";
+        }
+        else if (dir == Vector2.Up)
+        {
+            sprite.Frame = 4;
+            anim = "Walk_Up";
+        }
+        else if (dir == Vector2.Left)
+        {
+            sprite.Frame = 6;
+            anim = "Walk_Left";
+        }
+        if (moveable.moving && animation.CurrentAnimation == "" && anim != "")
+        {
+            GD.Print(anim);
+            animation.Play(anim, -1, 1000);
+        }
+        else if (animation.IsPlaying())
+        {
+            animation.Stop();
+        }
     }
 }

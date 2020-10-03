@@ -4,7 +4,7 @@ using Godot;
 public class Runtime
 {
     public ISelectable currentSelection { get; set; }
-    public WizardState WizardState { get; set; }
+    public IWizardState WizardState { get; set; }
     public Wizard wizardNode;
     public UIState UIState { get; }
     public UI UINode;
@@ -19,6 +19,7 @@ public class Runtime
 
     private TargetingSystem targeting;
 
+    public PlayerState playerState;
     public bool IsCasting;
 
     public Runtime()
@@ -26,6 +27,8 @@ public class Runtime
 
         this.UIState = new UIState();
         targeting = new TargetingSystem();
+
+        playerState = new PlayerState();
     }
 
     public void ClearRightTarget()
@@ -64,7 +67,9 @@ public class Runtime
     {
         wizardNode = wizard;
         targeting.targeter = wizardNode;
-        WizardState = new WizardState(wizardNode);
+        WizardState = new GoodWizard(wizardNode);
+        playerState.wizardState = WizardState;
+        playerState.bank = WizardState.InitResourceBank();
     }
 
     public void RegisterUI(UI ui)

@@ -7,6 +7,9 @@ public class World : Node2D, IHaveRuntime
 {
 
     private TileMap level2 => GetNode("Level2") as TileMap;
+
+
+
     private TileSet L2tileset => level2.Get("tile_set") as TileSet;
     private TileMap level3 => GetNode("Level3") as TileMap;
     private TileSet L3tileset => level3.Get("tile_set") as TileSet;
@@ -14,6 +17,8 @@ public class World : Node2D, IHaveRuntime
     private TileSet L4tileset => level4.Get("tile_set") as TileSet;
 
     private List<TileMap> AllLevels;
+
+    private List<TileChangeOrder> ChangeOrders;
 
     public Runtime runtime => GetParent<IHaveRuntime>().runtime;
     private TileTheme theme;
@@ -30,6 +35,7 @@ public class World : Node2D, IHaveRuntime
     private bool update;
     public override void _Ready()
     {
+        ChangeOrders = new List<TileChangeOrder>();
 
         update = false;
         mapHandler = new MapHandler();
@@ -43,8 +49,6 @@ public class World : Node2D, IHaveRuntime
             level2, level3, level4
         };
 
-
-        OverrideTileSet();
         mapHandler.GenerateTiles(50);
         mapHandler.AddGrass();
         mapHandler.tiles.ForEach(t => level3.SetCellv(t.coordsM, GetTileId(level3, t.tileType)));
@@ -61,23 +65,49 @@ public class World : Node2D, IHaveRuntime
                eCollisionLayers.ENTITY;
     }
 
+    public TileMap GetTileMap(eCollisionLayers layer)
+    {
+        return layer == eCollisionLayers.LEVEL2 ? level2 :
+        layer == eCollisionLayers.LEVEL3 ? level3 :
+        layer == eCollisionLayers.LEVEL4 ? level4 : null;
+    }
     public override void _Process(float delta)
     {
         var globalPosition = GetGlobalMousePosition();
-
-        if (update)
-        {
-            OverrideTileSet();
-        }
         ConfigureHighlights();
         HandleProjectileSpawn();
+        HandleTileOrders();
     }
 
+    public void HandleTileOrders()
+    {
+        foreach (var order in ChangeOrders)
+        {
+            order.Execute();
+        }
+    }
 
     public void CreateEarthWall(Vector2 v1)
     {
         var coord = level3.WorldToMap(v1);
         TryElevateTile(coord, level3, level4, eTileType.EARTH_WALL);
+    }
+
+
+    public void CreateGrassPatch(Vector2 vector2)
+    {
+        var coord = level3.WorldToMap(vector2);
+
+        var layer = GetElevation(vector2);
+
+        var level = GetTileMap(layer);
+
+        ChangeOrders.Add(new TileChangeOrder()
+        {
+            coords = coord,
+            map = level,
+            tileType = eTileType.GRASS
+        });
     }
     public void CreateEarthWall(Vector2 v1, Vector2 v2)
     {
@@ -90,6 +120,7 @@ public class World : Node2D, IHaveRuntime
         {
             TryElevateTile(coord, level3, level4, eTileType.EARTH_WALL);
         }
+        level4.Update();
     }
 
     public eCollisionLayers GetElevation(Vector2 v)
@@ -161,16 +192,7 @@ public class World : Node2D, IHaveRuntime
         return ret.FillOutCoords();
     }
 
-    private void OverrideTileSet()
-    {
-        foreach (var level in AllLevels)
-        {
-            level.TileSet.TileSetModulate(level.TileSet.FindTileByName("DIRT"), theme.cDirt);
-            level.TileSet.TileSetModulate(level.TileSet.FindTileByName("GRASS"), theme.cGrass);
-            level.TileSet.TileSetModulate(level.TileSet.FindTileByName("EARTH_WALL"), theme.cEarthWall);
-        }
 
-    }
 
     private int GetTileId(TileMap map, eTileType tileType)
     {

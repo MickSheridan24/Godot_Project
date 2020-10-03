@@ -44,6 +44,10 @@ public class SimpleProjectile : KinematicBody2D, IProjectileNode
 
     }
 
+    public override void _Ready()
+    {
+        HandlePoint();
+    }
     public override void _Process(float d)
     {
         HandleOther();
@@ -51,7 +55,13 @@ public class SimpleProjectile : KinematicBody2D, IProjectileNode
     }
     public override void _PhysicsProcess(float d)
     {
+
         HandleMove(d);
+    }
+
+    private void HandlePoint()
+    {
+        sprite.Rotate(direction.Angle() + (float)(Math.PI / 2));
     }
 
     private void HandleOther()

@@ -9,11 +9,11 @@ public class WizardState : IHaveStats
 
     public List<ISpell> KnownSpells { get; set; }
 
-    public ElevationHandler elevationHandler;
     public Wizard node { get; set; }
 
     public TickHandler tickHandler { get; }
-    public StatusHandler statusHandler;
+    public StatusHandler statusHandler { get; private set; }
+    public ElevationHandler elevationHandler { get; private set; }
     public WizardState(Wizard node)
     {
         this.node = node;
@@ -28,8 +28,7 @@ public class WizardState : IHaveStats
         KnownSpells.Add(new LightningSpell());
         KnownSpells.Add(new WallSpell());
         KnownSpells.Add(new SpeedSpell());
-
-
+        KnownSpells.Add(new GrassSpell());
         elevationHandler = new ElevationHandler(node, node.runtime);
     }
     public List<ISpell> GetAllUnlockedSpells()
@@ -37,13 +36,13 @@ public class WizardState : IHaveStats
         return KnownSpells;
     }
 
-    internal bool HandleDamage(int damage)
+    public bool HandleDamage(int damage)
     {
         health.current -= damage;
         return health.current > 0;
     }
 
-    internal void AddStatus(eStatusEffect s, int duration)
+    public void AddStatus(eStatusEffect s, int duration)
     {
         statusHandler.AddStatus(StatusEffect.Create(s));
         tickHandler.AddOrder(new RemoveStatusOrder(node, s), duration);
