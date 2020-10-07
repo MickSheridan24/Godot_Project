@@ -29,6 +29,7 @@ public class WizardState : IHaveStats
         KnownSpells.Add(new WallSpell());
         KnownSpells.Add(new SpeedSpell());
         KnownSpells.Add(new GrassSpell());
+        KnownSpells.Add(new FarmSpell());
         elevationHandler = new ElevationHandler(node, node.runtime);
     }
     public List<ISpell> GetAllUnlockedSpells()

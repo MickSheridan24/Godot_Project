@@ -67,6 +67,7 @@
     <Compile Include="src\Nodes\ResourceSummary.cs" />
     <Compile Include="src\Nodes\SimpleProjectile.cs" />
     <Compile Include="src\Nodes\SpellHandler.cs" />
+    <Compile Include="src\Nodes\StructureNode.cs" />
     <Compile Include="src\Nodes\UI.cs" />
     <Compile Include="src\Nodes\Wizard.cs" />
     <Compile Include="src\Nodes\World.cs" />
@@ -99,6 +100,7 @@
     <Compile Include="src\Models\Spells\WallSpell.cs" />
     <Compile Include="src\Models\Spells\GrassSpell.cs" />
     <Compile Include="src\Models\Spells\SpeedSpell.cs" />
+    <Compile Include="src\Models\Spells\FarmSpell.cs" />
     <Compile Include="src\Models\Projectiles\FireballProjectile.cs" />
     <Compile Include="src\Models\Projectiles\LightningProjectile.cs" />
     <Compile Include="src\Models\StatusEffects\JoltedEffect.cs" />
@@ -106,6 +108,8 @@
     <Compile Include="src\Models\Archetypes\GoodWizard.cs" />
     <Compile Include="src\Models\SpellCastResult.cs" />
     <Compile Include="src\Models\VectorTarget.cs" />
+    <Compile Include="src\Models\Structures\Cottage.cs" />
+    <Compile Include="src\Models\Structures\Farm.cs" />
     <Compile Include="src\Interfaces\ISelectable.cs" />
     <Compile Include="src\Interfaces\ISpell.cs" />
     <Compile Include="src\Interfaces\IHaveRuntime.cs" />

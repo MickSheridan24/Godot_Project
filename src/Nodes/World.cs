@@ -12,6 +12,7 @@ public class World : Node2D, IHaveRuntime
 
     private TileSet L2tileset => level2.Get("tile_set") as TileSet;
     private TileMap level3 => GetNode("Level3") as TileMap;
+
     private TileSet L3tileset => level3.Get("tile_set") as TileSet;
     private TileMap level4 => GetNode("Level4") as TileMap;
     private TileSet L4tileset => level4.Get("tile_set") as TileSet;
@@ -30,6 +31,7 @@ public class World : Node2D, IHaveRuntime
 
     public List<SimpleProjectile> projectileQueue { get; set; }
     private PackedScene snSimpleProjectile => (PackedScene)ResourceLoader.Load("res://scenes/SimpleProjectile.tscn");
+    private PackedScene snStructureNode => (PackedScene)ResourceLoader.Load("res://scenes/Structure.tscn");
 
 
     private bool update;
@@ -121,6 +123,19 @@ public class World : Node2D, IHaveRuntime
             TryElevateTile(coord, level3, level4, eTileType.EARTH_WALL);
         }
         level4.Update();
+    }
+
+
+
+    public void CreateStructure(Vector2 vector2, IStructure str)
+    {
+        var node = (StructureNode)snStructureNode.Instance();
+
+        node.state = str;
+        node.Position = vector2;
+        node.Configure();
+
+        AddChild(node);
     }
 
     public eCollisionLayers GetElevation(Vector2 v)

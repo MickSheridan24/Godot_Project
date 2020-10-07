@@ -22,7 +22,8 @@ public enum eSpell
     LIGHTNING,
     EARTH_WALL,
     SPEED,
-    CREATE_GRASS
+    CREATE_GRASS,
+    CREATE_FARM
 }
 public enum eDamageType
 {

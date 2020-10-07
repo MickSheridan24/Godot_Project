@@ -1,1 +1,6 @@
 *.aseprite
+assets/
+import/
+.import/
+.mono/
+mono/

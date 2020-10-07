@@ -6,12 +6,17 @@ public class Main : Node2D, IHaveRuntime
     public Runtime runtime { get; set; }
     public Wizard wizard => GetNode<Wizard>("Wizard");
     public World World => GetNode<World>("World");
+    public StructureNode Cottage => GetNode<StructureNode>("Structure");
 
     public override void _Ready()
     {
         runtime = new Runtime();
         runtime.RegisterWizard(wizard);
         runtime.RegisterWorld(World);
+
+        Cottage.state = new Cottage();
+        Cottage.Configure();
+
 
         // GetNode<Enemy>("Enemy").Name = "Beevis";
         // GetNode<Enemy>("Enemy2").Name = "Goonie";
