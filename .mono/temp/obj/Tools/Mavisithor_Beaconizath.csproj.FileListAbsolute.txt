@@ -1,6 +1,0 @@
-C:\Users\Mickey\Documents\Development\Godot\Mavisithor_Beaconizath\.mono\temp\bin\Tools\Mavisithor_Beaconizath.dll
-C:\Users\Mickey\Documents\Development\Godot\Mavisithor_Beaconizath\.mono\temp\bin\Tools\Mavisithor_Beaconizath.pdb
-C:\Users\Mickey\Documents\Development\Godot\Mavisithor_Beaconizath\.mono\temp\obj\Tools\Mavisithor_Beaconizath.csprojAssemblyReference.cache
-C:\Users\Mickey\Documents\Development\Godot\Mavisithor_Beaconizath\.mono\temp\obj\Tools\Mavisithor_Beaconizath.csproj.CoreCompileInputs.cache
-C:\Users\Mickey\Documents\Development\Godot\Mavisithor_Beaconizath\.mono\temp\obj\Tools\Mavisithor_Beaconizath.dll
-C:\Users\Mickey\Documents\Development\Godot\Mavisithor_Beaconizath\.mono\temp\obj\Tools\Mavisithor_Beaconizath.pdb

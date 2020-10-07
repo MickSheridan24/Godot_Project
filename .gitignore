@@ -1,6 +1,5 @@
 *.aseprite
-assets/
-import/
 .import/
 .mono/
-mono/
+.vscode/
+assets
