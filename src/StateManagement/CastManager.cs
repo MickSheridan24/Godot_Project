@@ -50,7 +50,7 @@ public class CastManager
 
     private IEnumerable<ISpell> NarrowSpells(string proposedCast)
     {
-        return currentSpells.Where(s => s.text.Contains(proposedCast));
+        return currentSpells.Where(s => s.text.StartsWith(proposedCast));
     }
 
     private bool IsCastValid(string cast)

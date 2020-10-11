@@ -1,4 +1,6 @@
 
+using System.Collections.Generic;
+
 public class SpeedSpell : Spell, ISpell
 {
     public SpeedSpell()
@@ -16,5 +18,18 @@ public class SpeedSpell : Spell, ISpell
             stats.speed.current *= 2;
             stats.tickHandler.AddOrder(new EndBuffOrder(stats.speed), 10);
         }
+    }
+
+    public List<UIEffect> GetUIHints(Wizard caster)
+    {
+        var target = caster.runtime.RightTarget;
+
+        var Circle = (CircleHighlight)snCircleHighlight.Instance();
+        Circle.color = new UITheme().cRed;
+        Circle.radius = 10;
+
+        return new List<UIEffect>(){
+            Circle
+        };
     }
 }

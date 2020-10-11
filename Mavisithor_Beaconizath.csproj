@@ -69,8 +69,10 @@
     <Compile Include="src\Nodes\SpellHandler.cs" />
     <Compile Include="src\Nodes\StructureNode.cs" />
     <Compile Include="src\Nodes\UI.cs" />
+    <Compile Include="src\Nodes\UIEffects\CircleHighlight.cs" />
     <Compile Include="src\Nodes\Wizard.cs" />
     <Compile Include="src\Nodes\World.cs" />
+    <Compile Include="src\Nodes\UIEffects\UIEffect.cs" />
     <Compile Include="src\Nodes\PhysicsHelpers\Moveable.cs" />
     <Compile Include="src\Nodes\PhysicsHelpers\ElevationHandler.cs" />
     <Compile Include="src\Nodes\PhysicsHelpers\MoveAnimationHelper.cs" />
@@ -91,6 +93,7 @@
     <Compile Include="src\StateManagement\TickHandler.cs" />
     <Compile Include="src\StateManagement\StatusHandler.cs" />
     <Compile Include="src\StateManagement\PlayerState.cs" />
+    <Compile Include="src\StateManagement\UIEffectHandler.cs" />
     <Compile Include="src\Models\Spell.cs" />
     <Compile Include="src\Models\Stat.cs" />
     <Compile Include="src\Models\ResourceBank.cs" />

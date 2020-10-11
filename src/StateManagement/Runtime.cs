@@ -16,10 +16,11 @@ public class Runtime
     public World World { get; private set; }
     public ITarget RightTarget => targeting.rightTarget;
     public ITarget LeftTarget => targeting.leftTarget;
-
     private TargetingSystem targeting;
-
     public PlayerState playerState;
+
+    public UIEffectHandler uIEffectHandler { get; private set; }
+
     public bool IsCasting;
 
     public Runtime()
@@ -29,6 +30,7 @@ public class Runtime
         targeting = new TargetingSystem();
 
         playerState = new PlayerState();
+        uIEffectHandler = new UIEffectHandler();
     }
 
     public void ClearRightTarget()
@@ -114,6 +116,7 @@ public class Runtime
     public void RegisterWorld(World world)
     {
         this.World = world;
+        uIEffectHandler.world = world;
     }
 
     public void SetWorldTarget(Vector2 position)
@@ -136,7 +139,11 @@ public class Runtime
         if (result.complete)
         {
             CompleteCast(result);
-
+            uIEffectHandler.CompleteCast();
+        }
+        else
+        {
+            uIEffectHandler.HintSpell(result.Spell, wizardNode);
         }
         return result;
     }

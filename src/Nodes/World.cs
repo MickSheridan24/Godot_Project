@@ -17,9 +17,13 @@ public class World : Node2D, IHaveRuntime
     private TileMap level4 => GetNode("Level4") as TileMap;
     private TileSet L4tileset => level4.Get("tile_set") as TileSet;
 
+
+
     private List<TileMap> AllLevels;
 
     private List<TileChangeOrder> ChangeOrders;
+
+
 
     public Runtime runtime => GetParent<IHaveRuntime>().runtime;
     private TileTheme theme;
@@ -267,6 +271,26 @@ public class World : Node2D, IHaveRuntime
         {
             leftHighlight.position = leftTarget?.GetTargetPosition() ?? Vector2.Zero;
             leftHighlight.Update();
+        }
+    }
+
+
+    public void ClearEffects(List<UIEffect> effects)
+    {
+        foreach (var effect in effects)
+        {
+            if (GetChildren().Contains(effect))
+            {
+                RemoveChild(effect);
+            }
+        }
+    }
+
+    public void AddEffects(List<UIEffect> effects)
+    {
+        foreach (var effect in effects)
+        {
+            AddChild(effect);
         }
     }
 }

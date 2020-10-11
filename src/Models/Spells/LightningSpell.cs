@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using Godot;
 
 public class LightningSpell : Spell, ISpell
@@ -19,5 +20,18 @@ public class LightningSpell : Spell, ISpell
             damage = 100
         };
         caster.CreateProjectile(projectileDetails);
+    }
+
+    public List<UIEffect> GetUIHints(Wizard caster)
+    {
+        var target = caster.runtime.RightTarget;
+
+        var Circle = (CircleHighlight)snCircleHighlight.Instance();
+        Circle.color = new UITheme().cRed;
+        Circle.radius = 10;
+
+        return new List<UIEffect>(){
+            Circle
+        };
     }
 }

@@ -58,13 +58,14 @@ public class Enemy : KinematicBody2D, IElevatable, IMove, ITarget, IDamageable, 
         InitState();
         state.elevationHandler.HandleElevation();
         state.statusHandler.HandleStatuses();
-        order = state.RequestAction(d);
+
 
 
         HandleAnimation();
     }
     public override void _PhysicsProcess(float d)
     {
+        order = state?.RequestAction(d);
         state?.Tick();
         if (order != null)
         {

@@ -1,8 +1,12 @@
 
+using System.Collections.Generic;
 using Godot;
 
 public class FireballSpell : Spell, ISpell
 {
+    public static int effectRadius = 200;
+
+
     public FireballSpell()
     {
         name = "Cast Fireball";
@@ -19,5 +23,19 @@ public class FireballSpell : Spell, ISpell
             start = caster.spritePosition
         };
         caster.CreateProjectile(projectileDetails);
+    }
+
+    public List<UIEffect> GetUIHints(Wizard caster)
+    {
+        var target = caster.runtime.RightTarget;
+
+        var Circle = (CircleHighlight)snCircleHighlight.Instance();
+        Circle.color = new UITheme().cRed;
+        Circle.radius = effectRadius;
+        Circle.origin = target;
+
+        return new List<UIEffect>(){
+            Circle
+        };
     }
 }

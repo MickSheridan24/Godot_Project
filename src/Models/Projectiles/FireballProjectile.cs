@@ -2,6 +2,7 @@ using Godot;
 
 public class FireballProjectile : ProjectileBase, IProjectile
 {
+
     public FireballProjectile()
     {
         projectileType = eProjectileType.FIREBALL;
@@ -24,7 +25,7 @@ public class FireballProjectile : ProjectileBase, IProjectile
 
     public void ConfigureNode()
     {
-        SetEffectRadius(200);
+        SetEffectRadius(FireballSpell.effectRadius);
         var tex = GD.Load<Texture>("res://assets/Fireball.png");
         node.sprite.SetTexture(tex);
     }

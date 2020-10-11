@@ -15,6 +15,8 @@ public class ProjectileBase
 
     public SpriteTheme theme => new SpriteTheme();
 
+
+
     protected void TryDamage(Node target, eDamageType type)
     {
         if (target != null && target is IDamageable)
