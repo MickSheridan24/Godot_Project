@@ -3,6 +3,8 @@ using System.Collections.Generic;
 
 public class SpeedSpell : Spell, ISpell
 {
+
+    public static int effectRadius = 40;
     public SpeedSpell()
     {
         name = "Gain Speed";
@@ -25,8 +27,9 @@ public class SpeedSpell : Spell, ISpell
         var target = caster.runtime.RightTarget;
 
         var Circle = (CircleHighlight)snCircleHighlight.Instance();
-        Circle.color = new UITheme().cRed;
-        Circle.radius = 10;
+        Circle.color = new UITheme().cGreen;
+        Circle.radius = effectRadius;
+        Circle.origin = caster;
 
         return new List<UIEffect>(){
             Circle

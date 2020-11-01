@@ -8,5 +8,6 @@ public class Spell
 
 
     protected PackedScene snCircleHighlight => (PackedScene)ResourceLoader.Load("res://scenes/CircleHighlight.tscn");
+    protected PackedScene snLineHighlight => (PackedScene)ResourceLoader.Load("res://scenes/LineHighlight.tscn");
 
 }

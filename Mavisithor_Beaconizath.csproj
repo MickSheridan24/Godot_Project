@@ -70,6 +70,7 @@
     <Compile Include="src\Nodes\StructureNode.cs" />
     <Compile Include="src\Nodes\UI.cs" />
     <Compile Include="src\Nodes\UIEffects\CircleHighlight.cs" />
+    <Compile Include="src\Nodes\UIEffects\LineHighlight.cs" />
     <Compile Include="src\Nodes\Wizard.cs" />
     <Compile Include="src\Nodes\World.cs" />
     <Compile Include="src\Nodes\UIEffects\UIEffect.cs" />

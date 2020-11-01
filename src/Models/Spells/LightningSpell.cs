@@ -26,12 +26,14 @@ public class LightningSpell : Spell, ISpell
     {
         var target = caster.runtime.RightTarget;
 
-        var Circle = (CircleHighlight)snCircleHighlight.Instance();
-        Circle.color = new UITheme().cRed;
-        Circle.radius = 10;
+        var line = (LineHighlight)snLineHighlight.Instance();
+        line.color = new UITheme().cRed;
+        line.target = caster.runtime.RightTarget;
+        line.origin = caster;
+        line.length = new Vector2(50, 50);
 
         return new List<UIEffect>(){
-            Circle
+            line
         };
     }
 }

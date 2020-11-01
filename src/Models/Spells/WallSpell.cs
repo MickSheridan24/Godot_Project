@@ -62,14 +62,39 @@ public class WallSpell : Spell, ISpell
 
     public List<UIEffect> GetUIHints(Wizard caster)
     {
-        var target = caster.runtime.RightTarget;
+        var rightPosition = caster.runtime.RightTarget;
+        var leftPosition = caster.runtime.LeftTarget;
 
-        var Circle = (CircleHighlight)snCircleHighlight.Instance();
-        Circle.color = new UITheme().cRed;
-        Circle.radius = 10;
+        SetVectors(rightPosition, leftPosition);
 
-        return new List<UIEffect>(){
-            Circle
-        };
+        var effects = new List<UIEffect>();
+
+        if (V1 != null)
+        {
+            var rightCircle = (CircleHighlight)snCircleHighlight.Instance();
+            rightCircle.color = new UITheme().cBlue;
+            rightCircle.radius = 40;
+            rightCircle.origin = new VectorTarget(V1);
+            effects.Add(rightCircle);
+        }
+        if (V2 != null)
+        {
+            var leftCircle = (CircleHighlight)snCircleHighlight.Instance();
+            leftCircle.color = new UITheme().cBlue;
+            leftCircle.radius = 40;
+            leftCircle.origin = new VectorTarget(V2);
+            effects.Add(leftCircle);
+        }
+        if (V1 != null && V2 != null)
+        {
+            var line = (LineHighlight)snLineHighlight.Instance();
+            line.origin = new VectorTarget(V1);
+            line.target = new VectorTarget(V2);
+            line.length = (V2 - V1).Abs();
+            line.color = new UITheme().cBlue;
+            effects.Add(line);
+        }
+
+        return effects;
     }
 }
