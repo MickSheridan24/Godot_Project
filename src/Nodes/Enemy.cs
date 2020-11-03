@@ -59,9 +59,9 @@ public class Enemy : KinematicBody2D, IElevatable, IMove, ITarget, IDamageable, 
         state.elevationHandler.HandleElevation();
         state.statusHandler.HandleStatuses();
 
+        OverrideSpriteColor();
 
-
-        HandleAnimation();
+        //HandleAnimation();
     }
     public override void _PhysicsProcess(float d)
     {
@@ -274,4 +274,13 @@ public class Enemy : KinematicBody2D, IElevatable, IMove, ITarget, IDamageable, 
             animation.Stop();
         }
     }
+
+
+    private void OverrideSpriteColor()
+    {
+        var theme = new SpriteTheme();
+        var defaultColor = theme.cEnemy;
+        sprite.Modulate = state.statusHandler.HasStatus(eStatusEffect.INTANGIBLE) ? theme.cEnemyHit : defaultColor;
+    }
+
 }

@@ -1,6 +1,7 @@
-[gd_scene load_steps=3 format=2]
+[gd_scene load_steps=4 format=2]
 
 [ext_resource path="res://src/Nodes/StructureNode.cs" type="Script" id=1]
+[ext_resource path="res://assets/Blank.png" type="Texture" id=2]
 
 [sub_resource type="RectangleShape2D" id=1]
 extents = Vector2( 119.521, 122.235 )
@@ -15,4 +16,8 @@ z_index = 1
 shape = SubResource( 1 )
 
 [node name="Sprite" type="Sprite" parent="."]
-scale = Vector2( 2, 2 )
+position = Vector2( 5.00679e-006, -1.16635 )
+scale = Vector2( 1.85654, 1.91121 )
+texture = ExtResource( 2 )
+region_enabled = true
+region_rect = Rect2( 0, 0, 128, 128 )

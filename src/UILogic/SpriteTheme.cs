@@ -8,6 +8,8 @@ public class SpriteTheme
     public Color cFireball => new Color("#D32C3D");
     public Color cLightning => new Color("#002dff");
 
+    public Color cCottage => new Color("#7e827d");
+
     public Color unselected => new Color("#a822dd");
     public Color selected => new Color("a866ff");
 }

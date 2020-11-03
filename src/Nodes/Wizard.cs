@@ -23,8 +23,6 @@ public class Wizard : KinematicBody2D, ISelectable, IHaveHealth, IMove, IHaveRun
     public Vector2 speed => state.speed.current.ToVector();
     public bool MovingTarget { get; set; }
 
-
-
     public bool isFallDisabled { get; set; }
     private PackedScene snSimpleProjectile => (PackedScene)ResourceLoader.Load("res://scenes/SimpleProjectile.tscn");
 
@@ -42,19 +40,19 @@ public class Wizard : KinematicBody2D, ISelectable, IHaveHealth, IMove, IHaveRun
         MovingTarget = true;
         isFallDisabled = false;
         weakref = WeakRef(this);
-        animation.GetAnimation("Walk_Up").Loop = true;
-        animation.GetAnimation("Walk_Down").Loop = true;
-        animation.GetAnimation("Walk_Left").Loop = true;
-        animation.GetAnimation("Walk_Right").Loop = true;
+        //  animation.GetAnimation("Walk_Up").Loop = true;
+        //  animation.GetAnimation("Walk_Down").Loop = true;
+        //  animation.GetAnimation("Walk_Left").Loop = true;
+        //  animation.GetAnimation("Walk_Right").Loop = true;
     }
 
     public override void _Process(float d)
     {
         state.elevationHandler.HandleElevation();
 
-        //    OverrideSpriteColor();
-        //aimLine.dest = runtime?.RightTarget?.GetTargetPosition() ?? aimLine.dest;
-        //aimLine.Update();
+        OverrideSpriteColor();
+        aimLine.dest = runtime?.RightTarget?.GetTargetPosition() ?? aimLine.dest;
+        aimLine.Update();
     }
 
     private void HandleAnimation()
@@ -99,7 +97,7 @@ public class Wizard : KinematicBody2D, ISelectable, IHaveHealth, IMove, IHaveRun
         HandleMove(delta);
 
         state.tickHandler.Tick();
-        HandleAnimation();
+        //  HandleAnimation();
     }
 
     //ISelectable
@@ -152,8 +150,8 @@ public class Wizard : KinematicBody2D, ISelectable, IHaveHealth, IMove, IHaveRun
     //private
     private void OverrideSpriteColor()
     {
-        // var defaultColor = runtime.currentSelection == this ? theme.selected : theme.unselected;
-        // sprite.Modulate = state.statusHandler.HasStatus(eStatusEffect.INTANGIBLE) ? theme.cEnemyHit : defaultColor;
+        var defaultColor = runtime.currentSelection == this ? theme.selected : theme.unselected;
+        sprite.Modulate = state.statusHandler.HasStatus(eStatusEffect.INTANGIBLE) ? theme.cEnemyHit : defaultColor;
     }
     private void SetDestination(Vector2 position)
     {

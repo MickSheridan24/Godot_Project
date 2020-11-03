@@ -1,7 +1,7 @@
 [gd_scene load_steps=11 format=2]
 
 [ext_resource path="res://src/Nodes/Wizard.cs" type="Script" id=1]
-[ext_resource path="res://assets/Wizard_All.png" type="Texture" id=2]
+[ext_resource path="res://assets/Blank.png" type="Texture" id=2]
 [ext_resource path="res://src/Nodes/AimLine.cs" type="Script" id=3]
 [ext_resource path="res://Scenes/HealthBar.tscn" type="PackedScene" id=4]
 
@@ -66,11 +66,11 @@ tracks/0/keys = {
 }
 
 [sub_resource type="CapsuleShape2D" id=5]
-radius = 2.44452
+radius = 1.62969
 height = 0.917048
 
 [sub_resource type="CircleShape2D" id=6]
-radius = 30.0
+radius = 20.0
 
 [node name="Wizard" type="KinematicBody2D"]
 collision_layer = 5
@@ -79,7 +79,8 @@ script = ExtResource( 1 )
 
 [node name="Sprite" type="Sprite" parent="."]
 texture = ExtResource( 2 )
-hframes = 8
+region_enabled = true
+region_rect = Rect2( 0, 0, 32, 32 )
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="Sprite"]
 anims/Walk_Down = SubResource( 1 )

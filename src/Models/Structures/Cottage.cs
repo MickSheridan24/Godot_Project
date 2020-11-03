@@ -10,6 +10,14 @@ public class Cottage : IStructure
     public void ConfigureNode(StructureNode structureNode)
     {
         this.node = structureNode;
-        node.sprite.SetTexture(text);
+        OverrideSpriteColor();
+    }
+
+
+    private void OverrideSpriteColor()
+    {
+        var theme = new SpriteTheme();
+        var defaultColor = theme.cEnemy;
+        node.sprite.Modulate = theme.cCottage;
     }
 }
