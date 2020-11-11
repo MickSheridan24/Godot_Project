@@ -17,10 +17,6 @@ public class Main : Node2D, IHaveRuntime
         Cottage.state = new Cottage();
         Cottage.Configure();
 
-
-        // GetNode<Enemy>("Enemy").Name = "Beevis";
-        // GetNode<Enemy>("Enemy2").Name = "Goonie";
-        // GetNode<Enemy>("Enemy3").Name = "Grubley";
     }
 
     public override void _Process(float d)

@@ -136,10 +136,11 @@ public class World : Node2D, IHaveRuntime
         var node = (StructureNode)snStructureNode.Instance();
 
         node.state = str;
-        node.Position = vector2;
-        node.Configure();
+
 
         AddChild(node);
+        node.Position = vector2;
+        node.Configure();
     }
 
     public eCollisionLayers GetElevation(Vector2 v)

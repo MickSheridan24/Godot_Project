@@ -2,6 +2,8 @@ using Godot;
 
 public class SpriteTheme
 {
+    internal Color cFarm => new Color("#ebd314");
+
     public Color cEnemyHit => new Color("#ffffff");
 
     public Color cEnemy => new Color("#fe9501");

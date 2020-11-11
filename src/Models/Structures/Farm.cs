@@ -10,6 +10,19 @@ public class Farm : IStructure
     public void ConfigureNode(StructureNode structureNode)
     {
         this.node = structureNode;
-        node.sprite.SetTexture(text);
+        OverrideSpriteColor();
+        node.RemoveCollisions();
+    }
+
+    public void RightClick(Vector2 position)
+    {
+        return;
+    }
+
+    private void OverrideSpriteColor()
+    {
+        var theme = new SpriteTheme();
+        var defaultColor = theme.cEnemy;
+        node.sprite.Modulate = theme.cFarm;
     }
 }

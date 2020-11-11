@@ -21,9 +21,9 @@ public class Enemy : KinematicBody2D, IElevatable, IMove, ITarget, IDamageable, 
     private IOrder order;
     private WeakRef weakref;
 
+
     private Highlight rightHighlight => GetNode<Highlight>("RightHighlight");
     private Highlight leftHighlight => GetNode<Highlight>("LeftHighlight");
-
     public int Health => state.health.current;
     public int MaxHealth => state.health.standard;
 

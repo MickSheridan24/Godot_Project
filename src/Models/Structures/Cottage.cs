@@ -13,6 +13,10 @@ public class Cottage : IStructure
         OverrideSpriteColor();
     }
 
+    public void RightClick(Vector2 position)
+    {
+        return;
+    }
 
     private void OverrideSpriteColor()
     {

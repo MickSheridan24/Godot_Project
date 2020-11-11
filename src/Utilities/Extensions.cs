@@ -146,4 +146,5 @@ public static class Extensions
         var wr = WeakRef.WeakRef(node);
         return wr.GetRef() == null;
     }
+
 }
