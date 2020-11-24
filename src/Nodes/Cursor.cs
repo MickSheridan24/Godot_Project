@@ -5,10 +5,6 @@ public class Cursor : Node2D
 {
     public UITheme theme => new UITheme();
 
-    public override void _Ready()
-    {
-        // Input.SetMouseMode(Input.MouseMode.Hidden);
-    }
     public override void _Process(float delta)
     {
         var pos = GetGlobalMousePosition();

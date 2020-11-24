@@ -64,6 +64,10 @@ public class Runtime
     {
         currentSelection = wizardNode;
     }
+    public bool WizardIsSelected()
+    {
+        return currentSelection == wizardNode;
+    }
 
     public void RegisterWizard(Wizard wizard)
     {

@@ -8,6 +8,8 @@ public class Main : Node2D, IHaveRuntime
     public World World => GetNode<World>("World");
     public StructureNode Cottage => GetNode<StructureNode>("Structure");
 
+    public InputHandler inputHandler;
+
     public override void _Ready()
     {
         runtime = new Runtime();
@@ -17,37 +19,13 @@ public class Main : Node2D, IHaveRuntime
         Cottage.state = new Cottage();
         Cottage.Configure();
 
-    }
+        inputHandler = new InputHandler(runtime);
 
-    public override void _Process(float d)
-    {
-        runtime.MousePosition = GetGlobalMousePosition();
     }
 
     public override void _Input(InputEvent @event)
     {
-        if (@event.RightClickJustPressed())
-        {
-            runtime.SetRightTarget(new VectorTarget(GetGlobalMousePosition()));
-            if (runtime.currentSelection != null)
-            {
-                runtime.currentSelection.RightClick(@event as InputEventMouseButton);
-            }
-        }
-
-        if (@event.LeftClickJustPressed())
-        {
-            runtime.SetLeftTarget(new VectorTarget(GetGlobalMousePosition()));
-        }
-
-        if (@event.GetKeyJustPressed() == (int)KeyList.Space && !runtime.IsCasting)
-        {
-            runtime.SelectWizard();
-        }
-        else if (@event.GetKeyJustPressed() == (int)KeyList.Shift)
-        {
-            runtime.ToggleCasting();
-        }
+        inputHandler.HandleInput(@event, GetGlobalMousePosition());
     }
 
 }
