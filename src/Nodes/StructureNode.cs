@@ -1,7 +1,7 @@
 using Godot;
 using System;
 
-public class StructureNode : Node2D, ISelectable, ITarget, IHaveRuntime
+public class StructureNode : Node2D, ISelectable, ITarget, IHaveRuntime, IHaveSize
 {
     private WeakRef weakref;
 
@@ -13,10 +13,11 @@ public class StructureNode : Node2D, ISelectable, ITarget, IHaveRuntime
 
     public bool MovingTarget => false;
 
-    public Vector2 SIZE_REPLACE => new Vector2(250, 250);
-
     private Highlight rightHighlight => GetNode<Highlight>("RightHighlight");
     private Highlight leftHighlight => GetNode<Highlight>("LeftHighlight");
+    private Highlight selectHighlight => GetNode<Highlight>("SelectHighlight");
+    public Vector2 size => new Vector2(160, 160);
+
     public override void _Ready()
     {
         weakref = WeakRef(this);
@@ -24,12 +25,15 @@ public class StructureNode : Node2D, ISelectable, ITarget, IHaveRuntime
         leftHighlight.position = Vector2.Zero;
         rightHighlight.color = new UITheme().cAccent;
         leftHighlight.color = new UITheme().cBlue;
+        selectHighlight.color = new UITheme().cPrimary;
     }
 
     public override void _Process(float d)
     {
         rightHighlight.Visible = runtime.RightTarget == this;
         leftHighlight.Visible = runtime.LeftTarget == this;
+
+        selectHighlight.Visible = runtime.currentSelection == this;
     }
 
     public void Configure()
@@ -85,7 +89,7 @@ public class StructureNode : Node2D, ISelectable, ITarget, IHaveRuntime
 
     public Rect2 GetSelectionArea()
     {
-        return new Rect2(GlobalPosition, SIZE_REPLACE);
+        return new Rect2(GlobalPosition - size / 2, size);
     }
 }
 

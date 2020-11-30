@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-public class World : Node2D, IHaveRuntime
+public class World : Node2D, IHaveRuntime, IHaveSize
 {
 
     private TileMap level2 => GetNode("Level2") as TileMap;
@@ -32,6 +32,7 @@ public class World : Node2D, IHaveRuntime
     public ITarget leftTarget => runtime.LeftTarget;
     private Highlight rightHighlight => GetNode<Highlight>("RightHighlight");
     private Highlight leftHighlight => GetNode<Highlight>("LeftHighlight");
+    public Vector2 size => new Vector2(40, 40);
 
     public List<SimpleProjectile> projectileQueue { get; set; }
     private PackedScene snSimpleProjectile => (PackedScene)ResourceLoader.Load("res://scenes/SimpleProjectile.tscn");
@@ -47,7 +48,8 @@ public class World : Node2D, IHaveRuntime
         mapHandler = new MapHandler();
         theme = new TileTheme();
         projectileQueue = new List<SimpleProjectile>();
-
+        rightHighlight.color = new UITheme().cAccent;
+        leftHighlight.color = new UITheme().cBlue;
 
 
         AllLevels = new List<TileMap>()
@@ -256,10 +258,9 @@ public class World : Node2D, IHaveRuntime
 
     private void ConfigureHighlights()
     {
-        rightHighlight.color = new UITheme().cAccent;
-        leftHighlight.color = new UITheme().cBlue;
 
-        rightHighlight.Visible = runtime?.RightTarget == rightTarget;
+
+        rightHighlight.Visible = runtime.WizardIsSelected() && runtime?.RightTarget == rightTarget;
 
         if (rightHighlight.position != rightTarget?.GetTargetPosition())
         {
@@ -267,7 +268,7 @@ public class World : Node2D, IHaveRuntime
             rightHighlight.Update();
         }
 
-        leftHighlight.Visible = runtime?.LeftTarget == leftTarget;
+        leftHighlight.Visible = runtime.WizardIsSelected() && runtime?.LeftTarget == leftTarget;
         if (leftHighlight.position != leftTarget?.GetTargetPosition())
         {
             leftHighlight.position = leftTarget?.GetTargetPosition() ?? Vector2.Zero;

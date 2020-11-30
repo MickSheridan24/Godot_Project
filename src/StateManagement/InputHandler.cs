@@ -11,11 +11,6 @@ public class InputHandler
     }
     public bool HandleInput(InputEvent @event, Vector2 mousePos, ISelectable effectedNode = null)
     {
-        if (@event is InputEventMouseButton)
-        {
-            var y = 0;
-        }
-
         var inputHandled = true;
         if (@event.LeftClickJustPressed())
         {

@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 
 public class Enemy : KinematicBody2D, IElevatable, IMove, ITarget, IDamageable, IHaveRuntime,
-                     IConductElectricity, IFreeable, ISufferStatusEffects, IHaveHealth
+                     IConductElectricity, IFreeable, ISufferStatusEffects, IHaveHealth, IHaveSize
 {
     public string name { get; set; }
     public Sprite sprite => GetNode<Sprite>("Sprite");
@@ -24,6 +24,7 @@ public class Enemy : KinematicBody2D, IElevatable, IMove, ITarget, IDamageable, 
 
     private Highlight rightHighlight => GetNode<Highlight>("RightHighlight");
     private Highlight leftHighlight => GetNode<Highlight>("LeftHighlight");
+    public Vector2 size => new Vector2(40, 40);
     public int Health => state.health.current;
     public int MaxHealth => state.health.standard;
 

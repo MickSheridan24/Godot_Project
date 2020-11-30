@@ -25,10 +25,7 @@ public class Main : Node2D, IHaveRuntime
 
     public override void _Input(InputEvent @event)
     {
-        if (@event is InputEventMouseButton)
-        {
-            var x = 0;
-        }
+
         if (runtime.inputHandler.HandleInput(@event, GetGlobalMousePosition()))
         {
             GetTree().SetInputAsHandled();

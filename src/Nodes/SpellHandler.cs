@@ -35,14 +35,14 @@ public class SpellHandler : Control
         }
     }
 
-    public override void _UnhandledInput(InputEvent e)
+    public override void _Input(InputEvent @event)
     {
-        if (runtime.IsCasting)
+        if (runtime.IsCasting && @event is InputEventKey)
         {
-            var key = e.GetAlphaOrSpaceJustPressed();
+            var key = @event.GetAlphaOrSpaceJustPressed();
             if (key != -1)
             {
-                HandleKeyPress(GetKey(key, e));
+                HandleKeyPress(GetKey(key, @event));
             }
         }
     }

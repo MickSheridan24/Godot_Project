@@ -50,6 +50,7 @@
   </ItemGroup>
   <ItemGroup>
     <!--HelloBash-->
+      <Compile Include="src\Interfaces\IHaveSize.cs" />
     <Compile Include="src\Nodes\ClickableArea2D.cs" />
     <Compile Include="src\StateManagement\InputHandler.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
