@@ -22,6 +22,7 @@ public class Runtime
     public UIEffectHandler uIEffectHandler { get; private set; }
 
     public bool IsCasting;
+    public InputHandler inputHandler;
 
     public Runtime()
     {
@@ -31,6 +32,8 @@ public class Runtime
 
         playerState = new PlayerState();
         uIEffectHandler = new UIEffectHandler();
+
+        inputHandler = new InputHandler(this);
     }
 
     public void ClearRightTarget()
@@ -76,6 +79,18 @@ public class Runtime
         WizardState = new GoodWizard(wizardNode);
         playerState.wizardState = WizardState;
         playerState.bank = WizardState.InitResourceBank();
+    }
+
+    public void SetSelection(ISelectable selected)
+    {
+        this.currentSelection = selected;
+        GD.Print("SELECTED: " + this.currentSelection);
+    }
+
+    public void ClearSelection()
+    {
+        currentSelection = null;
+        GD.Print("SELECTED: " + this.currentSelection);
     }
 
     public void RegisterUI(UI ui)

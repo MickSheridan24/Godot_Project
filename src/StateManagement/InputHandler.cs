@@ -9,26 +9,38 @@ public class InputHandler
     {
         this.runtime = runtime;
     }
-    public void HandleInput(InputEvent @event, Vector2 mousePos)
+    public bool HandleInput(InputEvent @event, Vector2 mousePos, ISelectable effectedNode = null)
     {
+        if (@event is InputEventMouseButton)
+        {
+            var y = 0;
+        }
+
+        var inputHandled = true;
         if (@event.LeftClickJustPressed())
         {
-            HandleLeftClickEvent(@event, mousePos);
+            GD.Print("LEFT CLICK: " + effectedNode);
+            if (Input.IsKeyPressed((int)KeyList.Space))
+            {
+                HandleSpaceLeft(@event, mousePos, effectedNode);
+            }
+            HandleLeftClickEvent(@event, mousePos, effectedNode);
         }
         else if (@event.RightClickJustPressed())
         {
-            if ((@event as InputEventMouseButton).Doubleclick)
+            GD.Print("RIGHT CLICK: " + effectedNode);
+            if (Input.IsKeyPressed((int)KeyList.Space))
             {
-                HandleDoubleRight(@event, mousePos);
+                HandleSpaceRight(@event, mousePos, effectedNode);
             }
-            else HandleRightClickEvent(@event, mousePos);
+            else HandleRightClickEvent(@event, mousePos, effectedNode);
         }
         else if (@event.GetKeyJustPressed() != 0)
         {
             HandleKeyEvent(@event.GetKeyJustPressed());
         }
+        return inputHandled;
     }
-
 
 
     private void HandleKeyEvent(int key)
@@ -43,36 +55,40 @@ public class InputHandler
         }
     }
 
-
-    private void HandleDoubleRight(InputEvent @event, Vector2 mousePos)
-    {
-        if (runtime.WizardIsSelected())
-        {
-            runtime.currentSelection.RightClick(@event as InputEventMouseButton);
-        }
-        else HandleRightClickEvent(@event, mousePos);
-    }
-    private void HandleRightClickEvent(InputEvent @event, Vector2 mousePos)
-    {
-        if (runtime.WizardIsSelected())
-        {
-            runtime.SetRightTarget(new VectorTarget(mousePos));
-
-        }
-        else if (runtime.currentSelection != null)
-        {
-            runtime.currentSelection.RightClick(@event as InputEventMouseButton);
-        }
-    }
-
-    private void HandleLeftClickEvent(InputEvent @event, Vector2 mousePos)
+    private void HandleSpaceLeft(InputEvent @event, Vector2 mousePos, ISelectable effectedNode)
     {
         if (runtime.WizardIsSelected())
         {
             runtime.SetLeftTarget(new VectorTarget(mousePos));
         }
+        else HandleLeftClickEvent(@event, mousePos, effectedNode);
+    }
+    private void HandleSpaceRight(InputEvent @event, Vector2 mousePos, ISelectable effectedNode)
+    {
+        if (runtime.WizardIsSelected())
+        {
+            runtime.SetRightTarget(new VectorTarget(mousePos));
+        }
+        else HandleRightClickEvent(@event, mousePos, effectedNode);
+    }
+    private void HandleRightClickEvent(InputEvent @event, Vector2 mousePos, ISelectable effectedNode)
+    {
+        if (runtime.currentSelection != null)
+        {
+            runtime.currentSelection.RightClick(@event as InputEventMouseButton);
+        }
+    }
 
-        //DID I CLICK ON SOMETHING SELECTABLE? 
+    private void HandleLeftClickEvent(InputEvent @event, Vector2 mousePos, ISelectable effectedNode)
+    {
+        if (effectedNode != null)
+        {
+            effectedNode.Select();
+        }
+        else if (!runtime.WizardIsSelected())
+        {
+            runtime.ClearSelection();
 
+        }
     }
 }

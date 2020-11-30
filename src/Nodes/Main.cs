@@ -8,7 +8,7 @@ public class Main : Node2D, IHaveRuntime
     public World World => GetNode<World>("World");
     public StructureNode Cottage => GetNode<StructureNode>("Structure");
 
-    public InputHandler inputHandler;
+
 
     public override void _Ready()
     {
@@ -19,13 +19,20 @@ public class Main : Node2D, IHaveRuntime
         Cottage.state = new Cottage();
         Cottage.Configure();
 
-        inputHandler = new InputHandler(runtime);
+
 
     }
 
     public override void _Input(InputEvent @event)
     {
-        inputHandler.HandleInput(@event, GetGlobalMousePosition());
+        if (@event is InputEventMouseButton)
+        {
+            var x = 0;
+        }
+        if (runtime.inputHandler.HandleInput(@event, GetGlobalMousePosition()))
+        {
+            GetTree().SetInputAsHandled();
+        }
     }
 
 }

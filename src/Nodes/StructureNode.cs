@@ -1,7 +1,7 @@
 using Godot;
 using System;
 
-public class StructureNode : Node2D, ISelectable, ITarget
+public class StructureNode : Node2D, ISelectable, ITarget, IHaveRuntime
 {
     private WeakRef weakref;
 
@@ -12,6 +12,8 @@ public class StructureNode : Node2D, ISelectable, ITarget
     public Runtime runtime => GetParent<IHaveRuntime>().runtime;
 
     public bool MovingTarget => false;
+
+    public Vector2 SIZE_REPLACE => new Vector2(250, 250);
 
     private Highlight rightHighlight => GetNode<Highlight>("RightHighlight");
     private Highlight leftHighlight => GetNode<Highlight>("LeftHighlight");
@@ -68,7 +70,7 @@ public class StructureNode : Node2D, ISelectable, ITarget
 
     public void Select()
     {
-        runtime.currentSelection = this;
+        runtime.SetSelection(this);
     }
 
     public void SetCollisionLayerBit(int n, bool v)
@@ -80,4 +82,11 @@ public class StructureNode : Node2D, ISelectable, ITarget
     {
         area.SetCollisionMaskBit(n, v);
     }
+
+    public Rect2 GetSelectionArea()
+    {
+        return new Rect2(GlobalPosition, SIZE_REPLACE);
+    }
 }
+
+

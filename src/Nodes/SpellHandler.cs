@@ -35,7 +35,7 @@ public class SpellHandler : Control
         }
     }
 
-    public override void _Input(InputEvent e)
+    public override void _UnhandledInput(InputEvent e)
     {
         if (runtime.IsCasting)
         {

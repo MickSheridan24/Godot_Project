@@ -54,7 +54,6 @@ public class Wizard : KinematicBody2D, ISelectable, IHaveHealth, IMove, IHaveRun
         aimLine.dest = runtime?.RightTarget?.GetTargetPosition() ?? aimLine.dest;
         aimLine.Update();
     }
-
     private void HandleAnimation()
     {
         var dir = Position.DirectionTo(destination).ToEightDir();
@@ -245,6 +244,11 @@ public class Wizard : KinematicBody2D, ISelectable, IHaveHealth, IMove, IHaveRun
     public void RemoveEffect(eStatusEffect eff)
     {
         state.statusHandler.RemoveStatus(eff);
+    }
+
+    public Rect2 GetSelectionArea()
+    {
+        return new Rect2(GetGlobalMousePosition(), sprite.RegionRect.Size);
     }
 }
 

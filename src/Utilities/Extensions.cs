@@ -94,6 +94,7 @@ public static class Extensions
         return vector.x >= low.x && vector.y >= low.y && vector.x < high.x && vector.y < high.y;
     }
 
+
     public static bool WithinAreaOf(this Vector2 vector, Vector2 dest, Vector2 size)
     {
         return vector.InBounds(dest - size / 2, dest + size / 2);

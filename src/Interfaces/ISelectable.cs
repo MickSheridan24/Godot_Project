@@ -4,6 +4,6 @@ public interface ISelectable
     Runtime runtime { get; }
 
     void Select();
-    void RightClick(InputEventMouseButton mouse);
-
+    void RightClick(InputEventMouseButton @event);
+    Rect2 GetSelectionArea();
 }

@@ -82,7 +82,7 @@ public class Enemy : KinematicBody2D, IElevatable, IMove, ITarget, IDamageable, 
         }
     }
 
-    public override void _Input(InputEvent e)
+    public override void _UnhandledInput(InputEvent e)
     {
         var pos = GetGlobalMousePosition();
         var rClick = (e as InputEventMouseButton);

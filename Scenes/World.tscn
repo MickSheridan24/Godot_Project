@@ -4,7 +4,7 @@
 [ext_resource path="res://assets/Tiles.png" type="Texture" id=2]
 [ext_resource path="res://src/Nodes/Highlight.cs" type="Script" id=3]
 
-[sub_resource type="OccluderPolygon2D" id=5]
+[sub_resource type="OccluderPolygon2D" id=1]
 polygon = PoolVector2Array( 0, 0, 32, 0, 32, 32, 0, 32 )
 
 [sub_resource type="ConvexPolygonShape2D" id=2]
@@ -16,7 +16,7 @@ points = PoolVector2Array( 0, 0, 32, 0, 32, 32, 0, 32 )
 [sub_resource type="ConvexPolygonShape2D" id=4]
 points = PoolVector2Array( 0, 0, 32, 0, 32, 32, 0, 32 )
 
-[sub_resource type="TileSet" id=1]
+[sub_resource type="TileSet" id=5]
 0/name = "DIRT"
 0/texture = ExtResource( 2 )
 0/tex_offset = Vector2( 0, 0 )
@@ -24,7 +24,7 @@ points = PoolVector2Array( 0, 0, 32, 0, 32, 32, 0, 32 )
 0/region = Rect2( 0, 0, 32, 32 )
 0/tile_mode = 0
 0/occluder_offset = Vector2( 0, 0 )
-0/occluder = SubResource( 5 )
+0/occluder = SubResource( 1 )
 0/navigation_offset = Vector2( 0, 0 )
 0/shapes = [ {
 "autotile_coord": Vector2( 0, 0 ),
@@ -73,7 +73,7 @@ script = ExtResource( 1 )
 
 [node name="Level2" type="TileMap" parent="."]
 z_index = -5
-tile_set = SubResource( 1 )
+tile_set = SubResource( 5 )
 cell_size = Vector2( 32, 32 )
 collision_use_kinematic = true
 collision_layer = 64
@@ -83,7 +83,7 @@ format = 1
 
 [node name="Level3" type="TileMap" parent="."]
 z_index = -4
-tile_set = SubResource( 1 )
+tile_set = SubResource( 5 )
 cell_size = Vector2( 32, 32 )
 collision_use_kinematic = true
 collision_layer = 128
@@ -93,7 +93,7 @@ format = 1
 
 [node name="Level4" type="TileMap" parent="."]
 z_index = -3
-tile_set = SubResource( 1 )
+tile_set = SubResource( 5 )
 cell_size = Vector2( 32, 32 )
 cell_tile_origin = 1
 cell_y_sort = true
