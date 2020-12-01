@@ -94,6 +94,7 @@ public class Runtime
     public void ClearSelection()
     {
         SetSelection(null);
+        IsCasting = false;
         GD.Print("SELECTED: " + this.currentSelection);
     }
 

@@ -13,6 +13,8 @@ public class Wizard : KinematicBody2D, ISelectable, IHaveHealth, IMove, IHaveRun
     public Moveable moveable;
     private WeakRef weakref;
 
+    public string EntityName => state.Name;
+    public string Description => state.Description;
     private Sprite sprite => GetNode<Sprite>("Sprite");
     private AnimationPlayer animation => sprite.GetNode<AnimationPlayer>("AnimationPlayer");
     public Area2D body => GetNode<Area2D>("Area2D");
@@ -31,7 +33,6 @@ public class Wizard : KinematicBody2D, ISelectable, IHaveHealth, IMove, IHaveRun
 
 
 
-
     //overrides
     public override void _Ready()
     {
@@ -40,10 +41,6 @@ public class Wizard : KinematicBody2D, ISelectable, IHaveHealth, IMove, IHaveRun
         MovingTarget = true;
         isFallDisabled = false;
         weakref = WeakRef(this);
-        //  animation.GetAnimation("Walk_Up").Loop = true;
-        //  animation.GetAnimation("Walk_Down").Loop = true;
-        //  animation.GetAnimation("Walk_Left").Loop = true;
-        //  animation.GetAnimation("Walk_Right").Loop = true;
     }
 
     public override void _Process(float d)
@@ -96,7 +93,7 @@ public class Wizard : KinematicBody2D, ISelectable, IHaveHealth, IMove, IHaveRun
         HandleMove(delta);
 
         state.tickHandler.Tick();
-        //  HandleAnimation();
+
     }
 
     //ISelectable

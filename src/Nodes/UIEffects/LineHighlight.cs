@@ -14,6 +14,7 @@ public class LineHighlight : UIEffect
 
     public override void _Process(float d)
     {
+
         if (GetPointDir() != dir)
         {
             dir = GetPointDir();
@@ -32,8 +33,12 @@ public class LineHighlight : UIEffect
 
     public override void _Draw()
     {
-        Position = origin.GetTargetPosition();
-        ZIndex = 1;
-        DrawLine(Vector2.Zero, dir * length, color, 4);
+        if (origin != null)
+        {
+            Position = origin.GetTargetPosition();
+            ZIndex = 1;
+            DrawLine(Vector2.Zero, dir * length, color, 4);
+        }
+
     }
 }

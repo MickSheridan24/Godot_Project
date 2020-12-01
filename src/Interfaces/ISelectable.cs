@@ -6,4 +6,7 @@ public interface ISelectable
     void Select();
     void RightClick(InputEventMouseButton @event);
     Rect2 GetSelectionArea();
+
+    string EntityName { get; }
+    string Description { get; }
 }

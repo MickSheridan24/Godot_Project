@@ -7,12 +7,6 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 script = ExtResource( 1 )
 
-[node name="SpellName" type="Label" parent="."]
-margin_left = 160.0
-margin_top = 826.0
-margin_right = 250.0
-margin_bottom = 850.0
-
 [node name="ColorRect" type="ColorRect" parent="."]
 margin_left = 150.0
 margin_top = 820.0
@@ -30,3 +24,28 @@ margin_bottom = 40.0
 
 [node name="CompletedText" type="Label" parent="SpellText/EntireText"]
 margin_bottom = 40.0
+
+[node name="SpellName" type="Label" parent="SpellText"]
+margin_left = -20.0
+margin_top = -14.0
+margin_right = 70.0
+margin_bottom = 10.0
+
+[node name="EntityMenu" type="Control" parent="."]
+margin_left = 160.0
+margin_top = 826.0
+margin_right = 1580.0
+margin_bottom = 896.0
+
+[node name="Nametag" type="Label" parent="EntityMenu"]
+margin_right = 150.0
+margin_bottom = 24.0
+align = 1
+valign = 1
+
+[node name="Description" type="Label" parent="EntityMenu"]
+margin_top = 24.0
+margin_right = 390.0
+margin_bottom = 72.0
+valign = 1
+autowrap = true

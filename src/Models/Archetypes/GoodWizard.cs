@@ -6,6 +6,10 @@ public class GoodWizard : WizardState, IWizardState
 
     }
 
+    public string Name => "Bartholemew the Good Wizard";
+
+    public string Description => "He's a nice guy";
+
     public IResourceBank InitResourceBank()
     {
         return new ResourceBank()

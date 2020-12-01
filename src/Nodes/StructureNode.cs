@@ -8,9 +8,9 @@ public class StructureNode : Node2D, ISelectable, ITarget, IHaveRuntime, IHaveSi
     public IStructure state { get; set; }
     public Sprite sprite => GetNode<Sprite>("Sprite");
     public StaticBody2D area => GetNode<StaticBody2D>("Area2D");
-
     public Runtime runtime => GetParent<IHaveRuntime>().runtime;
-
+    public string EntityName => state.Name;
+    public string Description => state.Description;
     public bool MovingTarget => false;
 
     private Highlight rightHighlight => GetNode<Highlight>("RightHighlight");

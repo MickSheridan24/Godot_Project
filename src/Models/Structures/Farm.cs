@@ -5,6 +5,9 @@ public class Farm : IStructure
 {
     private StructureNode node;
 
+    public string Name => "Farm";
+    public string Description => "Grows corn and the like";
+
     private Texture text = GD.Load<Texture>("res://assets/Farm.png");
 
     public void ConfigureNode(StructureNode structureNode)

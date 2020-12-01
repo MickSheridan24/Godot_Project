@@ -10,18 +10,24 @@ public class CircleHighlight : UIEffect
 
     public override void _Process(float d)
     {
-        if (Position != origin.GetTargetPosition())
+        if (origin != null)
         {
-            Position = origin.GetTargetPosition();
-            Update();
+            if (Position != origin.GetTargetPosition())
+            {
+                Position = origin.GetTargetPosition();
+                Update();
+            }
         }
     }
 
     public override void _Draw()
     {
-        Position = origin.GetTargetPosition();
-        ZIndex = 1;
-        DrawCircle(Vector2.Zero, radius, color);
+        if (origin != null)
+        {
+            Position = origin.GetTargetPosition();
+            ZIndex = 1;
+            DrawCircle(Vector2.Zero, radius, color);
+        }
     }
 
 

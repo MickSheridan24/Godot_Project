@@ -6,9 +6,12 @@ public class SpellHandler : Control
 
     public Runtime runtime => GetParent<IHaveRuntime>().runtime;
     public ColorRect panel => GetNode<ColorRect>("ColorRect");
-    public Label spellName => GetNode<Label>("SpellName");
+
+    public Control entityMenu => GetNode<Control>("EntityMenu");
+    public Control spellText => GetNode<Control>("SpellText");
     public Label entireText => GetNode<Label>("SpellText/EntireText");
     public Label completedText => GetNode<Label>("SpellText/EntireText/CompletedText");
+    public Label spellName => GetNode<Label>("SpellText/SpellName");
     public ISpell currentSpell => runtime.GetCurrentSpell();
     public UITheme theme;
 
@@ -26,13 +29,32 @@ public class SpellHandler : Control
         Visible = runtime.IsCasting;
         if (Visible)
         {
-            entireText.Text = currentSpell.text;
-            spellName.Text = currentSpell.name;
+            if (runtime.WizardIsSelected())
+            {
+                spellText.Visible = true;
+                entityMenu.Visible = false;
+                entireText.Text = currentSpell.text;
+                spellName.Text = currentSpell.name;
+            }
+            else if (runtime.currentSelection != null)
+            {
+                spellText.Visible = false;
+                entityMenu.Visible = true;
+
+                ConfigureEntityMenu();
+            }
+
         }
         else
         {
             completedText.Text = "";
         }
+    }
+
+    private void ConfigureEntityMenu()
+    {
+        entityMenu.GetNode<Label>("Nametag").Text = runtime.currentSelection.EntityName;
+        entityMenu.GetNode<Label>("Description").Text = runtime.currentSelection.Description;
     }
 
     public override void _Input(InputEvent @event)
