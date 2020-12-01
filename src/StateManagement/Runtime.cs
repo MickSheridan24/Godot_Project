@@ -83,13 +83,17 @@ public class Runtime
 
     public void SetSelection(ISelectable selected)
     {
+        if (WizardIsSelected() && selected != wizardNode)
+        {
+            targeting.Clear();
+        }
         this.currentSelection = selected;
         GD.Print("SELECTED: " + this.currentSelection);
     }
 
     public void ClearSelection()
     {
-        currentSelection = null;
+        SetSelection(null);
         GD.Print("SELECTED: " + this.currentSelection);
     }
 

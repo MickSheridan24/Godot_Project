@@ -28,8 +28,6 @@ public class World : Node2D, IHaveRuntime, IHaveSize
     public Runtime runtime => GetParent<IHaveRuntime>().runtime;
     private TileTheme theme;
     private MapHandler mapHandler;
-    public ITarget rightTarget => runtime.RightTarget;
-    public ITarget leftTarget => runtime.LeftTarget;
     private Highlight rightHighlight => GetNode<Highlight>("RightHighlight");
     private Highlight leftHighlight => GetNode<Highlight>("LeftHighlight");
     public Vector2 size => new Vector2(40, 40);
@@ -260,18 +258,18 @@ public class World : Node2D, IHaveRuntime, IHaveSize
     {
 
 
-        rightHighlight.Visible = runtime.WizardIsSelected() && runtime?.RightTarget == rightTarget;
+        rightHighlight.Visible = runtime.WizardIsSelected() && runtime?.RightTarget != null;
 
-        if (rightHighlight.position != rightTarget?.GetTargetPosition())
+        if (rightHighlight.position != runtime.RightTarget?.GetTargetPosition())
         {
-            rightHighlight.position = rightTarget?.GetTargetPosition() ?? Vector2.Zero;
+            rightHighlight.position = runtime.RightTarget?.GetTargetPosition() ?? Vector2.Zero;
             rightHighlight.Update();
         }
 
-        leftHighlight.Visible = runtime.WizardIsSelected() && runtime?.LeftTarget == leftTarget;
-        if (leftHighlight.position != leftTarget?.GetTargetPosition())
+        leftHighlight.Visible = runtime.WizardIsSelected() && runtime?.LeftTarget != null;
+        if (leftHighlight.position != runtime.LeftTarget?.GetTargetPosition())
         {
-            leftHighlight.position = leftTarget?.GetTargetPosition() ?? Vector2.Zero;
+            leftHighlight.position = runtime.LeftTarget?.GetTargetPosition() ?? Vector2.Zero;
             leftHighlight.Update();
         }
     }

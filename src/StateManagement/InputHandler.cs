@@ -14,16 +14,17 @@ public class InputHandler
         var inputHandled = true;
         if (@event.LeftClickJustPressed())
         {
-            GD.Print("LEFT CLICK: " + effectedNode);
             if (Input.IsKeyPressed((int)KeyList.Space))
             {
                 HandleSpaceLeft(@event, mousePos, effectedNode);
             }
-            HandleLeftClickEvent(@event, mousePos, effectedNode);
+            else
+            {
+                HandleLeftClickEvent(@event, mousePos, effectedNode);
+            }
         }
         else if (@event.RightClickJustPressed())
         {
-            GD.Print("RIGHT CLICK: " + effectedNode);
             if (Input.IsKeyPressed((int)KeyList.Space))
             {
                 HandleSpaceRight(@event, mousePos, effectedNode);
@@ -54,7 +55,10 @@ public class InputHandler
     {
         if (runtime.WizardIsSelected())
         {
-            runtime.SetLeftTarget(new VectorTarget(mousePos));
+            var target = effectedNode is ITarget ? effectedNode as ITarget
+                                                 : new VectorTarget(mousePos);
+
+            runtime.SetLeftTarget(target);
         }
         else HandleLeftClickEvent(@event, mousePos, effectedNode);
     }
@@ -62,7 +66,10 @@ public class InputHandler
     {
         if (runtime.WizardIsSelected())
         {
-            runtime.SetRightTarget(new VectorTarget(mousePos));
+            var target = effectedNode is ITarget ? effectedNode as ITarget
+                                                 : new VectorTarget(mousePos);
+
+            runtime.SetRightTarget(target);
         }
         else HandleRightClickEvent(@event, mousePos, effectedNode);
     }
@@ -80,10 +87,9 @@ public class InputHandler
         {
             effectedNode.Select();
         }
-        else if (!runtime.WizardIsSelected())
+        else
         {
             runtime.ClearSelection();
-
         }
     }
 }

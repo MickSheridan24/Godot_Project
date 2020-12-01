@@ -1,4 +1,6 @@
 
+using System;
+
 public class TargetingSystem
 {
     public ICaster targeter { get; set; }
@@ -26,5 +28,11 @@ public class TargetingSystem
     public void RemoveRightTarget()
     {
         rightTarget = null;
+    }
+
+    public void Clear()
+    {
+        RemoveLeftTarget();
+        RemoveRightTarget();
     }
 }
