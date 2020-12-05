@@ -9,7 +9,7 @@ public class Enemy : BaseActorNode, IElevatable, IMove, ITarget, IDamageable, IH
     public string name { get; set; }
     public AnimationPlayer animation => sprite.GetNode<AnimationPlayer>("AnimationPlayer");
     public Vector2 speed { get; set; }
-    public Area2D body => GetNode<Area2D>("Area2D");
+
     private int DamageStateCounter;
 
     private IOrder order;
@@ -29,7 +29,7 @@ public class Enemy : BaseActorNode, IElevatable, IMove, ITarget, IDamageable, IH
     {
         destination = Position;
         isFallDisabled = false;
-        speed = new Vector2(80, 80);
+        speed = new Vector2(40, 40);
         moveable = new Moveable(this);
         MovingTarget = true;
         DamageStateCounter = 0;
@@ -124,17 +124,17 @@ public class Enemy : BaseActorNode, IElevatable, IMove, ITarget, IDamageable, IH
 
     public void BecomeIntangible()
     {
-        body.SetCollisionLayerBit((int)eCollisionLayers.ENTITY, false);
-        body.SetCollisionLayerBit((int)eCollisionLayers.HOSTILE, false);
-        body.SetCollisionLayerBit((int)eCollisionLayers.INTANGIBLE, true);
+        SetCollisionLayerBit((int)eCollisionLayers.ENTITY, false);
+        SetCollisionLayerBit((int)eCollisionLayers.HOSTILE, false);
+        SetCollisionLayerBit((int)eCollisionLayers.INTANGIBLE, true);
         sprite.Modulate = new SpriteTheme().cEnemyHit;
     }
 
     public void EndIntangible()
     {
-        body.SetCollisionLayerBit((int)eCollisionLayers.ENTITY, true);
-        body.SetCollisionLayerBit((int)eCollisionLayers.HOSTILE, true);
-        body.SetCollisionLayerBit((int)eCollisionLayers.INTANGIBLE, false);
+        SetCollisionLayerBit((int)eCollisionLayers.ENTITY, true);
+        SetCollisionLayerBit((int)eCollisionLayers.HOSTILE, true);
+        SetCollisionLayerBit((int)eCollisionLayers.INTANGIBLE, false);
         sprite.Modulate = new SpriteTheme().cEnemy;
     }
 

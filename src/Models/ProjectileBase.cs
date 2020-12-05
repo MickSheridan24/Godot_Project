@@ -31,7 +31,7 @@ public class ProjectileBase
         (node.effectRadius.GetNode<CollisionShape2D>("CollisionShape2D").GetShape() as CircleShape2D).Radius = r;
     }
 
-    protected IEnumerable<Node> FindEffected<T>(Area2D exclude = null)
+    protected IEnumerable<Node> FindEffected<T>(Node exclude = null)
     {
         var areas = node.effectRadius.GetOverlappingAreas();
 

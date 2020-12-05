@@ -11,11 +11,13 @@ public class FireballProjectile : ProjectileBase, IProjectile
 
         damage = 300;
     }
-    public void HandleImpact(Area2D area)
+    public void HandleImpact(KinematicCollision2D collision)
     {
-        TryDamage(area?.GetParent(), eDamageType.FIRE);
 
-        foreach (var effected in FindEffected<IDamageable>(area))
+        var collider = collision.GetCollider() as Node;
+        TryDamage(collider, eDamageType.FIRE);
+
+        foreach (var effected in FindEffected<IDamageable>(collider))
         {
             (effected as IDamageable).Damage(damage / 2, eDamageType.FIRE);
         }

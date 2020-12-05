@@ -16,13 +16,14 @@ public class LightningProjectile : ProjectileBase, IProjectile
         isLaunching = false;
     }
 
-    public void HandleImpact(Area2D area)
+    public void HandleImpact(KinematicCollision2D collision)
     {
-        var target = area?.GetParent();
+        var collider = collision.GetCollider() as Node;
+
         isLaunching = false;
 
-        TryDamage(target, eDamageType.ELECTRIC);
-        TryConduct(target, area);
+        TryDamage(collider, eDamageType.ELECTRIC);
+        TryConduct(collider);
 
         node.ExecQueueFree();
     }
@@ -39,12 +40,12 @@ public class LightningProjectile : ProjectileBase, IProjectile
         }
     }
 
-    private void TryConduct(Node target, Area2D area)
+    private void TryConduct(Node target)
     {
         if (target != null && target is IConductElectricity)
         {
             var conductor = (target as IConductElectricity);
-            var conduit = FindConduit(conductor, area);
+            var conduit = FindConduit(conductor);
             conductor.AddJoltedEffect(2);
             if (conduit != null)
             {
@@ -53,9 +54,9 @@ public class LightningProjectile : ProjectileBase, IProjectile
         }
     }
 
-    private IConductElectricity FindConduit(IConductElectricity target, Area2D area)
+    private IConductElectricity FindConduit(IConductElectricity target)
     {
-        var conduits = FindEffected<IConductElectricity>(area)
+        var conduits = FindEffected<IConductElectricity>(target as Node)
                                         .Select(i => i as IConductElectricity)
                                         .Where(a => !a.HasStatusEffect(eStatusEffect.JOLTED))
 

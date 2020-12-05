@@ -66,8 +66,8 @@ tracks/0/keys = {
 "values": [ 4, 5, 4 ]
 }
 
-[sub_resource type="CircleShape2D" id=6]
-radius = 20.0
+[sub_resource type="RectangleShape2D" id=5]
+extents = Vector2( 16, 16 )
 
 [node name="Wizard" type="KinematicBody2D"]
 collision_layer = 5
@@ -93,8 +93,8 @@ script = ExtResource( 3 )
 z_index = 1
 script = ExtResource( 4 )
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-shape = SubResource( 6 )
-
 [node name="HealthBar" parent="." instance=ExtResource( 5 )]
 position = Vector2( -16, 35 )
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource( 5 )

@@ -12,7 +12,7 @@ public interface IProjectile
 
     int damage { get; set; }
 
-    void HandleImpact(Area2D area);
+    void HandleImpact(KinematicCollision2D collision);
     void HandleRayCollision();
     void ConfigureNode();
     void HandleProcess();

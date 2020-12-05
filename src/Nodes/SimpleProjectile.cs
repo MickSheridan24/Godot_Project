@@ -80,24 +80,22 @@ public class SimpleProjectile : KinematicBody2D, IProjectileNode
     private void HandleMove(float d)
     {
         destination = speed * direction * d;
-        var move = MoveAndCollide(destination);
+        var collision = MoveAndCollide(destination);
 
-        remainingDistance -= speed * d;
-        if (remainingDistance <= Vector2.Zero)
+        if (collision != null)
         {
+            state.HandleImpact(collision);
             QueueFree();
         }
-    }
-
-    //Signal Handlers 
-
-    public void _onBodyEntered(Area2D area)
-    {
-        var isWizard = area.GetParent() as Wizard;
-        if (isWizard != caster)
+        else
         {
-            state.HandleImpact(area);
+            remainingDistance -= speed * d;
+            if (remainingDistance <= Vector2.Zero)
+            {
+                QueueFree();
+            }
         }
+
     }
 
 
