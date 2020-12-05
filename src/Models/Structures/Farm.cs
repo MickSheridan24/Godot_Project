@@ -1,7 +1,7 @@
 
 using Godot;
 
-public class Farm : IStructure
+public class Farm : IStructure, IMenuState
 {
     private StructureNode node;
 
@@ -27,5 +27,10 @@ public class Farm : IStructure
         var theme = new SpriteTheme();
         var defaultColor = theme.cEnemy;
         node.sprite.Modulate = theme.cFarm;
+    }
+
+    public void AddButtons(PartialMenu menu)
+    {
+        return;
     }
 }

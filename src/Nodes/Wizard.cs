@@ -168,5 +168,15 @@ public class Wizard : BaseActorNode, ISelectable, IHaveHealth, IMove, IHaveRunti
     {
         state.statusHandler.RemoveStatus(eff);
     }
+
+    public PartialMenu GetPartial()
+    {
+        return null;
+    }
+
+    public IMenuState GetMenuState()
+    {
+        return null;
+    }
 }
 

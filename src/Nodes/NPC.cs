@@ -114,4 +114,14 @@ public class NPC : BaseActorNode, ISelectable, IHaveHealth, IMove, IHaveRuntime,
             }
         }
     }
+
+    public PartialMenu GetPartial()
+    {
+        return null;
+    }
+
+    public IMenuState GetMenuState()
+    {
+        return null;
+    }
 }

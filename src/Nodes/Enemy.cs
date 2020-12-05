@@ -270,4 +270,14 @@ public class Enemy : BaseActorNode, IElevatable, IMove, ITarget, IDamageable, IH
     {
         return GetState().CanMove();
     }
+
+    public PartialMenu GetPartial()
+    {
+        return null;
+    }
+
+    public IMenuState GetMenuState()
+    {
+        return null;
+    }
 }

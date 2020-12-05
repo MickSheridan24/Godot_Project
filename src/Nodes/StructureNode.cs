@@ -18,7 +18,8 @@ public class StructureNode : Node2D, ISelectable, ITarget, IHaveRuntime, IHaveSi
     private Highlight selectHighlight => GetNode<Highlight>("SelectHighlight");
     public Vector2 size => new Vector2(160, 160);
 
-  
+    private PackedScene snPartial => (PackedScene)ResourceLoader.Load("res://scenes/StructurePartialMenu.tscn");
+
 
     public override void _Ready()
     {
@@ -92,6 +93,16 @@ public class StructureNode : Node2D, ISelectable, ITarget, IHaveRuntime, IHaveSi
     public Rect2 GetSelectionArea()
     {
         return new Rect2(GlobalPosition - size / 2, size);
+    }
+
+    public PartialMenu GetPartial()
+    {
+        return snPartial.Instance() as StructurePartialMenu;
+    }
+
+    public IMenuState GetMenuState()
+    {
+        return state as IMenuState;
     }
 }
 

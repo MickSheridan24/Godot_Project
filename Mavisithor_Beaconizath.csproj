@@ -50,6 +50,10 @@
   </ItemGroup>
   <ItemGroup>
     <!--HelloBash-->
+      <Compile Include="src\Interfaces\IMenuState.cs" />
+    <Compile Include="src\Nodes\MenuButton.cs" />
+    <Compile Include="src\Nodes\StructurePartialMenu.cs" />
+    <Compile Include="src\UILogic\PartialMenu.cs" />
     <Compile Include="src\Nodes\BaseActorNode.cs" />
     <Compile Include="src\Nodes\NPC.cs" />
     <Compile Include="src\Nodes\SelectionIndicator.cs" />
@@ -76,7 +80,7 @@
     <Compile Include="src\Nodes\MouseBoundary.cs" />
     <Compile Include="src\Nodes\ResourceSummary.cs" />
     <Compile Include="src\Nodes\SimpleProjectile.cs" />
-    <Compile Include="src\Nodes\SpellHandler.cs" />
+    <Compile Include="src\Nodes\UIMenu.cs" />
     <Compile Include="src\Nodes\StructureNode.cs" />
     <Compile Include="src\Nodes\UI.cs" />
     <Compile Include="src\Nodes\UIEffects\CircleHighlight.cs" />

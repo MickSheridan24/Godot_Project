@@ -9,4 +9,8 @@ public interface ISelectable
 
     string EntityName { get; }
     string Description { get; }
+
+    PartialMenu GetPartial();
+
+    IMenuState GetMenuState();
 }

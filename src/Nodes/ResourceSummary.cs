@@ -1,23 +1,21 @@
 using Godot;
 using System;
 
-public class ResourceSummary : Control
+public class ResourceSummary : ColorRect
 {
     public Runtime runtime => GetParent<IHaveRuntime>().runtime;
     public IResourceBank bank => runtime.playerState.bank;
-
-    public ColorRect panel => GetNode<ColorRect>("Panel");
-    public Label food => GetNode<Label>("Panel/Food");
-    public Label wealth => GetNode<Label>("Panel/Wealth");
-    public Label pop => GetNode<Label>("Panel/Population");
-    public Label knowledge => GetNode<Label>("Panel/Knowledge");
-    public Label insight => GetNode<Label>("Panel/Insight");
+    public Label food => GetNode<Label>("Food");
+    public Label wealth => GetNode<Label>("Wealth");
+    public Label pop => GetNode<Label>("Population");
+    public Label knowledge => GetNode<Label>("Knowledge");
+    public Label insight => GetNode<Label>("Insight");
 
 
     public override void _Ready()
     {
         var theme = new UITheme();
-        panel.Modulate = theme.cPrimary;
+        Modulate = theme.cPrimary;
         food.Set("custom_colors/font_color", theme.cRed);
         wealth.Set("custom_colors/font_color", theme.cRed);
         pop.Set("custom_colors/font_color", theme.cRed);

@@ -1,11 +1,10 @@
 using Godot;
 using System;
 
-public class SpellHandler : Control
+public class UIMenu : ColorRect
 {
 
     public Runtime runtime => GetParent<IHaveRuntime>().runtime;
-    public ColorRect panel => GetNode<ColorRect>("ColorRect");
 
     public Control entityMenu => GetNode<Control>("EntityMenu");
     public Control spellText => GetNode<Control>("SpellText");
@@ -15,10 +14,12 @@ public class SpellHandler : Control
     public ISpell currentSpell => runtime.GetCurrentSpell();
     public UITheme theme;
 
+    private PartialMenu partial;
+
     public override void _Ready()
     {
         theme = new UITheme();
-        panel.Color = theme.cPrimary;
+        Color = theme.cPrimary;
 
         entireText.Set("custom_colors/font_color", theme.cAccent);
         completedText.Set("custom_colors/font_color", theme.cBlue);
@@ -51,10 +52,28 @@ public class SpellHandler : Control
         }
     }
 
+    public void AddPartial(PartialMenu menu)
+    {
+        if (partial != null)
+        {
+            RemoveChild(partial);
+        }
+        partial = menu;
+        AddChild(partial);
+        partial.RectPosition = new Vector2(500, 25);
+    }
+
     private void ConfigureEntityMenu()
     {
         entityMenu.GetNode<Label>("Nametag").Text = runtime.currentSelection.EntityName;
         entityMenu.GetNode<Label>("Description").Text = runtime.currentSelection.Description;
+
+        var partial = runtime.currentSelection.GetPartial();
+        if (partial != null)
+        {
+            AddPartial(partial);
+            partial.Config(runtime.currentSelection.GetMenuState());
+        }
     }
 
     public override void _Input(InputEvent @event)
