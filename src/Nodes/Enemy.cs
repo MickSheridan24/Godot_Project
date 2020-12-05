@@ -3,36 +3,27 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-public class Enemy : KinematicBody2D, IElevatable, IMove, ITarget, IDamageable, IHaveRuntime,
-                     IConductElectricity, IFreeable, ISufferStatusEffects, IHaveHealth, IHaveSize
+public class Enemy : BaseActorNode, IElevatable, IMove, ITarget, IDamageable, IHaveRuntime,
+                     IConductElectricity, IFreeable, ISufferStatusEffects, IHaveHealth, IHaveSize, ISelectable
 {
     public string name { get; set; }
-    public Sprite sprite => GetNode<Sprite>("Sprite");
     public AnimationPlayer animation => sprite.GetNode<AnimationPlayer>("AnimationPlayer");
-    public Runtime runtime => GetParent<IHaveRuntime>().runtime;
-    public EnemyState state { get; private set; }
-    private Moveable moveable;
-    public Vector2 destination { get; set; }
     public Vector2 speed { get; set; }
-    public bool MovingTarget { get; set; }
     public Area2D body => GetNode<Area2D>("Area2D");
     private int DamageStateCounter;
 
     private IOrder order;
-    private WeakRef weakref;
 
-
-    private Highlight rightHighlight => GetNode<Highlight>("RightHighlight");
-    private Highlight leftHighlight => GetNode<Highlight>("LeftHighlight");
     public Vector2 size => new Vector2(40, 40);
     public int Health => state.health.current;
     public int MaxHealth => state.health.standard;
 
-    public int GetDamage => state.damage.current;
+    public int GetDamage => GetState().damage.current;
+    public SelectionIndicator selectionIndicator => GetNode<SelectionIndicator>("SelectionIndicator");
 
-    public bool isFallDisabled { get; set; }
+    public string EntityName => "Enemy";
 
-
+    public string Description => "Very Dangerous. Should Avoid";
 
     public override void _Ready()
     {
@@ -41,38 +32,36 @@ public class Enemy : KinematicBody2D, IElevatable, IMove, ITarget, IDamageable, 
         speed = new Vector2(80, 80);
         moveable = new Moveable(this);
         MovingTarget = true;
-        rightHighlight.position = Vector2.Zero;
-        leftHighlight.position = Vector2.Zero;
         DamageStateCounter = 0;
-
-        rightHighlight.color = new UITheme().cAccent;
-        leftHighlight.color = new UITheme().cBlue;
-
 
         weakref = WeakRef(this);
     }
 
     public override void _Process(float d)
     {
-        rightHighlight.Visible = runtime.RightTarget == this;
-        leftHighlight.Visible = runtime.LeftTarget == this;
+
         InitState();
         state.elevationHandler.HandleElevation();
         state.statusHandler.HandleStatuses();
 
         OverrideSpriteColor();
 
-        //HandleAnimation();
+        selectionIndicator.ProcessSelection();
     }
     public override void _PhysicsProcess(float d)
     {
-        order = state?.RequestAction(d);
+        order = GetState()?.RequestAction(d);
         state?.Tick();
         if (order != null)
         {
             order.Execute();
             order = null;
         }
+    }
+
+    public EnemyState GetState()
+    {
+        return state as EnemyState;
     }
 
     private void InitState()
@@ -100,15 +89,6 @@ public class Enemy : KinematicBody2D, IElevatable, IMove, ITarget, IDamageable, 
         }
     }
 
-    public void HandleMove(float d)
-    {
-        moveable.HandleMove(d);
-    }
-
-    public bool CanMove()
-    {
-        return state.CanMove();
-    }
 
     //IDamageable
     public void Damage(int power, eDamageType type)
@@ -139,11 +119,6 @@ public class Enemy : KinematicBody2D, IElevatable, IMove, ITarget, IDamageable, 
         else return Vector2.Zero;
     }
 
-
-    public bool IsFreed()
-    {
-        return weakref.GetRef() == null;
-    }
 
     //IConductElectricity
 
@@ -199,26 +174,22 @@ public class Enemy : KinematicBody2D, IElevatable, IMove, ITarget, IDamageable, 
 
         var level = runtime.World.GetLayer(collider);
 
-        if ((int)level == (int)state.elevationHandler.Level + 1 && !state.isClimbing)
+        if ((int)level == (int)state.elevationHandler.Level + 1 && !GetState().isClimbing)
         {
-            state.InitClimbing(level);
+            GetState().InitClimbing(level);
         }
     }
 
     public void CompleteClimb()
     {
-        state.StopClimbing();
+        GetState().StopClimbing();
     }
 
-    public void Elevate(eCollisionLayers level)
-    {
-        state.elevationHandler.HandleElevation((int)level);
-    }
 
     public void DisableFall(int v)
     {
 
-        state.DisableFall(v);
+        GetState().DisableFall(v);
     }
     public void AddStatusEffect(IStatusEffect effect)
     {
@@ -284,4 +255,19 @@ public class Enemy : KinematicBody2D, IElevatable, IMove, ITarget, IDamageable, 
         sprite.Modulate = state.statusHandler.HasStatus(eStatusEffect.INTANGIBLE) ? theme.cEnemyHit : defaultColor;
     }
 
+
+    public void RightClick(InputEventMouseButton @event)
+    {
+        return;
+    }
+
+    public Rect2 GetSelectionArea()
+    {
+        return new Rect2(GlobalPosition - size / 2, size);
+    }
+
+    public bool CanMove()
+    {
+        return GetState().CanMove();
+    }
 }

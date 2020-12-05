@@ -20,9 +20,6 @@ public class Main : Node2D, IHaveRuntime
 
         Cottage.state = new Cottage();
         Cottage.Configure();
-
-
-
     }
 
     public override void _Input(InputEvent @event)

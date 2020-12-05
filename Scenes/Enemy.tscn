@@ -2,8 +2,9 @@
 
 [ext_resource path="res://src/Nodes/Enemy.cs" type="Script" id=1]
 [ext_resource path="res://assets/Blank.png" type="Texture" id=2]
-[ext_resource path="res://src/Nodes/Highlight.cs" type="Script" id=3]
-[ext_resource path="res://Scenes/HealthBar.tscn" type="PackedScene" id=4]
+[ext_resource path="res://Scenes/HealthBar.tscn" type="PackedScene" id=3]
+[ext_resource path="res://Scenes/SelectionIndicator.tscn" type="PackedScene" id=4]
+[ext_resource path="res://src/Nodes/ClickableArea2D.cs" type="Script" id=5]
 
 [sub_resource type="Animation" id=1]
 resource_name = "New Anim"
@@ -68,9 +69,6 @@ tracks/0/keys = {
 "values": [ 2, 3, 2 ]
 }
 
-[sub_resource type="CircleShape2D" id=6]
-radius = 19.5775
-
 [sub_resource type="CapsuleShape2D" id=7]
 radius = 20.8946
 height = 0.487789
@@ -93,21 +91,13 @@ anims/Walk_Left = SubResource( 3 )
 anims/Walk_Right = SubResource( 4 )
 anims/Walk_Up = SubResource( 5 )
 
-[node name="LeftHighlight" type="Node2D" parent="."]
-script = ExtResource( 3 )
-
-[node name="Area2D" type="Area2D" parent="."]
-collision_layer = 3
-collision_mask = 11
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
-shape = SubResource( 6 )
-
-[node name="RightHighlight" type="Node2D" parent="."]
-script = ExtResource( 3 )
-
-[node name="HealthBar" parent="." instance=ExtResource( 4 )]
+[node name="HealthBar" parent="." instance=ExtResource( 3 )]
 position = Vector2( -16.6986, 33.1032 )
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 shape = SubResource( 7 )
+
+[node name="SelectionIndicator" parent="." instance=ExtResource( 4 )]
+
+[node name="Selectable" type="Node2D" parent="."]
+script = ExtResource( 5 )

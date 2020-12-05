@@ -1,7 +1,7 @@
 using Godot;
 using System;
 
-public class ClickableArea2D : StaticBody2D
+public class ClickableArea2D : Node2D
 {
 
     public Runtime runtime => GetParent<IHaveRuntime>().runtime;

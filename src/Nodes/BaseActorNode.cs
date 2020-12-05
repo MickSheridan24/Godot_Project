@@ -9,7 +9,6 @@ public class BaseActorNode : KinematicBody2D
 
 
     //NodeInfo
-    public Area2D body => GetNode<Area2D>("Area2D");
     protected Sprite sprite => GetNode<Sprite>("Sprite");
     public Vector2 spritePosition => sprite.Position;
     protected WeakRef weakref;
@@ -79,6 +78,5 @@ public class BaseActorNode : KinematicBody2D
     {
         destination = position;
     }
-
 
 }

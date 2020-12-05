@@ -23,17 +23,17 @@ public class NPC : BaseActorNode, ISelectable, IHaveHealth, IMove, IHaveRuntime,
 
     public void BecomeIntangible()
     {
-        body.SetCollisionLayerBit((int)eCollisionLayers.ENTITY, false);
-        body.SetCollisionLayerBit((int)eCollisionLayers.FRIENDLY, false);
-        body.SetCollisionLayerBit((int)eCollisionLayers.INTANGIBLE, true);
+        SetCollisionLayerBit((int)eCollisionLayers.ENTITY, false);
+        SetCollisionLayerBit((int)eCollisionLayers.FRIENDLY, false);
+        SetCollisionLayerBit((int)eCollisionLayers.INTANGIBLE, true);
         sprite.Modulate = new SpriteTheme().cEnemyHit;
     }
 
     public void EndIntangible()
     {
-        body.SetCollisionLayerBit((int)eCollisionLayers.ENTITY, true);
-        body.SetCollisionLayerBit((int)eCollisionLayers.FRIENDLY, true);
-        body.SetCollisionLayerBit((int)eCollisionLayers.INTANGIBLE, false);
+        SetCollisionLayerBit((int)eCollisionLayers.ENTITY, true);
+        SetCollisionLayerBit((int)eCollisionLayers.FRIENDLY, true);
+        SetCollisionLayerBit((int)eCollisionLayers.INTANGIBLE, false);
     }
 
 

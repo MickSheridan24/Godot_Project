@@ -3,49 +3,30 @@ using System.Collections.Generic;
 using System.Linq;
 using Godot;
 
-public class EnemyState
+public class EnemyState : BaseActorState
 {
     public IAI ai { get; set; }
-    public Enemy node { get; set; }
     public bool isClimbing;
-
-    public Stat health;
-    public Stat speed;
     public Stat damage;
-    public ElevationHandler elevationHandler;
-    public StatusHandler statusHandler;
-    private TickHandler tickHandler;
 
 
-    public EnemyState(IAI AI, Enemy enemy)
+
+    public EnemyState(IAI AI, Enemy enemy) : base(enemy)
     {
         isClimbing = false;
         ai = AI;
-        node = enemy;
         health = Stat.Health(400);
         speed = Stat.Speed(85);
         damage = Stat.Damage(50);
-
-        elevationHandler = new ElevationHandler(node, node.runtime);
-        tickHandler = new TickHandler();
-        statusHandler = new StatusHandler(node);
     }
 
-    public void Tick()
-    {
-        tickHandler.Tick();
-    }
+
 
     public IOrder RequestAction(float d)
     {
         return ai.Request(this, d);
     }
 
-    public bool HandleDamage(int d)
-    {
-        health.current -= d;
-        return health.current > 0;
-    }
 
     internal bool CanMove()
     {
@@ -55,7 +36,7 @@ public class EnemyState
     internal void InitClimbing(eCollisionLayers level)
     {
         isClimbing = true;
-        tickHandler.AddOrder(new ClimbOrder(node, level), 5);
+        tickHandler.AddOrder(new ClimbOrder(node as IElevatable, level), 5);
     }
 
     internal void StopClimbing()
@@ -65,14 +46,7 @@ public class EnemyState
 
     internal void DisableFall(int v)
     {
-        node.isFallDisabled = true;
-        tickHandler.AddOrder(new ReEnableFallOrder(node), v);
-    }
-
-    internal void AddStatus(eStatusEffect s, int duration)
-    {
-        statusHandler.AddStatus(StatusEffect.Create(s));
-        tickHandler.AddOrder(new RemoveStatusOrder(node, s), duration);
-
+        (node as IElevatable).isFallDisabled = true;
+        tickHandler.AddOrder(new ReEnableFallOrder(node as IElevatable), v);
     }
 }

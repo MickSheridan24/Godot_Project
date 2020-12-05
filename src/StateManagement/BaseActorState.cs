@@ -35,5 +35,10 @@ public class BaseActorState
         statusHandler.AddStatus(StatusEffect.Create(s));
         tickHandler.AddOrder(new RemoveStatusOrder(node as ISufferStatusEffects, s), duration);
     }
+
+    public void Tick()
+    {
+        tickHandler.Tick();
+    }
 }
 
