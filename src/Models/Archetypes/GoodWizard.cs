@@ -3,12 +3,9 @@ public class GoodWizard : WizardState, IWizardState
 {
     public GoodWizard(Wizard node) : base(node)
     {
-
+        Name = "Bartholemew the Good Wizard";
+        Description = "He's a nice guy";
     }
-
-    public string Name => "Bartholemew the Good Wizard";
-
-    public string Description => "He's a nice guy";
 
     public IResourceBank InitResourceBank()
     {

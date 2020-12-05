@@ -14,4 +14,7 @@ public class SpriteTheme
 
     public Color unselected => new Color("#a822dd");
     public Color selected => new Color("a866ff");
+
+
+    public Color NPC => new Color("#46948d");
 }

@@ -14,6 +14,7 @@ public class Runtime
     public ITarget currentTarget => targeting.rightTarget;
     public DebugInfo Debug { get; set; }
     public World World { get; private set; }
+
     public ITarget RightTarget => targeting.rightTarget;
     public ITarget LeftTarget => targeting.leftTarget;
     private TargetingSystem targeting;
@@ -80,6 +81,13 @@ public class Runtime
         playerState.wizardState = WizardState;
         playerState.bank = WizardState.InitResourceBank();
     }
+
+
+    internal void RegisterNPC(NPC npc)
+    {
+        npc.state = new NPCState(npc);
+    }
+
 
     public void SetSelection(ISelectable selected)
     {

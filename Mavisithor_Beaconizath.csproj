@@ -50,7 +50,13 @@
   </ItemGroup>
   <ItemGroup>
     <!--HelloBash-->
-      <Compile Include="src\Interfaces\IHaveSize.cs" />
+    <Compile Include="src\Nodes\BaseActorNode.cs" />
+    <Compile Include="src\Nodes\NPC.cs" />
+    <Compile Include="src\Nodes\SelectionIndicator.cs" />
+    <Compile Include="src\StateManagement\NPCState.cs" />
+    <Compile Include="src\StateManagement\BaseActorState.cs" />
+    <Compile Include="src\Interfaces\INPCState.cs" />
+    <Compile Include="src\Interfaces\IHaveSize.cs" />
     <Compile Include="src\Nodes\ClickableArea2D.cs" />
     <Compile Include="src\StateManagement\InputHandler.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

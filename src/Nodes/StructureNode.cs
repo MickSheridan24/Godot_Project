@@ -18,6 +18,8 @@ public class StructureNode : Node2D, ISelectable, ITarget, IHaveRuntime, IHaveSi
     private Highlight selectHighlight => GetNode<Highlight>("SelectHighlight");
     public Vector2 size => new Vector2(160, 160);
 
+  
+
     public override void _Ready()
     {
         weakref = WeakRef(this);
