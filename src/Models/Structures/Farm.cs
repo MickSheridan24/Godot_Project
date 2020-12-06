@@ -29,8 +29,11 @@ public class Farm : IStructure, IMenuState
         node.sprite.Modulate = theme.cFarm;
     }
 
-    public void AddButtons(PartialMenu menu)
+    public void ConfigureButtons(PartialMenu partialMenu)
     {
-        return;
+        partialMenu.button1.Visible = false;
+        partialMenu.button2.Visible = false;
+        partialMenu.button3.Visible = false;
+        partialMenu.button4.Visible = false;
     }
 }

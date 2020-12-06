@@ -1,7 +1,7 @@
 using Godot;
 using System;
 
-public class UIMenu : ColorRect
+public class UIMenu : ColorRect, IHaveRuntime
 {
 
     public Runtime runtime => GetParent<IHaveRuntime>().runtime;
@@ -11,10 +11,10 @@ public class UIMenu : ColorRect
     public Label entireText => GetNode<Label>("SpellText/EntireText");
     public Label completedText => GetNode<Label>("SpellText/EntireText/CompletedText");
     public Label spellName => GetNode<Label>("SpellText/SpellName");
+
     public ISpell currentSpell => runtime.GetCurrentSpell();
     public UITheme theme;
-
-    private PartialMenu partial;
+    public PartialMenu partial => GetNode<PartialMenu>("PartialMenu");
 
     public override void _Ready()
     {
@@ -34,6 +34,8 @@ public class UIMenu : ColorRect
             {
                 spellText.Visible = true;
                 entityMenu.Visible = false;
+                partial.Visible = false;
+
                 entireText.Text = currentSpell.text;
                 spellName.Text = currentSpell.name;
             }
@@ -41,7 +43,7 @@ public class UIMenu : ColorRect
             {
                 spellText.Visible = false;
                 entityMenu.Visible = true;
-
+                partial.Visible = true;
                 ConfigureEntityMenu();
             }
 
@@ -52,27 +54,16 @@ public class UIMenu : ColorRect
         }
     }
 
-    public void AddPartial(PartialMenu menu)
-    {
-        if (partial != null)
-        {
-            RemoveChild(partial);
-        }
-        partial = menu;
-        AddChild(partial);
-        partial.RectPosition = new Vector2(500, 25);
-    }
 
     private void ConfigureEntityMenu()
     {
         entityMenu.GetNode<Label>("Nametag").Text = runtime.currentSelection.EntityName;
         entityMenu.GetNode<Label>("Description").Text = runtime.currentSelection.Description;
 
-        var partial = runtime.currentSelection.GetPartial();
-        if (partial != null)
+        if (partial.state != runtime.currentSelection.GetMenuState())
         {
-            AddPartial(partial);
             partial.Config(runtime.currentSelection.GetMenuState());
+            partial.ResetButtons();
         }
     }
 

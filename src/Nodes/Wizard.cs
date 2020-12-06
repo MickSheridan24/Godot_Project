@@ -20,6 +20,7 @@ public class Wizard : BaseActorNode, ISelectable, IHaveHealth, IMove, IHaveRunti
     public Vector2 size => new Vector2(32, 32);
 
 
+
     //overrides
 
     public override void _Process(float d)

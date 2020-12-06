@@ -15,20 +15,18 @@ public class MenuButton : ColorRect
 
     public override void _Input(InputEvent @event)
     {
-        if (mouseIn)
+
+        if (Visible && Action != null && GetGlobalMousePosition().InBounds(GetRect().Position, GetRect().Position + GetRect().Size))
         {
             GD.Print("CLICK BUTTON");
             Action();
+
+            GetTree().SetInputAsHandled();
         }
     }
-    public void _on_MenuButton_mouse_entered()
-    {
-        mouseIn = true;
-    }
 
-    public void _on_MenuButton_mouse_exited()
-    {
-        mouseIn = false;
-    }
+
+
+
 }
 

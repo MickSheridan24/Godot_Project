@@ -1,6 +1,8 @@
-[gd_scene load_steps=2 format=2]
+[gd_scene load_steps=4 format=2]
 
 [ext_resource path="res://src/Nodes/UIMenu.cs" type="Script" id=1]
+[ext_resource path="res://Scenes/PartialMenu.tscn" type="PackedScene" id=2]
+[ext_resource path="res://Scenes/MenuButton.tscn" type="PackedScene" id=3]
 
 [node name="UIMenu" type="ColorRect"]
 anchor_right = 1.0
@@ -46,3 +48,31 @@ margin_right = 350.0
 margin_bottom = 74.0
 valign = 1
 autowrap = true
+
+[node name="PartialMenu" parent="." instance=ExtResource( 2 )]
+margin_left = 360.0
+margin_right = 0.0
+margin_bottom = 0.0
+
+[node name="Button1" parent="PartialMenu" instance=ExtResource( 3 )]
+margin_top = 25.0
+margin_right = -340.0
+margin_bottom = -25.0
+
+[node name="Button2" parent="PartialMenu" instance=ExtResource( 3 )]
+margin_left = 75.0
+margin_top = 25.0
+margin_right = -265.0
+margin_bottom = -25.0
+
+[node name="Button3" parent="PartialMenu" instance=ExtResource( 3 )]
+margin_left = 150.0
+margin_top = 25.0
+margin_right = -190.0
+margin_bottom = -25.0
+
+[node name="Button4" parent="PartialMenu" instance=ExtResource( 3 )]
+margin_left = 225.0
+margin_top = 25.0
+margin_right = -115.0
+margin_bottom = -25.0

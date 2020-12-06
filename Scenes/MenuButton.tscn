@@ -9,5 +9,3 @@ margin_right = -1750.0
 margin_bottom = -950.0
 color = Color( 0.972549, 0.0470588, 0.239216, 1 )
 script = ExtResource( 1 )
-[connection signal="mouse_entered" from="." to="." method="_on_MenuButton_mouse_entered"]
-[connection signal="mouse_exited" from="." to="." method="_on_MenuButton_mouse_exited"]

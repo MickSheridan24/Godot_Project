@@ -11,8 +11,6 @@ public class Cottage : IStructure, IMenuState
     private Texture text = GD.Load<Texture>("res://assets/Cottage.png");
 
 
-    private PackedScene snMenuButton => (PackedScene)ResourceLoader.Load("res://scenes/MenuButton.tscn");
-
     public void ConfigureNode(StructureNode structureNode)
     {
         this.node = structureNode;
@@ -31,17 +29,22 @@ public class Cottage : IStructure, IMenuState
         node.sprite.Modulate = theme.cCottage;
     }
 
-    public void AddButtons(PartialMenu structurePartialMenu)
-    {
-        var createNPC = snMenuButton.Instance() as MenuButton;
-        createNPC.Hotkey = "Q";
-        createNPC.Action = () => TryCreateNPC();
-        (structurePartialMenu as StructurePartialMenu).AddButton(createNPC);
-    }
-
     private bool TryCreateNPC()
     {
         GD.Print("CREATING NPC");
         return true;
+    }
+
+    public void ConfigureButtons(PartialMenu partialMenu)
+    {
+        var createNPC = partialMenu.button1;
+        createNPC.Hotkey = "Q";
+        createNPC.Action = () => TryCreateNPC();
+
+        createNPC.Visible = true;
+        partialMenu.button2.Visible = true;
+        partialMenu.button3.Visible = true;
+        partialMenu.button4.Visible = true;
+
     }
 }
