@@ -3,7 +3,6 @@ using System;
 
 public class TargetingSystem
 {
-    public ICaster targeter { get; set; }
 
     public ITarget rightTarget { get; set; }
     public ITarget leftTarget { get; set; }

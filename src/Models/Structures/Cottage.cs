@@ -10,10 +10,12 @@ public class Cottage : IStructure, IMenuState
     public string Description => "Just a boring old cottage";
     private Texture text = GD.Load<Texture>("res://assets/Cottage.png");
     public TickHandler tickHandler { get; private set; }
+    public TargetingSystem Targeting { get; }
 
     public Cottage()
     {
         tickHandler = new TickHandler();
+        Targeting = new TargetingSystem();
     }
     public void ConfigureNode(StructureNode structureNode)
     {

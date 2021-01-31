@@ -5,13 +5,16 @@ public class StructureNode : Node2D, ISelectable, ITarget, IHaveRuntime, IHaveSi
 {
     private WeakRef weakref;
 
+
     public IStructure state { get; set; }
     public Sprite sprite => GetNode<Sprite>("Sprite");
-    public StaticBody2D area => GetNode<StaticBody2D>("Area2D");
+    public StaticBody2D area => GetNode<StaticBody2D>("Collidable");
     public Runtime runtime => GetParent<IHaveRuntime>().runtime;
     public string EntityName => state.Name;
     public string Description => state.Description;
     public bool MovingTarget => false;
+
+    public TargetingSystem Targeting { get => state.Targeting; }
 
     private Highlight rightHighlight => GetNode<Highlight>("RightHighlight");
     private Highlight leftHighlight => GetNode<Highlight>("LeftHighlight");
@@ -37,7 +40,11 @@ public class StructureNode : Node2D, ISelectable, ITarget, IHaveRuntime, IHaveSi
         leftHighlight.Visible = runtime.LeftTarget == this;
 
         selectHighlight.Visible = runtime.currentSelection == this;
+
+        state.tickHandler.Tick();
+
     }
+
 
     public void Configure()
     {

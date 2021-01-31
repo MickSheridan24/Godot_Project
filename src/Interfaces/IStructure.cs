@@ -11,5 +11,6 @@ public interface IStructure
 
 
     TickHandler tickHandler { get; }
-
+    TargetingSystem Targeting { get; }
 }
+

@@ -33,15 +33,15 @@ public class InputHandler
         }
         else if (@event.GetKeyJustPressed() != 0)
         {
-            HandleKeyEvent(@event.GetKeyJustPressed());
+            HandleKeyEvent(@event.GetKeyJustPressed(), @event);
         }
         return inputHandled;
     }
 
 
-    private void HandleKeyEvent(int key)
+    private void HandleKeyEvent(int key, InputEvent @event)
     {
-        if (key == (int)KeyList.Space && !runtime.IsCasting)
+        if (key == (int)KeyList.W && !runtime.IsCasting)
         {
             runtime.SelectWizard();
         }
@@ -53,23 +53,31 @@ public class InputHandler
 
     private void HandleSpaceLeft(InputEvent @event, Vector2 mousePos, ISelectable effectedNode)
     {
-        if (runtime.WizardIsSelected())
+        if (runtime.currentSelection is IHaveTarget)
         {
             var target = effectedNode is ITarget ? effectedNode as ITarget
                                                  : new VectorTarget(mousePos);
 
-            runtime.SetLeftTarget(target);
+            var targeter = runtime.currentSelection as IHaveTarget;
+            if (targeter.CanTarget(target))
+            {
+                runtime.SetLeftTarget(target);
+            }
         }
         else HandleLeftClickEvent(@event, mousePos, effectedNode);
     }
     private void HandleSpaceRight(InputEvent @event, Vector2 mousePos, ISelectable effectedNode)
     {
-        if (runtime.WizardIsSelected())
+        if (runtime.currentSelection is IHaveTarget)
         {
             var target = effectedNode is ITarget ? effectedNode as ITarget
                                                  : new VectorTarget(mousePos);
 
-            runtime.SetRightTarget(target);
+            var targeter = runtime.currentSelection as IHaveTarget;
+            if (targeter.CanTarget(target))
+            {
+                runtime.SetRightTarget(target);
+            }
         }
         else HandleRightClickEvent(@event, mousePos, effectedNode);
     }

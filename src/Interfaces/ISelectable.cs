@@ -13,4 +13,6 @@ public interface ISelectable
     PartialMenu GetPartial();
 
     IMenuState GetMenuState();
+
+    TargetingSystem Targeting { get; }
 }

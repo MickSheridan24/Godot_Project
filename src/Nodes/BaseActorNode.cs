@@ -1,10 +1,11 @@
+using System;
 using Godot;
 
 public class BaseActorNode : KinematicBody2D
 {
 
     public Runtime runtime => GetParent<IHaveRuntime>().runtime;
-    public BaseActorState state;
+    public BaseActorState state { get; set; }
 
 
 
@@ -12,9 +13,17 @@ public class BaseActorNode : KinematicBody2D
     protected Sprite sprite => GetNode<Sprite>("Sprite");
     public Vector2 spritePosition => sprite.Position;
     protected WeakRef weakref;
+
     public SpriteTheme theme => new SpriteTheme();
 
+    private bool active;
 
+
+    public void Activate()
+    {
+        active = true;
+        Visible = true;
+    }
 
 
 

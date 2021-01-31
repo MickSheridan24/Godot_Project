@@ -2,7 +2,7 @@ using Godot;
 using System;
 
 public class Wizard : BaseActorNode, ISelectable, IHaveHealth, IMove, IHaveRuntime, ICaster,
-                      IElevatable, ITarget, IDamageable, ISufferStatusEffects
+                      IElevatable, ITarget, IDamageable, ISufferStatusEffects, IHaveTarget
 {
 
 
@@ -35,6 +35,7 @@ public class Wizard : BaseActorNode, ISelectable, IHaveHealth, IMove, IHaveRunti
 
     //ISelectable
 
+    public TargetingSystem Targeting { get => state.Targeting; }
     public void RightClick(InputEventMouseButton mouse)
     {
         var dest = GetGlobalMousePosition();
@@ -45,6 +46,25 @@ public class Wizard : BaseActorNode, ISelectable, IHaveHealth, IMove, IHaveRunti
     {
         return new Rect2(GlobalPosition - size / 2, size);
     }
+
+    //IHaveTarget 
+
+    public bool CanTarget(ITarget target)
+    {
+        return true; //Can target anything
+    }
+
+    public void SetLeftTarget(ITarget target)
+    {
+        Targeting.SetLeftTarget(target);
+    }
+
+    public void SetRightTarget(ITarget target)
+    {
+        Targeting.SetRightTarget(target);
+    }
+
+
 
     //IMove
 

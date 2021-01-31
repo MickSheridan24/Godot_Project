@@ -11,13 +11,12 @@ public class Runtime
     public Vector2 hoveredCell;
     public Vector2 MousePosition { get; set; }
     public CastManager castManager { get; set; }
-    public ITarget currentTarget => targeting.rightTarget;
     public DebugInfo Debug { get; set; }
     public World World { get; private set; }
 
-    public ITarget RightTarget => targeting.rightTarget;
-    public ITarget LeftTarget => targeting.leftTarget;
-    private TargetingSystem targeting;
+    public ITarget RightTarget => targeting?.rightTarget;
+    public ITarget LeftTarget => targeting?.leftTarget;
+    private TargetingSystem targeting => currentSelection?.Targeting;
     public PlayerState playerState;
 
     public UIEffectHandler uIEffectHandler { get; private set; }
@@ -29,7 +28,6 @@ public class Runtime
     {
 
         this.UIState = new UIState();
-        targeting = new TargetingSystem();
 
         playerState = new PlayerState();
         uIEffectHandler = new UIEffectHandler();
@@ -76,7 +74,6 @@ public class Runtime
     public void RegisterWizard(Wizard wizard)
     {
         wizardNode = wizard;
-        targeting.targeter = wizardNode;
         WizardState = new GoodWizard(wizardNode);
         playerState.wizardState = WizardState;
         playerState.bank = WizardState.InitResourceBank();

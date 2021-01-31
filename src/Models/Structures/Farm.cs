@@ -6,6 +6,7 @@ public class Farm : IStructure, IMenuState
     private StructureNode node;
 
     public TickHandler tickHandler { get; private set; }
+    public TargetingSystem Targeting { get; }
 
     public string Name => "Farm";
     public string Description => "Grows corn and the like";
@@ -16,6 +17,8 @@ public class Farm : IStructure, IMenuState
     public Farm()
     {
         tickHandler = new TickHandler();
+
+        Targeting = new TargetingSystem();
     }
     public void ConfigureNode(StructureNode structureNode)
     {

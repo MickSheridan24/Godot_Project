@@ -2,7 +2,7 @@ using Godot;
 using System;
 
 public class NPC : BaseActorNode, ISelectable, IHaveHealth, IMove, IHaveRuntime, ICaster,
-                      IElevatable, ITarget, IDamageable, ISufferStatusEffects, IHaveSize
+                      IElevatable, ITarget, IDamageable, ISufferStatusEffects, IHaveSize, IHaveTarget
 {
     public string EntityName => state.Name;
     public string Description => state.Description;
@@ -13,6 +13,8 @@ public class NPC : BaseActorNode, ISelectable, IHaveHealth, IMove, IHaveRuntime,
     public Vector2 speed => state.speed.current.ToVector();
 
     public SelectionIndicator selectionIndicator => GetNode<SelectionIndicator>("SelectionIndicator");
+
+    public TargetingSystem Targeting => state.Targeting;
 
     public override void _Process(float d)
     {
@@ -123,5 +125,20 @@ public class NPC : BaseActorNode, ISelectable, IHaveHealth, IMove, IHaveRuntime,
     public IMenuState GetMenuState()
     {
         return null;
+    }
+
+    public bool CanTarget(ITarget target)
+    {
+        return target is StructureNode || target is BaseActorNode;
+    }
+
+    public void SetLeftTarget(ITarget target)
+    {
+        Targeting.SetRightTarget(target);
+    }
+
+    public void SetRightTarget(ITarget target)
+    {
+        Targeting.SetRightTarget(target);
     }
 }

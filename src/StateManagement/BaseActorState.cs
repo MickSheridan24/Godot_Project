@@ -5,25 +5,40 @@ public class BaseActorState
 {
     public Stat speed { get; set; }
     public Stat health { get; set; }
-    public TickHandler tickHandler { get; }
+    public TickHandler tickHandler { get; private set; }
     public StatusHandler statusHandler { get; set; }
     public ElevationHandler elevationHandler { get; set; }
     public Node2D node { get; set; }
 
     public string Name { get; set; }
     public string Description { get; set; }
+    public TargetingSystem Targeting { get; internal set; }
 
+    private Runtime runtime;
 
     public BaseActorState(Node2D node)
+    {
+        runtime = (node as IHaveRuntime).runtime;
+
+        Config(node);
+    }
+
+    public BaseActorState(Node2D node, IHaveRuntime parent)
+    {
+        runtime = parent.runtime;
+        Config(node);
+
+    }
+
+    private void Config(Node2D node)
     {
         this.node = node;
         tickHandler = new TickHandler();
         statusHandler = new StatusHandler(node as ISufferStatusEffects);
-        elevationHandler = new ElevationHandler(node as IElevatable, (node as IHaveRuntime).runtime);
+        elevationHandler = new ElevationHandler(node as IElevatable, runtime);
+        Targeting = new TargetingSystem();
         (node as BaseActorNode).state = this;
-
     }
-
 
     public bool HandleDamage(int damage)
     {

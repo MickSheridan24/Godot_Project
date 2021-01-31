@@ -25,6 +25,8 @@ public class Enemy : BaseActorNode, IElevatable, IMove, ITarget, IDamageable, IH
 
     public string Description => "Very Dangerous. Should Avoid";
 
+    public TargetingSystem Targeting => state.Targeting;
+
     public override void _Ready()
     {
         destination = Position;
