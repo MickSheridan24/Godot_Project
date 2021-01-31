@@ -9,8 +9,12 @@ public class Cottage : IStructure, IMenuState
     public string Name => "Cottage";
     public string Description => "Just a boring old cottage";
     private Texture text = GD.Load<Texture>("res://assets/Cottage.png");
+    public TickHandler tickHandler { get; private set; }
 
-
+    public Cottage()
+    {
+        tickHandler = new TickHandler();
+    }
     public void ConfigureNode(StructureNode structureNode)
     {
         this.node = structureNode;
@@ -32,6 +36,9 @@ public class Cottage : IStructure, IMenuState
     private bool TryCreateNPC()
     {
         GD.Print("CREATING NPC");
+
+        var npc = ActorFactory.CreateNPC(node.runtime.World);
+        tickHandler.AddOrder(new SpawnOrder(npc, node.runtime.World, node.Position + new Vector2(200, 200)), 1);
         return true;
     }
 
