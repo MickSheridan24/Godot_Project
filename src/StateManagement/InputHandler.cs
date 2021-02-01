@@ -20,6 +20,7 @@ public class InputHandler
             }
             else
             {
+                ClearTargets();
                 HandleLeftClickEvent(@event, mousePos, effectedNode);
             }
         }
@@ -29,7 +30,12 @@ public class InputHandler
             {
                 HandleSpaceRight(@event, mousePos, effectedNode);
             }
-            else HandleRightClickEvent(@event, mousePos, effectedNode);
+            else
+            {
+                ClearTargets();
+                HandleRightClickEvent(@event, mousePos, effectedNode);
+            }
+
         }
         else if (@event.GetKeyJustPressed() != 0)
         {
@@ -38,6 +44,13 @@ public class InputHandler
         return inputHandled;
     }
 
+    private void ClearTargets()
+    {
+        if (runtime.currentSelection is IHaveTarget && !runtime.WizardIsSelected())
+        {
+            (runtime.currentSelection as IHaveTarget).ClearTargets();
+        }
+    }
 
     private void HandleKeyEvent(int key, InputEvent @event)
     {
@@ -61,7 +74,7 @@ public class InputHandler
             var targeter = runtime.currentSelection as IHaveTarget;
             if (targeter.CanTarget(target))
             {
-                runtime.SetLeftTarget(target);
+                targeter.SetLeftTarget(target);
             }
         }
         else HandleLeftClickEvent(@event, mousePos, effectedNode);
@@ -76,7 +89,7 @@ public class InputHandler
             var targeter = runtime.currentSelection as IHaveTarget;
             if (targeter.CanTarget(target))
             {
-                runtime.SetRightTarget(target);
+                targeter.SetRightTarget(target);
             }
         }
         else HandleRightClickEvent(@event, mousePos, effectedNode);

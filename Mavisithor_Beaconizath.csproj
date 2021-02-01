@@ -50,6 +50,8 @@
   </ItemGroup>
   <ItemGroup>
     <!--HelloBash-->
+      <Compile Include="src\Interfaces\IAction.cs" />
+      <Compile Include="src\StateManagement\ActionQueue.cs" />
       <Compile Include="src\Interfaces\IHaveTarget.cs" />
       <Compile Include="src\Nodes\Factories/ActorFactory.cs" />
       <Compile Include="src\AI\Orders/SpawnOrder.cs" />

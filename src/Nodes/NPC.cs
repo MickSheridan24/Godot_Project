@@ -134,11 +134,18 @@ public class NPC : BaseActorNode, ISelectable, IHaveHealth, IMove, IHaveRuntime,
 
     public void SetLeftTarget(ITarget target)
     {
-        Targeting.SetRightTarget(target);
+        Targeting.SetLeftTarget(target);
+        SetDestination(target.GetTargetPosition());
     }
 
     public void SetRightTarget(ITarget target)
     {
         Targeting.SetRightTarget(target);
+        SetDestination(target.GetTargetPosition());
+    }
+
+    public void ClearTargets()
+    {
+        Targeting.Clear();
     }
 }

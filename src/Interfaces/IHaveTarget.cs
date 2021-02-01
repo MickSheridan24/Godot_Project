@@ -5,4 +5,5 @@ public interface IHaveTarget
     void SetLeftTarget(ITarget target);
 
     void SetRightTarget(ITarget target);
+    void ClearTargets();
 }

@@ -64,6 +64,10 @@ public class Wizard : BaseActorNode, ISelectable, IHaveHealth, IMove, IHaveRunti
         Targeting.SetRightTarget(target);
     }
 
+    public void ClearTargets()
+    {
+        Targeting.Clear();
+    }
 
 
     //IMove
