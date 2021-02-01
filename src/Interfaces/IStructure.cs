@@ -15,5 +15,7 @@ public interface IStructure
 
     ITask GetFriendlyTask(BaseActorNode node);
     ITask GetHostileTask(BaseActorNode node);
+
+    PlayerState player { get; }
 }
 

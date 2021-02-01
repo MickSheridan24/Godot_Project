@@ -12,8 +12,11 @@ public class Cottage : IStructure, IMenuState
     public TickHandler tickHandler { get; private set; }
     public TargetingSystem Targeting { get; }
 
-    public Cottage()
+    public PlayerState player { get; private set; }
+
+    public Cottage(PlayerState player)
     {
+        this.player = player;
         tickHandler = new TickHandler();
         Targeting = new TargetingSystem();
     }
@@ -42,6 +45,7 @@ public class Cottage : IStructure, IMenuState
         var npc = ActorFactory.CreateNPC(node.runtime.World);
         tickHandler.AddOrder(new SpawnOrder(npc, node.runtime.World, node.Position + new Vector2(200, 200)), 1);
         return true;
+
     }
 
     public void ConfigureButtons(PartialMenu partialMenu)

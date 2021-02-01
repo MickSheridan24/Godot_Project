@@ -11,13 +11,15 @@ public class Farm : IStructure, IMenuState
     public string Name => "Farm";
     public string Description => "Grows corn and the like";
 
+    public PlayerState player { get; private set; }
+
     private Texture text = GD.Load<Texture>("res://assets/Farm.png");
 
 
-    public Farm()
+    public Farm(PlayerState player)
     {
         tickHandler = new TickHandler();
-
+        this.player = player;
         Targeting = new TargetingSystem();
     }
     public void ConfigureNode(StructureNode structureNode)

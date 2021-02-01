@@ -18,7 +18,7 @@ public class Main : Node2D, IHaveRuntime
         runtime.RegisterWorld(World);
         runtime.RegisterNPC(npc);
 
-        Cottage.state = new Cottage();
+        Cottage.state = new Cottage(runtime.playerState);
         Cottage.Configure(eTeam.FRIENDLY);
     }
 
