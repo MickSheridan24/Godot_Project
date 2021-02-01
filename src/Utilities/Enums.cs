@@ -60,3 +60,10 @@ public enum eStatusEffect
     BURNING,
     INTANGIBLE
 }
+
+public enum eTeam
+{
+    FRIENDLY,
+    HOSTILE,
+    NEUTRAL
+}

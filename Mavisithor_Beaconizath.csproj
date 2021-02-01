@@ -50,8 +50,12 @@
   </ItemGroup>
   <ItemGroup>
     <!--HelloBash-->
-      <Compile Include="src\Interfaces\IAction.cs" />
-      <Compile Include="src\StateManagement\ActionQueue.cs" />
+      <Compile Include="src\AI\Orders\FarmOrder.cs" />
+      <Compile Include="src\AI\Tasks\StartFarmingTask.cs" />
+      <Compile Include="src\StateManagement\ContinuousTask.cs" />
+      <Compile Include="src\StateManagement\ContinuousTaskHandler.cs" />
+      <Compile Include="src\Interfaces\ITask.cs" />
+      <Compile Include="src\StateManagement\TaskQueue.cs" />
       <Compile Include="src\Interfaces\IHaveTarget.cs" />
       <Compile Include="src\Nodes\Factories/ActorFactory.cs" />
       <Compile Include="src\AI\Orders/SpawnOrder.cs" />

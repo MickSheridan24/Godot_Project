@@ -11,7 +11,7 @@ public class EnemyState : BaseActorState
 
 
 
-    public EnemyState(IAI AI, Enemy enemy) : base(enemy)
+    public EnemyState(IAI AI, Enemy enemy) : base(enemy, enemy.runtime.enemyPlayerState)
     {
         isClimbing = false;
         ai = AI;

@@ -27,6 +27,11 @@ public class Farm : IStructure, IMenuState
         node.RemoveCollisions();
     }
 
+    public Vector2 Position()
+    {
+        return node.Position;
+    }
+
     public void RightClick(Vector2 position)
     {
         return;
@@ -45,5 +50,15 @@ public class Farm : IStructure, IMenuState
         partialMenu.button2.Visible = false;
         partialMenu.button3.Visible = false;
         partialMenu.button4.Visible = false;
+    }
+
+    public ITask GetFriendlyTask(BaseActorNode node)
+    {
+        return new StartFarmingTask(node, this);
+    }
+
+    public ITask GetHostileTask(BaseActorNode node)
+    {
+        throw new System.NotImplementedException();
     }
 }

@@ -12,5 +12,8 @@ public interface IStructure
 
     TickHandler tickHandler { get; }
     TargetingSystem Targeting { get; }
+
+    ITask GetFriendlyTask(BaseActorNode node);
+    ITask GetHostileTask(BaseActorNode node);
 }
 

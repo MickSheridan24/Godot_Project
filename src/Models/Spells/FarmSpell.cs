@@ -16,7 +16,7 @@ public class FarmSpell : Spell, ISpell
     {
         var target = caster.runtime.RightTarget;
 
-        caster.runtime.World.CreateStructure(target.GetTargetPosition(), new Farm());
+        caster.runtime.World.CreateStructure(target.GetTargetPosition(), new Farm(), caster.Team);
     }
     public List<UIEffect> GetUIHints(Wizard caster)
     {

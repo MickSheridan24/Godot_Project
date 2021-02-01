@@ -14,6 +14,7 @@ public class StructureNode : Node2D, ISelectable, ITarget, IHaveRuntime, IHaveSi
     public string Description => state.Description;
     public bool MovingTarget => false;
 
+    public eTeam Team { get; set; }
     public TargetingSystem Targeting { get => state.Targeting; }
 
     private Highlight rightHighlight => GetNode<Highlight>("RightHighlight");
@@ -46,9 +47,10 @@ public class StructureNode : Node2D, ISelectable, ITarget, IHaveRuntime, IHaveSi
     }
 
 
-    public void Configure()
+    public void Configure(eTeam team)
     {
         state.ConfigureNode(this);
+        this.Team = team;
     }
     public bool GetCollisionLayerBit(int n)
     {
@@ -110,6 +112,16 @@ public class StructureNode : Node2D, ISelectable, ITarget, IHaveRuntime, IHaveSi
     public IMenuState GetMenuState()
     {
         return state as IMenuState;
+    }
+
+    public ITask GetFriendlyTask(BaseActorNode node)
+    {
+        return state.GetFriendlyTask(node);
+    }
+
+    public ITask GetHostileTask(BaseActorNode node)
+    {
+        return state.GetHostileTask(node);
     }
 }
 

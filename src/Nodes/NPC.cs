@@ -9,6 +9,7 @@ public class NPC : BaseActorNode, ISelectable, IHaveHealth, IMove, IHaveRuntime,
     public int Health => state.health.current;
     public int MaxHealth => state.health.standard;
 
+    public eTeam Team => eTeam.FRIENDLY;
     public Vector2 size => new Vector2(32, 32);
     public Vector2 speed => state.speed.current.ToVector();
 
@@ -135,17 +136,46 @@ public class NPC : BaseActorNode, ISelectable, IHaveHealth, IMove, IHaveRuntime,
     public void SetLeftTarget(ITarget target)
     {
         Targeting.SetLeftTarget(target);
-        SetDestination(target.GetTargetPosition());
+        SetTask(target);
+
     }
 
     public void SetRightTarget(ITarget target)
     {
         Targeting.SetRightTarget(target);
+        SetTask(target);
+    }
+
+    private void SetTask(ITarget target)
+    {
         SetDestination(target.GetTargetPosition());
+
+        if (target.Team == Team)
+        {
+            var task = target.GetFriendlyTask(this);
+            state.taskQueue.Add(task);
+        }
+        else if (target.Team != eTeam.NEUTRAL)
+        {
+            var task = target.GetHostileTask(this);
+            state.taskQueue.Add(task);
+        }
+
     }
 
     public void ClearTargets()
     {
         Targeting.Clear();
+        state.taskQueue.Clear();
+    }
+
+    public ITask GetFriendlyTask(BaseActorNode node)
+    {
+        throw new NotImplementedException();
+    }
+
+    public ITask GetHostileTask(BaseActorNode node)
+    {
+        throw new NotImplementedException();
     }
 }

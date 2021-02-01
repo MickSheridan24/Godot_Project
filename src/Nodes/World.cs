@@ -131,7 +131,7 @@ public class World : Node2D, IHaveRuntime, IHaveSize
 
 
 
-    public void CreateStructure(Vector2 vector2, IStructure str)
+    public void CreateStructure(Vector2 vector2, IStructure str, eTeam team)
     {
         var node = (StructureNode)snStructureNode.Instance();
 
@@ -140,7 +140,7 @@ public class World : Node2D, IHaveRuntime, IHaveSize
 
         AddChild(node);
         node.Position = vector2;
-        node.Configure();
+        node.Configure(team);
     }
 
     public eCollisionLayers GetElevation(Vector2 v)

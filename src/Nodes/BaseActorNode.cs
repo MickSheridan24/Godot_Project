@@ -53,6 +53,8 @@ public class BaseActorNode : KinematicBody2D
     {
         HandleMove(delta);
         state?.tickHandler.Tick();
+        state.continuousActionHandler.Process();
+        state.taskQueue.Process();
     }
 
 

@@ -18,6 +18,7 @@ public class Runtime
     public ITarget LeftTarget => targeting?.leftTarget;
     private TargetingSystem targeting => currentSelection?.Targeting;
     public PlayerState playerState;
+    public PlayerState enemyPlayerState;
 
     public UIEffectHandler uIEffectHandler { get; private set; }
 
@@ -30,6 +31,8 @@ public class Runtime
         this.UIState = new UIState();
 
         playerState = new PlayerState();
+
+        enemyPlayerState = new PlayerState();
         uIEffectHandler = new UIEffectHandler();
 
         inputHandler = new InputHandler(this);

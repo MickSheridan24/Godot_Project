@@ -14,6 +14,8 @@ public class Enemy : BaseActorNode, IElevatable, IMove, ITarget, IDamageable, IH
 
     private IOrder order;
 
+    public eTeam Team => eTeam.HOSTILE;
+
     public Vector2 size => new Vector2(40, 40);
     public int Health => state.health.current;
     public int MaxHealth => state.health.standard;
@@ -281,5 +283,15 @@ public class Enemy : BaseActorNode, IElevatable, IMove, ITarget, IDamageable, IH
     public IMenuState GetMenuState()
     {
         return null;
+    }
+
+    public ITask GetFriendlyTask(BaseActorNode node)
+    {
+        throw new NotImplementedException();
+    }
+
+    public ITask GetHostileTask(BaseActorNode node)
+    {
+        throw new NotImplementedException();
     }
 }

@@ -8,6 +8,13 @@ public class BaseActorState
     public TickHandler tickHandler { get; private set; }
     public StatusHandler statusHandler { get; set; }
     public ElevationHandler elevationHandler { get; set; }
+
+    public TaskQueue taskQueue { get; private set; }
+
+    public PlayerState player { get; set; }
+
+    public ContinuousTaskHandler continuousActionHandler;
+
     public Node2D node { get; set; }
 
     public string Name { get; set; }
@@ -16,27 +23,30 @@ public class BaseActorState
 
     private Runtime runtime;
 
-    public BaseActorState(Node2D node)
+    public BaseActorState(Node2D node, PlayerState player)
     {
         runtime = (node as IHaveRuntime).runtime;
 
-        Config(node);
+        Config(node, player);
     }
 
-    public BaseActorState(Node2D node, IHaveRuntime parent)
+    public BaseActorState(Node2D node, IHaveRuntime parent, PlayerState player)
     {
         runtime = parent.runtime;
-        Config(node);
+        Config(node, player);
 
     }
 
-    private void Config(Node2D node)
+    private void Config(Node2D node, PlayerState player)
     {
+        this.player = player;
         this.node = node;
         tickHandler = new TickHandler();
         statusHandler = new StatusHandler(node as ISufferStatusEffects);
         elevationHandler = new ElevationHandler(node as IElevatable, runtime);
         Targeting = new TargetingSystem();
+        taskQueue = new TaskQueue();
+        continuousActionHandler = new ContinuousTaskHandler();
         (node as BaseActorNode).state = this;
     }
 

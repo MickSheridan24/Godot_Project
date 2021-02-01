@@ -8,7 +8,7 @@ public class WizardState : BaseActorState, IHaveStats
 
 
     public List<ISpell> KnownSpells { get; set; }
-    public WizardState(Wizard node) : base(node)
+    public WizardState(Wizard node) : base(node, node.runtime.playerState)
     {
 
         speed = Stat.Speed(115);

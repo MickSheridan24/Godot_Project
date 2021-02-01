@@ -36,6 +36,8 @@ public class Wizard : BaseActorNode, ISelectable, IHaveHealth, IMove, IHaveRunti
     //ISelectable
 
     public TargetingSystem Targeting { get => state.Targeting; }
+    public eTeam Team => eTeam.FRIENDLY;
+
     public void RightClick(InputEventMouseButton mouse)
     {
         var dest = GetGlobalMousePosition();
@@ -202,6 +204,16 @@ public class Wizard : BaseActorNode, ISelectable, IHaveHealth, IMove, IHaveRunti
     public IMenuState GetMenuState()
     {
         return null;
+    }
+
+    public ITask GetFriendlyTask(BaseActorNode node)
+    {
+        throw new NotImplementedException();
+    }
+
+    public ITask GetHostileTask(BaseActorNode node)
+    {
+        throw new NotImplementedException();
     }
 }
 

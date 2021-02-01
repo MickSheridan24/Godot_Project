@@ -19,7 +19,7 @@ public class Main : Node2D, IHaveRuntime
         runtime.RegisterNPC(npc);
 
         Cottage.state = new Cottage();
-        Cottage.Configure();
+        Cottage.Configure(eTeam.FRIENDLY);
     }
 
     public override void _Input(InputEvent @event)

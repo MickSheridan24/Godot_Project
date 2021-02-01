@@ -56,4 +56,14 @@ public class Cottage : IStructure, IMenuState
         partialMenu.button4.Visible = true;
 
     }
+
+    public ITask GetFriendlyTask(BaseActorNode node)
+    {
+        throw new NotImplementedException();
+    }
+
+    public ITask GetHostileTask(BaseActorNode node)
+    {
+        throw new NotImplementedException();
+    }
 }
