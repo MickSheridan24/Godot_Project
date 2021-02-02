@@ -1,11 +1,16 @@
-[gd_scene load_steps=2 format=2]
+[gd_scene load_steps=3 format=2]
 
 [ext_resource path="res://src/Nodes/MenuButton.cs" type="Script" id=1]
 
-[node name="MenuButton" type="ColorRect"]
+[sub_resource type="StyleBoxFlat" id=1]
+bg_color = Color( 0.12549, 0.376471, 0.776471, 1 )
+
+[node name="Button" type="Button"]
 anchor_right = 1.0
 anchor_bottom = 1.0
 margin_right = -1750.0
 margin_bottom = -950.0
-color = Color( 0.972549, 0.0470588, 0.239216, 1 )
+rect_min_size = Vector2( 50, 50 )
+custom_styles/normal = SubResource( 1 )
+text = "Q"
 script = ExtResource( 1 )

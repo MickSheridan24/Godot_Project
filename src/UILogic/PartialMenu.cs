@@ -22,6 +22,10 @@ public class PartialMenu : Container
     public override void _Ready()
     {
         Buttons = new List<MenuButton>();
+        button1.Hotkey = "Q";
+        button2.Hotkey = "W";
+        button3.Hotkey = "E";
+        button4.Hotkey = "R";
     }
 
     public void ResetButtons()

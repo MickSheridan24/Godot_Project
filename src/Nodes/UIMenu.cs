@@ -28,7 +28,7 @@ public class UIMenu : ColorRect, IHaveRuntime
     public override void _Process(float f)
     {
         Visible = runtime.IsCasting;
-        if (Visible)
+        if (Visible && runtime.IsCasting)
         {
             if (runtime.WizardIsSelected())
             {
@@ -69,7 +69,7 @@ public class UIMenu : ColorRect, IHaveRuntime
 
     public override void _Input(InputEvent @event)
     {
-        if (runtime.IsCasting && @event is InputEventKey)
+        if (runtime.IsCasting && runtime.WizardIsSelected() && @event is InputEventKey)
         {
             var key = @event.GetAlphaOrSpaceJustPressed();
             if (key != -1)
@@ -96,3 +96,5 @@ public class UIMenu : ColorRect, IHaveRuntime
         }
     }
 }
+
+

@@ -96,13 +96,11 @@ public class Runtime
             targeting.Clear();
         }
         this.currentSelection = selected;
-        GD.Print("SELECTED: " + this.currentSelection);
     }
 
     public void ClearSelection()
     {
         SetSelection(null);
-        GD.Print("SELECTED: " + this.currentSelection);
     }
 
     public void RegisterUI(UI ui)

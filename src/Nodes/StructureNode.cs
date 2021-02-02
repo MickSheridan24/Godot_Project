@@ -1,7 +1,8 @@
 using Godot;
 using System;
-
-public class StructureNode : Node2D, ISelectable, ITarget, IHaveRuntime, IHaveSize
+using System.Linq;
+using System.Collections.Generic;
+public class StructureNode : Node2D, ISelectable, ITarget, IHaveRuntime, IHaveSize, IHaveSpawnArea
 {
     private WeakRef weakref;
 
@@ -13,6 +14,8 @@ public class StructureNode : Node2D, ISelectable, ITarget, IHaveRuntime, IHaveSi
     public string EntityName => state.Name;
     public string Description => state.Description;
     public bool MovingTarget => false;
+
+    public Area2D spawnArea => GetNode<Area2D>("SpawnArea");
 
     public eTeam Team { get; set; }
     public TargetingSystem Targeting { get => state.Targeting; }
@@ -122,6 +125,42 @@ public class StructureNode : Node2D, ISelectable, ITarget, IHaveRuntime, IHaveSi
     public ITask GetHostileTask(BaseActorNode node)
     {
         return state.GetHostileTask(node);
+    }
+
+    public Vector2? FindOpenPosition()
+    {
+        var obstacles = spawnArea.GetOverlappingAreas().ToList();
+
+        var spawnVector = Position + size * new Vector2(0, 1) + new Vector2(0, 10);
+        var direction = Vector2.Left;
+
+        int tries = 100;
+        while (tries >= 0 && obstacles.Find(obstacle => ObstacleObstructs(obstacle as IHaveSize, spawnVector)) != null)
+        {
+            tries--;
+            spawnVector = spawnVector + new Vector2(10, 0);
+            spawnVector = ShiftSpawnVector(spawnVector, direction);
+        }
+        if (obstacles.Find(obstacle => ObstacleObstructs(obstacle as IHaveSize, spawnVector)) == null)
+        {
+            return spawnVector;
+        }
+        return null;
+    }
+
+    private Vector2 ShiftSpawnVector(Vector2 vector, Vector2 direction)
+    {
+        if (vector.Abs() * direction > (Position + size) * direction)
+        {
+            var newDir = new Vector2(direction.y, direction.x) * new Vector2(-1, -1);
+            return newDir;
+        }
+        return direction;
+    }
+
+    private bool ObstacleObstructs(IHaveSize obstacle, Vector2 vector)
+    {
+        return vector.InBounds(obstacle.Position, obstacle.Position + obstacle.size);
     }
 }
 

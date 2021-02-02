@@ -8,11 +8,11 @@ public class Cottage : IStructure, IMenuState
 
     public string Name => "Cottage";
     public string Description => "Just a boring old cottage";
-    private Texture text = GD.Load<Texture>("res://assets/Cottage.png");
     public TickHandler tickHandler { get; private set; }
     public TargetingSystem Targeting { get; }
 
     public PlayerState player { get; private set; }
+
 
     public Cottage(PlayerState player)
     {
@@ -43,10 +43,11 @@ public class Cottage : IStructure, IMenuState
         GD.Print("CREATING NPC");
 
         var npc = ActorFactory.CreateNPC(node.runtime.World);
-        tickHandler.AddOrder(new SpawnOrder(npc, node.runtime.World, node.Position + new Vector2(200, 200)), 1);
+        tickHandler.AddOrder(new SpawnOrder(npc, node.runtime.World, node), 1);
         return true;
 
     }
+
 
     public void ConfigureButtons(PartialMenu partialMenu)
     {
@@ -70,4 +71,5 @@ public class Cottage : IStructure, IMenuState
     {
         throw new NotImplementedException();
     }
+
 }
