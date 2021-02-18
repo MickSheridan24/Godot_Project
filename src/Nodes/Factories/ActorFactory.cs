@@ -7,7 +7,7 @@ public class ActorFactory
     public static NPC CreateNPC(IHaveRuntime parent)
     {
         var node = snNPCNode.Instance() as NPC;
-        node.state = new NPCState(node, parent);
+        node.state = new NPCState(node, parent, false);
         return node;
     }
 }

@@ -21,7 +21,7 @@ public class MenuButton : Button
 
     public override void _Input(InputEvent @event)
     {
-        if (Visible && @event is InputEventKey && @event.AsText() == Hotkey)
+        if (Visible && @event is InputEventKey && @event.AsText() == Hotkey && @event.IsPressed() && !@event.IsEcho())
         {
             Click();
         }

@@ -18,6 +18,8 @@ public class BaseActorNode : KinematicBody2D
 
     private bool active;
 
+    public bool debug { get; set; }
+
 
     public void Activate()
     {
@@ -31,6 +33,16 @@ public class BaseActorNode : KinematicBody2D
     public Moveable moveable;
     public Vector2 destination { get; set; }
 
+    internal void InitiatePosition(Vector2 pos)
+    {
+        if (debug)
+        {
+            GD.Print("InitiatePostition");
+        }
+        GlobalPosition = pos;
+        destination = pos;
+    }
+
     public bool MovingTarget { get; set; }
 
 
@@ -42,8 +54,11 @@ public class BaseActorNode : KinematicBody2D
 
     public override void _Ready()
     {
-        moveable = new Moveable(this as IMove);
-        destination = Position;
+        if (debug)
+        {
+            GD.Print("Debugging BaseActorNode");
+        }
+        moveable = new Moveable(this as IMove, debug);
         MovingTarget = true;
         isFallDisabled = false;
         weakref = WeakRef(this);

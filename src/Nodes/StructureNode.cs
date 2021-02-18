@@ -127,40 +127,53 @@ public class StructureNode : Node2D, ISelectable, ITarget, IHaveRuntime, IHaveSi
         return state.GetHostileTask(node);
     }
 
-    public Vector2? FindOpenPosition()
+    public Vector2? FindOpenPosition(Vector2 nodeSize)
     {
         var obstacles = spawnArea.GetOverlappingAreas().ToList();
 
-        var spawnVector = Position + size * new Vector2(0, 1) + new Vector2(0, 10);
+        var spawnVector = Position + (size / 2 * new Vector2(0, 1)) + new Vector2(0, 20);
         var direction = Vector2.Left;
-
+        Node obstacle = (Node)obstacles.Find(o => ObstacleObstructs(((Node)o).GetParent<IHaveSize>(), spawnVector, nodeSize));
         int tries = 100;
-        while (tries >= 0 && obstacles.Find(obstacle => ObstacleObstructs(obstacle as IHaveSize, spawnVector)) != null)
+        while (tries >= 0 && obstacle != null)
         {
             tries--;
-            spawnVector = spawnVector + new Vector2(10, 0);
-            spawnVector = ShiftSpawnVector(spawnVector, direction);
+            spawnVector = spawnVector + (new Vector2(10, 10) * direction);
+            direction = ShiftSpawnVector(spawnVector, direction, obstacle.GetParent<IHaveSize>());
+            obstacle = (Node)obstacles.Find(o => ObstacleObstructs(((Node)o).GetParent<IHaveSize>(), spawnVector, nodeSize));
         }
-        if (obstacles.Find(obstacle => ObstacleObstructs(obstacle as IHaveSize, spawnVector)) == null)
+        if (obstacles.Find(o => ObstacleObstructs(((Node)o).GetParent<IHaveSize>(), spawnVector, nodeSize)) == null)
         {
             return spawnVector;
         }
         return null;
     }
 
-    private Vector2 ShiftSpawnVector(Vector2 vector, Vector2 direction)
+    private Vector2 ShiftSpawnVector(Vector2 vector, Vector2 direction, IHaveSize obs)
     {
-        if (vector.Abs() * direction > (Position + size) * direction)
+
+        if (direction == Vector2.Left && vector.x + obs.size.x / 2 < Position.x - size.x / 2)
         {
-            var newDir = new Vector2(direction.y, direction.x) * new Vector2(-1, -1);
-            return newDir;
+            return Vector2.Up;
+        }
+        else if (direction == Vector2.Up && vector.y + obs.size.y / 2 < Position.y - size.y / 2)
+        {
+            return Vector2.Right;
+        }
+        else if (direction == Vector2.Right && vector.x - obs.size.x / 2 > Position.x + size.x / 2)
+        {
+            return Vector2.Down;
+        }
+        else if (direction == Vector2.Down && vector.y - obs.size.y / 2 > Position.y + size.y / 2)
+        {
+            return Vector2.Left;
         }
         return direction;
     }
 
-    private bool ObstacleObstructs(IHaveSize obstacle, Vector2 vector)
+    private bool ObstacleObstructs(IHaveSize obstacle, Vector2 vector, Vector2 size)
     {
-        return vector.InBounds(obstacle.Position, obstacle.Position + obstacle.size);
+        return new Rect2(obstacle.Position, obstacle.size).Intersects(new Rect2(vector, size));
     }
 }
 

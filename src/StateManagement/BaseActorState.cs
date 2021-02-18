@@ -23,24 +23,24 @@ public class BaseActorState
 
     private Runtime runtime;
 
-    public BaseActorState(Node2D node, PlayerState player)
+    public BaseActorState(Node2D node, PlayerState player, bool debug = false)
     {
         runtime = (node as IHaveRuntime).runtime;
 
-        Config(node, player);
+        Config(node, player, debug);
     }
 
-    public BaseActorState(Node2D node, IHaveRuntime parent, PlayerState player)
+    public BaseActorState(Node2D node, IHaveRuntime parent, PlayerState player, bool debug = false)
     {
         runtime = parent.runtime;
-        Config(node, player);
-
+        Config(node, player, debug);
     }
 
-    private void Config(Node2D node, PlayerState player)
+    private void Config(Node2D node, PlayerState player, bool debug = false)
     {
         this.player = player;
         this.node = node;
+        (node as BaseActorNode).debug = debug;
         tickHandler = new TickHandler();
         statusHandler = new StatusHandler(node as ISufferStatusEffects);
         elevationHandler = new ElevationHandler(node as IElevatable, runtime);

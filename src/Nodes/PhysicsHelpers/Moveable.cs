@@ -3,15 +3,21 @@ using Godot;
 public class Moveable
 {
     private IMove subject;
+    public bool debug { get; set; }
     public bool moving;
-    public Moveable(IMove subject)
+    public Moveable(IMove subject, bool debug = false)
     {
         this.subject = subject;
+        this.debug = debug;
         moving = false;
     }
 
     public void HandleMove(float d)
     {
+        if (this.debug)
+        {
+            GD.Print("Debugging Movement, " + d);
+        }
         KinematicCollision2D collision;
         if (subject.Position != subject.destination)
         {

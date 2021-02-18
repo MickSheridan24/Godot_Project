@@ -26,7 +26,7 @@ public class HUD : Node2D, IHaveRuntime
         var pos = GetGlobalMousePosition();
         var center = GetViewportRect().Size / 2 + Position;
 
-        if (!pos.InBounds(bounds.Position, bounds.Position + bounds.Size))
+        if (false && !pos.InBounds(bounds.Position, bounds.Position + bounds.Size))
         {
 
             var directi = c.DirectionTo(pos);

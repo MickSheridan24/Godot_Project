@@ -19,7 +19,8 @@ public class SpawnOrder : IOrder
     {
 
         GD.Print("FINDING SPACE FOR NODE");
-        var pos = spawnArea.FindOpenPosition();
+        var size = node is IHaveSize ? (node as IHaveSize).size : Vector2.Zero;
+        var pos = spawnArea.FindOpenPosition(size);
         if (pos == null)
         {
             GD.Print("NO SPOT FOR NODE");
@@ -28,7 +29,7 @@ public class SpawnOrder : IOrder
         else
         {
             parent.AddChild(node);
-            node.Position = pos ?? Vector2.Zero;
+            node.InitiatePosition(pos ?? Vector2.Zero);
             node.Activate();
             return true;
         }
