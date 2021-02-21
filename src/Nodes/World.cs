@@ -15,11 +15,16 @@ public class World : Node2D, IHaveRuntime, IHaveSize
 
     private TileSet L3tileset => level3.Get("tile_set") as TileSet;
     private TileMap level4 => GetNode("Level4") as TileMap;
+
+
+
     private TileSet L4tileset => level4.Get("tile_set") as TileSet;
 
 
 
     private List<TileMap> AllLevels;
+
+
 
     private List<TileChangeOrder> ChangeOrders;
 
@@ -30,6 +35,17 @@ public class World : Node2D, IHaveRuntime, IHaveSize
     private MapHandler mapHandler;
     private Highlight rightHighlight => GetNode<Highlight>("RightHighlight");
     private Highlight leftHighlight => GetNode<Highlight>("LeftHighlight");
+    private DragSelect dragSelect => GetNode<DragSelect>("DragSelect");
+    internal void startDrag()
+    {
+        dragSelect.BeginDrag();
+        dragSelect.Update();
+    }
+    internal void endDrag()
+    {
+        dragSelect.EndDrag();
+        dragSelect.Update();
+    }
     public Vector2 size => new Vector2(40, 40);
 
     public List<SimpleProjectile> projectileQueue { get; set; }
@@ -272,6 +288,7 @@ public class World : Node2D, IHaveRuntime, IHaveSize
             leftHighlight.position = runtime.LeftTarget?.GetTargetPosition() ?? Vector2.Zero;
             leftHighlight.Update();
         }
+
     }
 
 

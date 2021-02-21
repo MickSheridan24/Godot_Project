@@ -5,41 +5,58 @@ public class InputHandler
 {
     private Runtime runtime;
 
+    private bool dragging;
     public InputHandler(Runtime runtime)
     {
         this.runtime = runtime;
+        dragging = false;
     }
     public bool HandleInput(InputEvent @event, Vector2 mousePos, ISelectable effectedNode = null)
     {
         var inputHandled = true;
-        if (@event.LeftClickJustPressed())
-        {
-            if (Input.IsKeyPressed((int)KeyList.Space))
-            {
-                HandleSpaceLeft(@event, mousePos, effectedNode);
-            }
-            else
-            {
-                ClearTargets();
-                HandleLeftClickEvent(@event, mousePos, effectedNode);
-            }
-        }
-        else if (@event.RightClickJustPressed())
-        {
-            if (Input.IsKeyPressed((int)KeyList.Space))
-            {
-                HandleSpaceRight(@event, mousePos, effectedNode);
-            }
-            else
-            {
-                ClearTargets();
-                HandleRightClickEvent(@event, mousePos, effectedNode);
-            }
 
-        }
-        else if (@event.GetKeyJustPressed() != 0)
+        if (!dragging && @event is InputEventMouseButton && @event.IsPressed())
         {
-            HandleKeyEvent(@event.GetKeyJustPressed(), @event);
+            runtime.World.startDrag();
+            dragging = true;
+        }
+        else if (dragging && @event is InputEventMouseButton)
+        {
+            dragging = false;
+            runtime.World.endDrag();
+        }
+
+        if (!dragging)
+        {
+            if (@event.LeftClickJustPressed())
+            {
+                if (Input.IsKeyPressed((int)KeyList.Space))
+                {
+                    HandleSpaceLeft(@event, mousePos, effectedNode);
+                }
+                else
+                {
+                    ClearTargets();
+                    HandleLeftClickEvent(@event, mousePos, effectedNode);
+                }
+            }
+            else if (@event.RightClickJustPressed())
+            {
+                if (Input.IsKeyPressed((int)KeyList.Space))
+                {
+                    HandleSpaceRight(@event, mousePos, effectedNode);
+                }
+                else
+                {
+                    ClearTargets();
+                    HandleRightClickEvent(@event, mousePos, effectedNode);
+                }
+
+            }
+            else if (@event.GetKeyJustPressed() != 0)
+            {
+                HandleKeyEvent(@event.GetKeyJustPressed(), @event);
+            }
         }
         return inputHandled;
     }

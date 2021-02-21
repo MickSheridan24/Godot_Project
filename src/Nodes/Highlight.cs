@@ -5,9 +5,13 @@ public class Highlight : Node2D
 {
     public UITheme theme => new UITheme();
     public Vector2 position { get; set; }
-
-    public Vector2 size => GetParent<IHaveSize>().size;
+    public Vector2 size { get; set; }
     public Color color { get; set; }
+
+    public override void _Ready()
+    {
+        this.size = GetParent<IHaveSize>().size;
+    }
 
     public override void _Draw()
     {

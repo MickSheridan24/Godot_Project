@@ -1,8 +1,9 @@
-[gd_scene load_steps=9 format=2]
+[gd_scene load_steps=10 format=2]
 
 [ext_resource path="res://src/Nodes/World.cs" type="Script" id=1]
 [ext_resource path="res://assets/Tiles.png" type="Texture" id=2]
 [ext_resource path="res://src/Nodes/Highlight.cs" type="Script" id=3]
+[ext_resource path="res://src/Nodes/DragSelect.cs" type="Script" id=4]
 
 [sub_resource type="OccluderPolygon2D" id=1]
 polygon = PoolVector2Array( 0, 0, 32, 0, 32, 32, 0, 32 )
@@ -109,3 +110,7 @@ script = ExtResource( 3 )
 
 [node name="RightHighlight" type="Node2D" parent="."]
 script = ExtResource( 3 )
+
+[node name="DragSelect" type="Node2D" parent="."]
+z_index = 1
+script = ExtResource( 4 )
