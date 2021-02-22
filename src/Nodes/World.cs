@@ -25,7 +25,6 @@ public class World : Node2D, IHaveRuntime, IHaveSize
     private List<TileMap> AllLevels;
 
 
-
     private List<TileChangeOrder> ChangeOrders;
 
 
@@ -43,16 +42,26 @@ public class World : Node2D, IHaveRuntime, IHaveSize
     }
     internal void endDrag()
     {
+        GroupSelect(dragSelect.position, dragSelect.position + dragSelect.size);
         dragSelect.EndDrag();
         dragSelect.Update();
     }
+
+    private void GroupSelect(Vector2 position, Vector2 dest)
+    {
+        var minions = runtime.entityFinder.FindMinions(position, dest).ToList<ISelectable>();
+        if (minions.Count > 0)
+        {
+            var selectable = new GroupSelection(minions);
+            runtime.currentSelection = selectable;
+        }
+    }
+
     public Vector2 size => new Vector2(40, 40);
 
     public List<SimpleProjectile> projectileQueue { get; set; }
     private PackedScene snSimpleProjectile => (PackedScene)ResourceLoader.Load("res://scenes/SimpleProjectile.tscn");
     private PackedScene snStructureNode => (PackedScene)ResourceLoader.Load("res://scenes/Structure.tscn");
-
-
     private bool update;
     public override void _Ready()
     {

@@ -20,6 +20,8 @@ public class Runtime
     public PlayerState playerState;
     public PlayerState enemyPlayerState;
 
+    public EntityFinder entityFinder;
+    public EntityRegistry entityRegistry;
     public UIEffectHandler uIEffectHandler { get; private set; }
 
     public bool IsCasting;
@@ -36,6 +38,22 @@ public class Runtime
         uIEffectHandler = new UIEffectHandler();
 
         inputHandler = new InputHandler(this);
+        entityRegistry = new EntityRegistry();
+        entityFinder = new EntityFinder(World, entityRegistry);
+    }
+
+    internal bool IsSelected(ISelectable selectable)
+    {
+        if (currentSelection == selectable)
+        {
+            return true;
+        }
+        else if (currentSelection is GroupSelection)
+        {
+            var group = currentSelection as GroupSelection;
+            return group.Has(selectable);
+        }
+        return false;
     }
 
     public void ClearRightTarget()
@@ -86,6 +104,7 @@ public class Runtime
     internal void RegisterNPC(NPC npc)
     {
         npc.state = new NPCState(npc);
+        entityRegistry.Add(npc);
     }
 
 

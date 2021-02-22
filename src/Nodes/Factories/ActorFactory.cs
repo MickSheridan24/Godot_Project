@@ -8,6 +8,7 @@ public class ActorFactory
     {
         var node = snNPCNode.Instance() as NPC;
         node.state = new NPCState(node, parent, false);
+        parent.runtime.entityRegistry.Add(node);
         return node;
     }
 }

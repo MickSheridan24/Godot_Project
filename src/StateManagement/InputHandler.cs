@@ -15,16 +15,7 @@ public class InputHandler
     {
         var inputHandled = true;
 
-        if (!dragging && @event is InputEventMouseButton && @event.IsPressed())
-        {
-            runtime.World.startDrag();
-            dragging = true;
-        }
-        else if (dragging && @event is InputEventMouseButton)
-        {
-            dragging = false;
-            runtime.World.endDrag();
-        }
+
 
         if (!dragging)
         {
@@ -57,6 +48,16 @@ public class InputHandler
             {
                 HandleKeyEvent(@event.GetKeyJustPressed(), @event);
             }
+        }
+        if (!dragging && @event is InputEventMouseButton && @event.IsPressed() && !@event.IsActionReleased("MOUSE_BUTTON"))
+        {
+            runtime.World.startDrag();
+            dragging = true;
+        }
+        else if (dragging && @event is InputEventMouseButton)
+        {
+            dragging = false;
+            runtime.World.endDrag();
         }
         return inputHandled;
     }

@@ -50,6 +50,9 @@
   </ItemGroup>
   <ItemGroup>
     <!--HelloBash-->
+      <Compile Include="src\Nodes\GroupSelection.cs" />
+      <Compile Include="src\StateManagement\EntityRegistry.cs" />
+      <Compile Include="src\StateManagement\EntityFinder.cs" />
     <Compile Include="src\Interfaces\IHaveSpawnArea.cs" />
     <Compile Include="src\AI\Orders\FarmOrder.cs" />
     <Compile Include="src\AI\Tasks\StartFarmingTask.cs" />
