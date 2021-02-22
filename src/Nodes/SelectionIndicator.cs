@@ -25,7 +25,7 @@ public class SelectionIndicator : Node2D, IHaveSize
     {
         rightHighlight.Visible = runtime.RightTarget == targetable;
         leftHighlight.Visible = runtime.LeftTarget == targetable;
-        selectHighlight.Visible = runtime.currentSelection == selectable;
+        selectHighlight.Visible = runtime.IsSelected(selectable);
     }
 
 }
