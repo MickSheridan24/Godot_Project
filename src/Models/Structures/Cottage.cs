@@ -41,11 +41,14 @@ public class Cottage : IStructure, IMenuState
     private bool TryCreateNPC()
     {
         GD.Print("CREATING NPC");
-
-        var npc = ActorFactory.CreateNPC(node.runtime.World);
-        tickHandler.AddOrder(new SpawnOrder(npc, node.runtime.World, node), 1);
-        return true;
-
+        if (player.bank.food >= 5)
+        {
+            var npc = ActorFactory.CreateNPC(node.runtime.World);
+            tickHandler.AddOrder(new SpawnOrder(npc, node.runtime.World, node), 1);
+            player.bank.food -= 5;
+            return true;
+        }
+        else return false;
     }
 
 

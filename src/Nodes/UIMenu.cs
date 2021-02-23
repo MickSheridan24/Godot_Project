@@ -38,6 +38,7 @@ public class UIMenu : ColorRect, IHaveRuntime
 
                 entireText.Text = currentSpell.text;
                 spellName.Text = currentSpell.name;
+                partial.ResetButtons();
             }
             else if (runtime.currentSelection != null)
             {

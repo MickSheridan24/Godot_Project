@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using Godot;
 
-public class PartialMenu : Container
+public class PartialMenu : Container, IHaveRuntime
 {
     public IMenuState state { get; set; }
     public Runtime runtime => GetParent<IHaveRuntime>().runtime;

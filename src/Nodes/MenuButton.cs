@@ -1,12 +1,20 @@
 using Godot;
 using System;
 
-public class MenuButton : Button
+public class MenuButton : Button, IHaveSize
 {
     private bool mouseIn;
     public string Hotkey { get; set; }
     public Func<bool> Action { get; internal set; }
 
+    public Runtime runtime => GetParent<IHaveRuntime>().runtime;
+
+    public Vector2 size => size;
+
+    public Vector2 Position => Position;
+    public Vector2 GlobalPosition => GlobalPosition;
+
+    public UIHighlight highlight => GetNode<UIHighlight>("Highlight");
 
     public int flashFrames;
 
@@ -21,7 +29,7 @@ public class MenuButton : Button
 
     public override void _Input(InputEvent @event)
     {
-        if (Visible && @event is InputEventKey && @event.AsText() == Hotkey && @event.IsPressed() && !@event.IsEcho())
+        if (!runtime.WizardIsSelected() && Visible && @event is InputEventKey && @event.AsText() == Hotkey && @event.IsPressed() && !@event.IsEcho())
         {
             Click();
         }
@@ -29,12 +37,12 @@ public class MenuButton : Button
     public override void _PhysicsProcess(float delta)
     {
         Text = Hotkey;
-        //    flashFrames--;
+        flashFrames--;
         if (flashFrames <= 0)
         {
-            Pressed = false;
             flashFrames = 0;
-            (Get("custom_styles/normal") as StyleBoxFlat).Set("bg_color", new Color("#2060c6"));
+            highlight.color = new Color("#000000");
+            highlight.Visible = false;
         }
     }
 
@@ -58,9 +66,9 @@ public class MenuButton : Button
 
     private void FlashColor(Color color)
     {
-        Pressed = true;
-        flashFrames = 200;
-        (Get("custom_styles/normal") as StyleBoxFlat).Set("bg_color", color);
+        flashFrames = 20;
+        highlight.color = color;
+        highlight.Visible = true;
     }
 
     private void _button_pressed()

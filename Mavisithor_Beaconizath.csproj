@@ -50,6 +50,7 @@
   </ItemGroup>
   <ItemGroup>
     <!--HelloBash-->
+      <Compile Include="src\UILogic\UIHighlight.cs" />
       <Compile Include="src\Nodes\GroupSelection.cs" />
       <Compile Include="src\StateManagement\EntityRegistry.cs" />
       <Compile Include="src\StateManagement\EntityFinder.cs" />

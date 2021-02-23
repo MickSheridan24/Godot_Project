@@ -49,7 +49,7 @@ public class InputHandler
                 HandleKeyEvent(@event.GetKeyJustPressed(), @event);
             }
         }
-        if (!dragging && @event is InputEventMouseButton && @event.IsPressed() && !@event.IsActionReleased("MOUSE_BUTTON"))
+        if (!dragging && @event is InputEventMouseButton && @event.IsPressed())
         {
             runtime.World.startDrag();
             dragging = true;
