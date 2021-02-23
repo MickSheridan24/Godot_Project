@@ -292,6 +292,10 @@ public class Enemy : BaseActorNode, IElevatable, IMove, ITarget, IDamageable, IH
 
     public ITask GetHostileTask(BaseActorNode node)
     {
-        throw new NotImplementedException();
+        if (node is ICanAttack)
+        {
+            return new AttackTask(node as ICanAttack, this);
+        }
+        return null;
     }
 }

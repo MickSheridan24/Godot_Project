@@ -16,6 +16,8 @@ public class Runtime
 
     public ITarget RightTarget => targeting?.rightTarget;
     public ITarget LeftTarget => targeting?.leftTarget;
+
+
     private TargetingSystem targeting => currentSelection?.Targeting;
     public PlayerState playerState;
     public PlayerState enemyPlayerState;
@@ -68,7 +70,7 @@ public class Runtime
 
     public EnemyState CreateEnemyState(Enemy enemy)
     {
-        var AI = new ZombieAI(enemy, wizardNode);
+        var AI = new PatrolAI(enemy, Vector2.Left, new Vector2(50, 50));
         return new EnemyState(AI, enemy);
     }
 
@@ -107,6 +109,11 @@ public class Runtime
         entityRegistry.Add(npc);
     }
 
+    internal void RegisterEnemy(Enemy enemy)
+    {
+        enemy.state = CreateEnemyState(enemy);
+        entityRegistry.Add(enemy);
+    }
 
     public void SetSelection(ISelectable selected)
     {

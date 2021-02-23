@@ -50,6 +50,9 @@
   </ItemGroup>
   <ItemGroup>
     <!--HelloBash-->
+      <Compile Include="src\AI\Orders/AttackOrder.cs" />
+      <Compile Include="src\Interfaces\ICanAttack.cs" />
+      <Compile Include="src\AI\Tasks/AttackTask.cs" />
       <Compile Include="src\UILogic\UIHighlight.cs" />
       <Compile Include="src\Nodes\GroupSelection.cs" />
       <Compile Include="src\StateManagement\EntityRegistry.cs" />

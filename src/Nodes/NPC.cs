@@ -2,7 +2,7 @@ using Godot;
 using System;
 
 public class NPC : BaseActorNode, ISelectable, IHaveHealth, IMove, IHaveRuntime, ICaster,
-                      IElevatable, ITarget, IDamageable, ISufferStatusEffects, IHaveSize, IHaveTarget
+                      IElevatable, ITarget, IDamageable, ISufferStatusEffects, IHaveSize, IHaveTarget, ICanAttack
 {
     public string EntityName => state.Name;
     public string Description => state.Description;
@@ -16,6 +16,14 @@ public class NPC : BaseActorNode, ISelectable, IHaveHealth, IMove, IHaveRuntime,
     public SelectionIndicator selectionIndicator => GetNode<SelectionIndicator>("SelectionIndicator");
 
     public TargetingSystem Targeting => state.Targeting;
+
+    public float Range => 50;
+
+    public eDamageType damageType => eDamageType.PHYSICAL;
+
+    public int CurrentDamage => (state as NPCState).damage.current;
+
+
 
     public override void _Process(float d)
     {
