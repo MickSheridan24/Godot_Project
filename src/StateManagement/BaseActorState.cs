@@ -55,7 +55,7 @@ public class BaseActorState
         health.current -= damage;
         return health.current > 0;
     }
-    public void AddStatus(eStatusEffect s, int duration)
+    public void AddStatus(eStatusEffect s, double duration)
     {
         statusHandler.AddStatus(StatusEffect.Create(s));
         tickHandler.AddOrder(new RemoveStatusOrder(node as ISufferStatusEffects, s), duration);

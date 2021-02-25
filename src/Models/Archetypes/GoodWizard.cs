@@ -11,7 +11,7 @@ public class GoodWizard : WizardState, IWizardState
     {
         return new ResourceBank()
         {
-            food = 0,
+            food = 10,
             wealth = 0,
             insight = 0,
             knowledge = 0,

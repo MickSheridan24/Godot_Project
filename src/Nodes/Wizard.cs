@@ -132,7 +132,7 @@ public class Wizard : BaseActorNode, ISelectable, IHaveHealth, IMove, IHaveRunti
             switch (type)
             {
                 default:
-                    state.AddStatus(eStatusEffect.INTANGIBLE, 2);
+                    state.AddStatus(eStatusEffect.INTANGIBLE, 6);
                     TakeDamage(power);
                     break;
             }

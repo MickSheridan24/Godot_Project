@@ -48,12 +48,11 @@ public class Enemy : BaseActorNode, IElevatable, IMove, ITarget, IDamageable, IH
         state.elevationHandler.HandleElevation();
         state.statusHandler.HandleStatuses();
 
-        OverrideSpriteColor();
-
         selectionIndicator.ProcessSelection();
     }
     public override void _PhysicsProcess(float d)
     {
+        OverrideSpriteColor();
         order = GetState()?.RequestAction(d);
         state?.Tick();
         if (order != null)
@@ -97,12 +96,15 @@ public class Enemy : BaseActorNode, IElevatable, IMove, ITarget, IDamageable, IH
     //IDamageable
     public void Damage(int power, eDamageType type)
     {
-        switch (type)
+        if (!state.statusHandler.HasStatus(eStatusEffect.INTANGIBLE))
         {
-            default:
-                state.AddStatus(eStatusEffect.INTANGIBLE, 1);
-                TakeDamage(power);
-                break;
+            switch (type)
+            {
+                default:
+                    state.AddStatus(eStatusEffect.INTANGIBLE, 5);
+                    TakeDamage(power);
+                    break;
+            }
         }
     }
 

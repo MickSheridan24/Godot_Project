@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Godot;
 
-public class GroupSelection : ISelectable
+public class GroupSelection : ISelectable, IHaveTarget
 {
     public List<ISelectable> group;
 
@@ -20,6 +20,24 @@ public class GroupSelection : ISelectable
     public string Description => "Selected " + group.Count + " Units";
 
     public TargetingSystem Targeting => first.Targeting;
+
+    public bool CanTarget(ITarget target)
+    {
+        return GetTargeters().Any(t => t.CanTarget(target));
+    }
+
+    private List<IHaveTarget> GetTargeters()
+    {
+        return group.Where(e => e is IHaveTarget).Select(t => t as IHaveTarget).ToList();
+    }
+
+    public void ClearTargets()
+    {
+        foreach (var npc in GetTargeters())
+        {
+            npc.ClearTargets();
+        }
+    }
 
     public IMenuState GetMenuState()
     {
@@ -49,6 +67,22 @@ public class GroupSelection : ISelectable
         foreach (var e in group)
         {
             e.Select();
+        }
+    }
+
+    public void SetLeftTarget(ITarget target)
+    {
+        foreach (var npc in GetTargeters().Where(t => t.CanTarget(target)))
+        {
+            npc.SetLeftTarget(target);
+        }
+    }
+
+    public void SetRightTarget(ITarget target)
+    {
+        foreach (var npc in GetTargeters().Where(t => t.CanTarget(target)))
+        {
+            npc.SetRightTarget(target);
         }
     }
 

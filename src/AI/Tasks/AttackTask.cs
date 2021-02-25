@@ -19,13 +19,13 @@ public class AttackTask : ITask
 
     public void Execute()
     {
-        var attackOrder = new AttackOrder(actor, enemy);
+        var attackOrder = new AttackOrder(actor, enemy, CanExecute);
 
         var tickOrder = new TickOrder()
         {
             order = attackOrder,
-            ticks = 1,
-            defaultTicks = 1,
+            ticks = 9,
+            defaultTicks = 9,
             complete = false
         };
 

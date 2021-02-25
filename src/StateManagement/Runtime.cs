@@ -36,6 +36,7 @@ public class Runtime
 
         playerState = new PlayerState();
 
+
         enemyPlayerState = new PlayerState();
         uIEffectHandler = new UIEffectHandler();
 

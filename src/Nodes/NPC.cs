@@ -119,7 +119,7 @@ public class NPC : BaseActorNode, ISelectable, IHaveHealth, IMove, IHaveRuntime,
             switch (type)
             {
                 default:
-                    state.AddStatus(eStatusEffect.INTANGIBLE, 2);
+                    state.AddStatus(eStatusEffect.INTANGIBLE, 5);
                     TakeDamage(power);
                     break;
             }

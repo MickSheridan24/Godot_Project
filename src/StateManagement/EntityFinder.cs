@@ -18,7 +18,7 @@ public class EntityFinder
         var ret = new List<NPC>();
         for (var x = 0; x < registry.NPCs.Count; x++)
         {
-            var e = registry.Entities[x];
+            var e = registry.NPCs[x];
             if (e.entity.Position > origin && e.entity.Position < target)
             {
                 ret.Add(e.entity as NPC);

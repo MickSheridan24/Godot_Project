@@ -8,7 +8,7 @@ public class NPCState : BaseActorState
     {
         speed = Stat.Speed(115);
         health = Stat.Health(10000);
-        damage = Stat.Damage(10);
+        damage = Stat.Damage(50);
 
     }
 
@@ -16,6 +16,6 @@ public class NPCState : BaseActorState
     {
         speed = Stat.Speed(115);
         health = Stat.Health(10000);
-        damage = Stat.Damage(10);
+        damage = Stat.Damage(50);
     }
 }
