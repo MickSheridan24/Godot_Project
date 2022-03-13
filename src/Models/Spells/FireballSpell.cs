@@ -16,11 +16,11 @@ public class FireballSpell : Spell, ISpell
     public void Cast(Wizard caster)
     {
         var target = caster.runtime.RightTarget;
-        var targetPos = target?.GetTargetPosition() ?? caster.spritePosition + new Vector2(1, 1);
+        var targetPos = target?.GetTargetPosition() ?? caster.Position + new Vector2(1, 1);
         var projectileDetails = new FireballProjectile()
         {
             direction = caster.Position.GetDirectionTo(target.GetTargetPosition()),
-            start = caster.spritePosition
+            start = caster.Position
         };
         caster.CreateProjectile(projectileDetails);
     }

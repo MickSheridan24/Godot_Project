@@ -3,29 +3,33 @@ using System.Collections.Generic;
 
 public class TaskQueue
 {
-    private List<ITask> queue;
-
+    private Dictionary<string, ITask> dict;
     public TaskQueue()
     {
-        queue = new List<ITask>();
+        dict = new Dictionary<string, ITask>();
     }
 
-    public void Add(ITask Task)
+    public void Add(ITask Task, string key)
     {
-        queue.Add(Task);
+        dict[key] = Task;
     }
 
     public void Process()
     {
-        if (queue.Count > 0 && queue[0].CanExecute())
+        if (dict.Count > 0)
         {
-            queue[0].Execute();
-            queue.Remove(queue[0]);
+            foreach (var key in dict.Keys)
+            {
+                if (dict[key].CanExecute())
+                {
+                    dict[key].Execute();
+                }
+            }
         }
     }
 
     internal void Clear()
     {
-        queue = new List<ITask>();
+        dict = new Dictionary<string, ITask>();
     }
 }

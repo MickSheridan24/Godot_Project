@@ -1,9 +1,11 @@
+using System;
 using Godot;
 public interface ISelectable
 {
     Runtime runtime { get; }
 
     void Select();
+    void DeSelect();
     void RightClick(InputEventMouseButton @event);
     Rect2 GetSelectionArea();
 

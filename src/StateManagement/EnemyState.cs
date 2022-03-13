@@ -18,6 +18,7 @@ public class EnemyState : BaseActorState
         health = Stat.Health(400);
         speed = Stat.Speed(85);
         damage = Stat.Damage(50);
+        range = Stat.Range(50);
     }
 
 

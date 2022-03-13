@@ -7,7 +7,7 @@ public class Enemy : BaseActorNode, IElevatable, IMove, ITarget, IDamageable, IH
                      IConductElectricity, IFreeable, ISufferStatusEffects, IHaveHealth, IHaveSize, ISelectable
 {
     public string name { get; set; }
-    public AnimationPlayer animation => sprite.GetNode<AnimationPlayer>("AnimationPlayer");
+
     public Vector2 speed { get; set; }
 
     private int DamageStateCounter;
@@ -52,7 +52,6 @@ public class Enemy : BaseActorNode, IElevatable, IMove, ITarget, IDamageable, IH
     }
     public override void _PhysicsProcess(float d)
     {
-        OverrideSpriteColor();
         order = GetState()?.RequestAction(d);
         state?.Tick();
         if (order != null)
@@ -133,7 +132,7 @@ public class Enemy : BaseActorNode, IElevatable, IMove, ITarget, IDamageable, IH
         SetCollisionLayerBit((int)eCollisionLayers.ENTITY, false);
         SetCollisionLayerBit((int)eCollisionLayers.HOSTILE, false);
         SetCollisionLayerBit((int)eCollisionLayers.INTANGIBLE, true);
-        sprite.Modulate = new SpriteTheme().cEnemyHit;
+        Shade("isFlash", true);
     }
 
     public void EndIntangible()
@@ -141,28 +140,22 @@ public class Enemy : BaseActorNode, IElevatable, IMove, ITarget, IDamageable, IH
         SetCollisionLayerBit((int)eCollisionLayers.ENTITY, true);
         SetCollisionLayerBit((int)eCollisionLayers.HOSTILE, true);
         SetCollisionLayerBit((int)eCollisionLayers.INTANGIBLE, false);
-        sprite.Modulate = new SpriteTheme().cEnemy;
+        Shade("isFlash", false);
     }
 
 
     public void ExecQueueFree()
     {
-        if (runtime.LeftTarget == this)
-        {
-            runtime.ClearLeftTarget();
-        }
 
-        if (runtime.RightTarget == this)
-        {
-            runtime.ClearRightTarget();
-        }
+        runtime.RemoveEntity(this);
+
 
         CallDeferred("free");
     }
 
     public void HandleCollision(KinematicCollision2D collision)
     {
-        var collider = collision.GetCollider();
+        var collider = collision.Collider;
 
         if (collider is TileMap)
         {
@@ -176,7 +169,7 @@ public class Enemy : BaseActorNode, IElevatable, IMove, ITarget, IDamageable, IH
 
     private void HandleTileCollision(KinematicCollision2D collision)
     {
-        var collider = collision.GetCollider() as TileMap;
+        var collider = collision.Collider as TileMap;
 
         var level = runtime.World.GetLayer(collider);
 
@@ -216,50 +209,6 @@ public class Enemy : BaseActorNode, IElevatable, IMove, ITarget, IDamageable, IH
         state.AddStatus(eStatusEffect.JOLTED, d);
     }
 
-
-
-    private void HandleAnimation()
-    {
-        var dir = Position.DirectionTo(destination).ToEightDir();
-        var anim = "";
-        if (dir == Vector2.Down)
-        {
-            sprite.Frame = 0;
-            anim = "Walk_Down";
-        }
-        else if (dir == Vector2.Right)
-        {
-            sprite.Frame = 2;
-            anim = "Walk_Right";
-        }
-        else if (dir == Vector2.Up)
-        {
-            sprite.Frame = 4;
-            anim = "Walk_Up";
-        }
-        else if (dir == Vector2.Left)
-        {
-            sprite.Frame = 6;
-            anim = "Walk_Left";
-        }
-        if (moveable.moving && animation.CurrentAnimation == "" && anim != "")
-        {
-            GD.Print(anim);
-            animation.Play(anim, -1, 1000);
-        }
-        else if (animation.IsPlaying())
-        {
-            animation.Stop();
-        }
-    }
-
-
-    private void OverrideSpriteColor()
-    {
-        var theme = new SpriteTheme();
-        var defaultColor = theme.cEnemy;
-        sprite.Modulate = state.statusHandler.HasStatus(eStatusEffect.INTANGIBLE) ? theme.cEnemyHit : defaultColor;
-    }
 
 
     public void RightClick(InputEventMouseButton @event)

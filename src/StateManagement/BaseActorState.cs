@@ -5,6 +5,8 @@ public class BaseActorState
 {
     public Stat speed { get; set; }
     public Stat health { get; set; }
+
+    public Stat range { get; set; }
     public TickHandler tickHandler { get; private set; }
     public StatusHandler statusHandler { get; set; }
     public ElevationHandler elevationHandler { get; set; }
@@ -21,7 +23,7 @@ public class BaseActorState
     public string Description { get; set; }
     public TargetingSystem Targeting { get; internal set; }
 
-    private Runtime runtime;
+    public Runtime runtime;
 
     public BaseActorState(Node2D node, PlayerState player, bool debug = false)
     {

@@ -92,6 +92,10 @@ public class StructureNode : Node2D, ISelectable, ITarget, IHaveRuntime, IHaveSi
         runtime.SetSelection(this);
     }
 
+    public void DeSelect()
+    {
+        return;
+    }
     public void SetCollisionLayerBit(int n, bool v)
     {
         area.SetCollisionLayerBit(n, v);
@@ -129,7 +133,7 @@ public class StructureNode : Node2D, ISelectable, ITarget, IHaveRuntime, IHaveSi
 
     public Vector2? FindOpenPosition(Vector2 nodeSize)
     {
-        var obstacles = spawnArea.GetOverlappingAreas().ToList();
+        var obstacles = spawnArea.GetOverlappingAreas().ToList<Node>();
 
         var spawnVector = Position + (size / 2 * new Vector2(0, 1)) + new Vector2(0, 20);
         var direction = Vector2.Left;
@@ -175,6 +179,7 @@ public class StructureNode : Node2D, ISelectable, ITarget, IHaveRuntime, IHaveSi
     {
         return new Rect2(obstacle.Position, obstacle.size).Intersects(new Rect2(vector, size));
     }
+
 }
 
 

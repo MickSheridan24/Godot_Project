@@ -33,10 +33,8 @@ public class ProjectileBase
 
     protected IEnumerable<Node> FindEffected<T>(Node exclude = null)
     {
-        var areas = node.effectRadius.GetOverlappingAreas();
-
-
+        var areas = node.effectRadius.GetOverlappingAreas().ToList<Node>();
         return areas.Where(a => a != exclude && ((Node)a).GetParent() is T)
-                    .Select(t => ((Node)t).GetParent());
+            .Select(t => ((Node)t).GetParent());
     }
 }

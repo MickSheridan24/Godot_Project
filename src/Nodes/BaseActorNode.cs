@@ -10,13 +10,23 @@ public class BaseActorNode : KinematicBody2D
 
 
     //NodeInfo
-    protected Sprite sprite => GetNode<Sprite>("Sprite");
-    public Vector2 spritePosition => sprite.Position;
     protected WeakRef weakref;
 
     public SpriteTheme theme => new SpriteTheme();
 
     private bool active;
+
+    public Node2D Model => GetNode<Node2D>("Model");
+
+    public ShaderMaterial ModelMat => Model.Material as ShaderMaterial;
+
+
+    public void Shade(string param, bool b)
+    {
+        ModelMat.SetShaderParam(param, b);
+    }
+
+
 
     public bool debug { get; set; }
 
@@ -50,7 +60,7 @@ public class BaseActorNode : KinematicBody2D
     //Elevateable
 
     public bool isFallDisabled { get; set; }
-
+    public int EntityId { get; internal set; }
 
     public override void _Ready()
     {
@@ -75,14 +85,24 @@ public class BaseActorNode : KinematicBody2D
 
     public bool IsFreed()
     {
-        return weakref.GetRef() == null;
+        return weakref?.GetRef() == null;
     }
 
 
     // ISelectable
     public void Select()
     {
+
+        runtime.DeSelect();
         runtime.currentSelection = this as ISelectable;
+        ModelMat.SetShaderParam("isSelected", true);
+    }
+
+
+
+    public void DeSelect()
+    {
+        ModelMat.SetShaderParam("isSelected", false);
     }
 
     // IMoveable

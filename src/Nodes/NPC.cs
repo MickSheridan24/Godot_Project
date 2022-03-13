@@ -1,8 +1,8 @@
 using Godot;
 using System;
 
-public class NPC : BaseActorNode, ISelectable, IHaveHealth, IMove, IHaveRuntime, ICaster,
-                      IElevatable, ITarget, IDamageable, ISufferStatusEffects, IHaveSize, IHaveTarget, ICanAttack
+public abstract class NPC : BaseActorNode, ISelectable, IHaveHealth, IMove, IHaveRuntime, ICaster,
+                      IElevatable, ITarget, IDamageable, ISufferStatusEffects, IHaveSize, IHaveTarget
 {
     public string EntityName => state.Name;
     public string Description => state.Description;
@@ -24,12 +24,21 @@ public class NPC : BaseActorNode, ISelectable, IHaveHealth, IMove, IHaveRuntime,
     public int CurrentDamage => (state as NPCState).damage.current;
 
 
+    public override void _Ready()
+    {
+        base._Ready();
+        OverrideModel();
+    }
 
     public override void _Process(float d)
     {
         state.elevationHandler.HandleElevation();
-        OverrideSpriteColor();
         selectionIndicator.ProcessSelection();
+    }
+
+    protected virtual void OverrideModel()
+    {
+        return;
     }
 
     public void BecomeIntangible()
@@ -37,7 +46,7 @@ public class NPC : BaseActorNode, ISelectable, IHaveHealth, IMove, IHaveRuntime,
         SetCollisionLayerBit((int)eCollisionLayers.ENTITY, false);
         SetCollisionLayerBit((int)eCollisionLayers.FRIENDLY, false);
         SetCollisionLayerBit((int)eCollisionLayers.INTANGIBLE, true);
-        sprite.Modulate = new SpriteTheme().cEnemyHit;
+        Shade("isFlash", true);
     }
 
     public void EndIntangible()
@@ -45,18 +54,17 @@ public class NPC : BaseActorNode, ISelectable, IHaveHealth, IMove, IHaveRuntime,
         SetCollisionLayerBit((int)eCollisionLayers.ENTITY, true);
         SetCollisionLayerBit((int)eCollisionLayers.FRIENDLY, true);
         SetCollisionLayerBit((int)eCollisionLayers.INTANGIBLE, false);
+        Shade("isFlash", false);
     }
 
 
-    private void OverrideSpriteColor()
-    {
-        var defaultColor = theme.NPC;
-        sprite.Modulate = state.statusHandler.HasStatus(eStatusEffect.INTANGIBLE) ? theme.cEnemyHit : defaultColor;
-    }
     public void RightClick(InputEventMouseButton mouse)
     {
-        var dest = GetGlobalMousePosition();
-        SetDestination(dest);
+        if (!IsFreed())
+        {
+            var dest = GetGlobalMousePosition();
+            SetDestination(dest);
+        }
     }
     public Rect2 GetSelectionArea()
     {
@@ -74,6 +82,7 @@ public class NPC : BaseActorNode, ISelectable, IHaveHealth, IMove, IHaveRuntime,
 
     public void ExecQueueFree()
     {
+        state.runtime.RemoveEntity(this);
         CallDeferred("queue_free");
     }
 
@@ -95,7 +104,7 @@ public class NPC : BaseActorNode, ISelectable, IHaveHealth, IMove, IHaveRuntime,
 
     public void HandleCollision(KinematicCollision2D collision)
     {
-        var collider = collision.GetCollider();
+        var collider = collision.Collider;
 
         if (collider is Enemy)
         {
@@ -161,12 +170,12 @@ public class NPC : BaseActorNode, ISelectable, IHaveHealth, IMove, IHaveRuntime,
         if (target.Team == Team)
         {
             var task = target.GetFriendlyTask(this);
-            state.taskQueue.Add(task);
+            state.taskQueue.Add(task, "CURRENT");
         }
         else if (target.Team != eTeam.NEUTRAL)
         {
             var task = target.GetHostileTask(this);
-            state.taskQueue.Add(task);
+            state.taskQueue.Add(task, "CURRENT");
         }
 
     }
@@ -177,13 +186,17 @@ public class NPC : BaseActorNode, ISelectable, IHaveHealth, IMove, IHaveRuntime,
         state.taskQueue.Clear();
     }
 
-    public ITask GetFriendlyTask(BaseActorNode node)
+    public virtual ITask GetFriendlyTask(BaseActorNode node)
     {
-        throw new NotImplementedException();
+        return new DoNothingTask();
     }
 
-    public ITask GetHostileTask(BaseActorNode node)
+    public virtual ITask GetHostileTask(BaseActorNode node)
     {
-        throw new NotImplementedException();
+        if (node is ICanAttack)
+        {
+            return new AttackTask(node as ICanAttack, this);
+        }
+        return null;
     }
 }

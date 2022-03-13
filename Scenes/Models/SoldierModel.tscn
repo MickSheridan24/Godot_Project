@@ -1,0 +1,52 @@
+[gd_scene load_steps=2 format=2]
+
+[ext_resource path="res://addons/regular_polygon2d_node/RegularPolygon2D.gd" type="Script" id=1]
+
+[node name="Node2D" type="Node2D"]
+scale = Vector2( 1.4, 1.4 )
+
+[node name="Head" type="Node2D" parent="."]
+scale = Vector2( 0.75, 0.75 )
+z_index = 1
+script = ExtResource( 1 )
+centered = true
+num_sides = 5
+polygon_color = Color( 0.270588, 0.690196, 0.698039, 1 )
+border_size = 2.0
+polygon_rotation = 36.0
+
+[node name="Helmet" type="Node2D" parent="."]
+position = Vector2( 0, -15 )
+scale = Vector2( 0.75, 0.5 )
+script = ExtResource( 1 )
+centered = true
+num_sides = 6
+polygon_color = Color( 0.682353, 0.854902, 0.843137, 1 )
+border_size = 2.0
+polygon_rotation = -360.0
+
+[node name="RegularPolygon2D" type="Node2D" parent="."]
+position = Vector2( 0, -10 )
+scale = Vector2( 0.45, 0.45 )
+z_index = 1
+script = ExtResource( 1 )
+num_sides = 25
+polygon_color = Color( 0.686275, 0.917647, 0.905882, 1 )
+border_size = 3.0
+
+[node name="RegularPolygon2D" type="Node2D" parent="RegularPolygon2D"]
+position = Vector2( 2, 1 )
+script = ExtResource( 1 )
+polygon_color = Color( 0.454902, 0.678431, 0.662745, 1 )
+border_size = 2.0
+polygon_rotation = 239.106
+
+[node name="RegularPolygon2D2" type="Node2D" parent="."]
+position = Vector2( -15, -5 )
+scale = Vector2( 0.1, 1 )
+z_index = 1
+script = ExtResource( 1 )
+centered = true
+num_sides = 4
+polygon_color = Color( 0.286275, 0.364706, 0.368627, 1 )
+border_size = 5.0

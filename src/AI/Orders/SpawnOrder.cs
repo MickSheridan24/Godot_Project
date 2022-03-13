@@ -1,14 +1,14 @@
 
 using Godot;
 
-public class SpawnOrder : IOrder
+public class SpawnOrder<T> : IOrder where T : BaseActorNode
 {
     private BaseActorNode node;
     private Node2D parent;
 
     private IHaveSpawnArea spawnArea;
 
-    public SpawnOrder(BaseActorNode node, Node2D parent, IHaveSpawnArea spawnArea)
+    public SpawnOrder(T node, Node2D parent, IHaveSpawnArea spawnArea)
     {
         this.node = node;
         this.parent = parent;

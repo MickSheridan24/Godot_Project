@@ -21,16 +21,5 @@ public class AttackTask : ITask
     {
         var attackOrder = new AttackOrder(actor, enemy, CanExecute);
 
-        var tickOrder = new TickOrder()
-        {
-            order = attackOrder,
-            ticks = 9,
-            defaultTicks = 9,
-            complete = false
-        };
-
-        var continuousTask = new ContinuousTask(() => CanExecute(), tickOrder, actor.state.tickHandler);
-        actor.state.tickHandler.AddOrder(tickOrder);
-        actor.state.continuousActionHandler.Add(continuousTask);
     }
 }

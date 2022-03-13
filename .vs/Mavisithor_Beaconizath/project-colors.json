@@ -1,0 +1,16 @@
+{
+  "Version": 1,
+  "ProjectMap": {
+    "4306f8f6-3409-4805-b4d6-171f8d5f249a": {
+      "ProjectGuid": "4306f8f6-3409-4805-b4d6-171f8d5f249a",
+      "DisplayName": "Mavisithor_Beaconizath",
+      "ColorIndex": 0
+    },
+    "a2fe74e1-b743-11d0-ae1a-00a0c90fffc3": {
+      "ProjectGuid": "a2fe74e1-b743-11d0-ae1a-00a0c90fffc3",
+      "DisplayName": "Miscellaneous Files",
+      "ColorIndex": -1
+    }
+  },
+  "NextColorIndex": 1
+}

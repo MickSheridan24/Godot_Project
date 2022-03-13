@@ -51,7 +51,8 @@ public enum eStat
 {
     SPEED,
     HEALTH,
-    DAMAGE
+    DAMAGE,
+    RANGE
 }
 
 public enum eStatusEffect

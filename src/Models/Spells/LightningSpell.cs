@@ -12,11 +12,11 @@ public class LightningSpell : Spell, ISpell
     public void Cast(Wizard caster)
     {
         var target = caster.runtime.RightTarget;
-        var targetPos = target?.GetTargetPosition() ?? caster.spritePosition + new Vector2(1, 1);
+        var targetPos = target?.GetTargetPosition() ?? caster.Position + new Vector2(1, 1);
         var projectileDetails = new LightningProjectile(20)
         {
             direction = caster.Position.GetDirectionTo(target.GetTargetPosition()),
-            start = caster.spritePosition,
+            start = caster.Position,
             damage = 100
         };
         caster.CreateProjectile(projectileDetails);

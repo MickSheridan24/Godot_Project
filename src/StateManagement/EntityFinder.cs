@@ -16,13 +16,17 @@ public class EntityFinder
     public List<NPC> FindMinions(Vector2 origin, Vector2 target)
     {
         var ret = new List<NPC>();
-        for (var x = 0; x < registry.NPCs.Count; x++)
+        if (registry.NPCs.Count > 0)
         {
-            var e = registry.NPCs[x];
-            if (e.entity.Position > origin && e.entity.Position < target)
+            for (var x = 0; x < registry.NPCs.Count; x++)
             {
-                ret.Add(e.entity as NPC);
+                var e = registry.NPCs[x];
+                if (!e.entity.IsFreed() && e.entity.Position > origin && e.entity.Position < target)
+                {
+                    ret.Add(e.entity as NPC);
+                }
             }
+            return ret;
         }
         return ret;
     }

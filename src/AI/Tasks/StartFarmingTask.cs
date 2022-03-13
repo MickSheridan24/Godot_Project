@@ -1,9 +1,11 @@
+using Mavisithor_Beaconizath.src.Interfaces;
+
 public class StartFarmingTask : ITask
 {
-    private BaseActorNode actor;
+    private ICanDoLabor actor;
     private Farm farm;
 
-    public StartFarmingTask(BaseActorNode actor, Farm farm)
+    public StartFarmingTask(ICanDoLabor actor, Farm farm)
     {
         this.actor = actor;
         this.farm = farm;

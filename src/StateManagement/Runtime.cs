@@ -69,10 +69,40 @@ public class Runtime
         targeting.RemoveLeftTarget();
     }
 
+    internal void DeSelect()
+    {
+        if (currentSelection != null)
+        {
+            currentSelection.DeSelect();
+        }
+    }
+
     public EnemyState CreateEnemyState(Enemy enemy)
     {
-        var AI = new PatrolAI(enemy, Vector2.Left, new Vector2(50, 50));
-        return new EnemyState(AI, enemy);
+        var AI = new SmartZombieAI(enemy, wizardNode, 1250);
+        var state = new EnemyState(AI, enemy);
+        AI.state = state;
+        return state;
+    }
+
+    internal void RemoveEntity(BaseActorNode node)
+    {
+
+
+        entityRegistry.Remove(node);
+        if (currentSelection == node)
+        {
+            currentSelection = null;
+        }
+        if (LeftTarget == node)
+        {
+            ClearLeftTarget();
+        }
+
+        if (RightTarget == node)
+        {
+            ClearRightTarget();
+        }
     }
 
     public void SetLeftTarget(ITarget t)
@@ -118,6 +148,8 @@ public class Runtime
 
     public void SetSelection(ISelectable selected)
     {
+        DeSelect();
+
         if (WizardIsSelected() && selected != wizardNode)
         {
             targeting.Clear();

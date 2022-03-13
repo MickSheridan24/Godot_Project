@@ -17,4 +17,7 @@ public class SpriteTheme
 
 
     public Color NPC => new Color("#46948d");
+
+    public Color Laborer => new Color("#56ee9f");
+    public Color Soldier => new Color("#347169");
 }

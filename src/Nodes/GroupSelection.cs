@@ -70,6 +70,14 @@ public class GroupSelection : ISelectable, IHaveTarget
         }
     }
 
+    public void DeSelect()
+    {
+        foreach (var e in group)
+        {
+            e.DeSelect();
+        }
+    }
+
     public void SetLeftTarget(ITarget target)
     {
         foreach (var npc in GetTargeters().Where(t => t.CanTarget(target)))
@@ -90,4 +98,6 @@ public class GroupSelection : ISelectable, IHaveTarget
     {
         return group.Any(s => s == selectable);
     }
+
+
 }

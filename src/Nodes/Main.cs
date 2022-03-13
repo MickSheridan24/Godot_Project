@@ -6,7 +6,6 @@ public class Main : Node2D, IHaveRuntime
     public Runtime runtime { get; set; }
     public Wizard wizard => GetNode<Wizard>("Wizard");
     public World World => GetNode<World>("World");
-    public NPC npc => GetNode<NPC>("NPC");
 
     public Enemy enemy => GetNode<Enemy>("Enemy");
     public StructureNode Cottage => GetNode<StructureNode>("Structure");
@@ -18,7 +17,6 @@ public class Main : Node2D, IHaveRuntime
         runtime = new Runtime();
         runtime.RegisterWizard(wizard);
         runtime.RegisterWorld(World);
-        runtime.RegisterNPC(npc);
         runtime.RegisterEnemy(enemy);
 
         Cottage.state = new Cottage(runtime.playerState);

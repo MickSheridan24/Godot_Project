@@ -1,5 +1,6 @@
 
 using Godot;
+using Mavisithor_Beaconizath.src.Interfaces;
 
 public class Farm : IStructure, IMenuState
 {
@@ -25,10 +26,19 @@ public class Farm : IStructure, IMenuState
     public void ConfigureNode(StructureNode structureNode)
     {
         this.node = structureNode;
-        OverrideSpriteColor();
+        OverrideModel();
         node.RemoveCollisions();
     }
 
+
+    protected PackedScene snModel => (PackedScene)ResourceLoader.Load("res://scenes/Models/FarmModel.tscn");
+
+    protected void OverrideModel()
+    {
+        var modelNode = (Node2D)snModel.Instance();
+        node.AddChild(modelNode);
+
+    }
     public Vector2 Position()
     {
         return node.Position;
@@ -56,7 +66,11 @@ public class Farm : IStructure, IMenuState
 
     public ITask GetFriendlyTask(BaseActorNode node)
     {
-        return new StartFarmingTask(node, this);
+        if (node is ICanDoLabor)
+        {
+            return new StartFarmingTask(node as ICanDoLabor, this);
+        }
+        else return new DoNothingTask();
     }
 
     public ITask GetHostileTask(BaseActorNode node)

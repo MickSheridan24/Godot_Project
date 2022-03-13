@@ -23,7 +23,7 @@ public class Cottage : IStructure, IMenuState
     public void ConfigureNode(StructureNode structureNode)
     {
         this.node = structureNode;
-        OverrideSpriteColor();
+        OverrideModel();
     }
 
     public void RightClick(Vector2 position)
@@ -31,11 +31,13 @@ public class Cottage : IStructure, IMenuState
         return;
     }
 
-    private void OverrideSpriteColor()
+    protected PackedScene snModel => (PackedScene)ResourceLoader.Load("res://scenes/Models/CottageModel.tscn");
+
+    protected void OverrideModel()
     {
-        var theme = new SpriteTheme();
-        var defaultColor = theme.cEnemy;
-        node.sprite.Modulate = theme.cCottage;
+        var modelNode = (Node2D)snModel.Instance();
+        node.AddChild(modelNode);
+
     }
 
     private bool TryCreateNPC()
@@ -43,9 +45,23 @@ public class Cottage : IStructure, IMenuState
         GD.Print("CREATING NPC");
         if (player.bank.food >= 5)
         {
-            var npc = ActorFactory.CreateNPC(node.runtime.World);
-            tickHandler.AddOrder(new SpawnOrder(npc, node.runtime.World, node), 1);
+            var npc = ActorFactory.CreateLaborer(node.runtime.World);
+            tickHandler.AddOrder(new SpawnOrder<Laborer>(npc, node.runtime.World, node), 1);
             player.bank.food -= 5;
+            return true;
+        }
+        else return false;
+    }
+
+
+    private bool TryCreateSoldier()
+    {
+        GD.Print("CREATING NPC");
+        if (player.bank.food >= 100)
+        {
+            var npc = ActorFactory.CreateSoldier(node.runtime.World);
+            tickHandler.AddOrder(new SpawnOrder<Soldier>(npc, node.runtime.World, node), 1);
+            player.bank.food -= 100;
             return true;
         }
         else return false;
@@ -59,11 +75,17 @@ public class Cottage : IStructure, IMenuState
         createNPC.Action = () => TryCreateNPC();
 
         createNPC.Visible = true;
-        partialMenu.button2.Visible = true;
+
+        var createSoldier = partialMenu.button2;
+        createSoldier.Hotkey = "W";
+        createSoldier.Action = () => TryCreateSoldier();
+        createSoldier.Visible = true;
+
         partialMenu.button3.Visible = true;
         partialMenu.button4.Visible = true;
 
     }
+
 
     public ITask GetFriendlyTask(BaseActorNode node)
     {
