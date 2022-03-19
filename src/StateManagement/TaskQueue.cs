@@ -1,3 +1,4 @@
+using System.Linq;
 using System;
 using System.Collections.Generic;
 
@@ -16,13 +17,28 @@ public class TaskQueue
 
     public void Process()
     {
+        var keysToRemove = new List<string>();
         if (dict.Count > 0)
         {
             foreach (var key in dict.Keys)
             {
                 if (dict[key].CanExecute())
                 {
-                    dict[key].Execute();
+                    if (dict[key].Execute())
+                    {
+                        keysToRemove.Add(key);
+                    }
+                }
+                else if (dict[key].WhenCannotExecute())
+                {
+                    keysToRemove.Add(key);
+                }
+            }
+            foreach (var key in keysToRemove)
+            {
+                if (dict.Keys.Contains(key))
+                {
+                    dict.Remove(key);
                 }
             }
         }

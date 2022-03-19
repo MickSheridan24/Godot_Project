@@ -18,7 +18,7 @@ public class LightningProjectile : ProjectileBase, IProjectile
 
     public void HandleImpact(KinematicCollision2D collision)
     {
-        var collider = collision.GetCollider() as Node;
+        var collider = collision.Collider as Node;
 
         isLaunching = false;
 
@@ -107,11 +107,11 @@ public class LightningProjectile : ProjectileBase, IProjectile
     public void ConfigureNode()
     {
         var dest = start + node.direction * range;
-        node.raycast.SetCastTo(dest);
+        node.raycast.CastTo = dest;
 
         node.sprite.Set("modulate", theme.cLightning);
 
-        (node.effectRadius.GetNode<CollisionShape2D>("CollisionShape2D").GetShape() as CircleShape2D).Radius = 100;
+        (node.effectRadius.GetNode<CollisionShape2D>("CollisionShape2D").Shape as CircleShape2D).Radius = 100;
 
 
     }

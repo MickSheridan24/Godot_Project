@@ -32,4 +32,12 @@ public class VectorTarget : ITarget
     {
         throw new System.NotImplementedException();
     }
+
+    public void HighlightTarget()
+    {
+    }
+
+    public void DeHighlightTarget()
+    {
+    }
 }

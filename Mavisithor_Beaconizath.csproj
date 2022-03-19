@@ -49,6 +49,7 @@
     <Compile Include="src\Interfaces\IHaveSize.cs" />
     <Compile Include="src\Nodes\ClickableArea2D.cs" />
     <Compile Include="src\StateManagement\InputHandler.cs" />
+    <Compile Include="src\StateManagement\NPCs\SoldierState.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="src\Conlanger\Conlanger.cs" />
     <Compile Include="src\Conlanger\Proto\ProtoAncient.cs" />

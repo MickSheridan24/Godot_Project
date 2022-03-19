@@ -10,4 +10,8 @@ public interface ITarget
 
     ITask GetFriendlyTask(BaseActorNode node);
     ITask GetHostileTask(BaseActorNode node);
+
+    void HighlightTarget();
+    void DeHighlightTarget();
+
 }

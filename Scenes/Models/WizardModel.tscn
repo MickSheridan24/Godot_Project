@@ -8,21 +8,21 @@ shader = ExtResource( 2 )
 shader_param/isFlash = false
 shader_param/isSelected = false
 shader_param/isTargetedFriend = null
-shader_param/isTargetedFoe = null
+shader_param/isTargetedFoe = true
 
-[sub_resource type="Gradient" id=3]
+[sub_resource type="Gradient" id=11]
 offsets = PoolRealArray( 0 )
 colors = PoolColorArray( 0.054902, 0.690196, 0.690196, 1 )
 
 [sub_resource type="GradientTexture" id=4]
-gradient = SubResource( 3 )
+gradient = SubResource( 11 )
 
-[sub_resource type="Gradient" id=8]
+[sub_resource type="Gradient" id=12]
 offsets = PoolRealArray( 0 )
 colors = PoolColorArray( 0, 0, 0, 1 )
 
 [sub_resource type="GradientTexture" id=9]
-gradient = SubResource( 8 )
+gradient = SubResource( 12 )
 
 [sub_resource type="Gradient" id=10]
 offsets = PoolRealArray( 0 )

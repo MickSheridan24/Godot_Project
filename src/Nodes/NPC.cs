@@ -17,11 +17,12 @@ public abstract class NPC : BaseActorNode, ISelectable, IHaveHealth, IMove, IHav
 
     public TargetingSystem Targeting => state.Targeting;
 
-    public float Range => 50;
+    public float Range => 100;
 
     public eDamageType damageType => eDamageType.PHYSICAL;
 
     public int CurrentDamage => (state as NPCState).damage.current;
+
 
 
     public override void _Ready()
@@ -38,7 +39,8 @@ public abstract class NPC : BaseActorNode, ISelectable, IHaveHealth, IMove, IHav
 
     protected virtual void OverrideModel()
     {
-        return;
+
+        AddChild(ModelCollision.Duplicate());
     }
 
     public void BecomeIntangible()
@@ -198,5 +200,13 @@ public abstract class NPC : BaseActorNode, ISelectable, IHaveHealth, IMove, IHav
             return new AttackTask(node as ICanAttack, this);
         }
         return null;
+    }
+
+    public void HighlightTarget()
+    {
+    }
+
+    public void DeHighlightTarget()
+    {
     }
 }

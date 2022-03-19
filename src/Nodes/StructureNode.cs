@@ -23,9 +23,14 @@ public class StructureNode : Node2D, ISelectable, ITarget, IHaveRuntime, IHaveSi
     private Highlight rightHighlight => GetNode<Highlight>("RightHighlight");
     private Highlight leftHighlight => GetNode<Highlight>("LeftHighlight");
     private Highlight selectHighlight => GetNode<Highlight>("SelectHighlight");
-    public Vector2 size => new Vector2(160, 160);
+
+    private Vector2 _size = new Vector2(160, 160);
+    public Vector2 size { get => _size; set => _size = value; }
 
     private PackedScene snPartial => (PackedScene)ResourceLoader.Load("res://scenes/StructurePartialMenu.tscn");
+
+    public Node2D Model => GetNode<Node2D>("Model");
+
 
 
     public override void _Ready()
@@ -46,6 +51,19 @@ public class StructureNode : Node2D, ISelectable, ITarget, IHaveRuntime, IHaveSi
         selectHighlight.Visible = runtime.currentSelection == this;
 
         state.tickHandler.Tick();
+
+    }
+
+    public void OverrideHitboxes()
+    {
+
+        var spawnPoint = Model.GetNode("SpawnArea").Duplicate();
+        var collidePoint = Model.GetNode<StaticBody2D>("Collidable").Duplicate();
+
+        AddChild(spawnPoint);
+        AddChild(collidePoint);
+
+
 
     }
 
@@ -109,6 +127,7 @@ public class StructureNode : Node2D, ISelectable, ITarget, IHaveRuntime, IHaveSi
     public Rect2 GetSelectionArea()
     {
         return new Rect2(GlobalPosition - size / 2, size);
+
     }
 
     public PartialMenu GetPartial()
@@ -137,16 +156,19 @@ public class StructureNode : Node2D, ISelectable, ITarget, IHaveRuntime, IHaveSi
 
         var spawnVector = Position + (size / 2 * new Vector2(0, 1)) + new Vector2(0, 20);
         var direction = Vector2.Left;
-        Node obstacle = (Node)obstacles.Find(o => ObstacleObstructs(((Node)o).GetParent<IHaveSize>(), spawnVector, nodeSize));
+        Node obstacle = (Node)obstacles.Find(o => ((Node)o).GetParent() is IHaveSize
+                                                && ObstacleObstructs(((Node)o).GetParent<IHaveSize>(), spawnVector, nodeSize));
         int tries = 100;
         while (tries >= 0 && obstacle != null)
         {
             tries--;
             spawnVector = spawnVector + (new Vector2(10, 10) * direction);
             direction = ShiftSpawnVector(spawnVector, direction, obstacle.GetParent<IHaveSize>());
-            obstacle = (Node)obstacles.Find(o => ObstacleObstructs(((Node)o).GetParent<IHaveSize>(), spawnVector, nodeSize));
+            obstacle = (Node)obstacles.Find(o => ((Node)o).GetParent() is IHaveSize
+            && ObstacleObstructs(((Node)o).GetParent<IHaveSize>(), spawnVector, nodeSize));
         }
-        if (obstacles.Find(o => ObstacleObstructs(((Node)o).GetParent<IHaveSize>(), spawnVector, nodeSize)) == null)
+        if (obstacles.Find(o => ((Node)o).GetParent() is IHaveSize
+                                && ObstacleObstructs(((Node)o).GetParent<IHaveSize>(), spawnVector, nodeSize)) == null)
         {
             return spawnVector;
         }
@@ -180,6 +202,15 @@ public class StructureNode : Node2D, ISelectable, ITarget, IHaveRuntime, IHaveSi
         return new Rect2(obstacle.Position, obstacle.size).Intersects(new Rect2(vector, size));
     }
 
+    public void HighlightTarget()
+    {
+
+    }
+
+    public void DeHighlightTarget()
+    {
+
+    }
 }
 
 

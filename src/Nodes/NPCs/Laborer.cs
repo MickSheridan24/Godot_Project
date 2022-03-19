@@ -10,7 +10,10 @@ public class Laborer : NPC, ICanDoLabor
     protected override void OverrideModel()
     {
         var node = (Node2D)snModel.Instance();
+        node.Name = "Model";
         AddChild(node);
+        base.OverrideModel();
+
 
     }
 

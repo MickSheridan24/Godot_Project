@@ -11,8 +11,12 @@ public class DoNothingTask : ITask
         return true;
     }
 
-    public void Execute()
+    public bool Execute()
     {
-        return; 
+        return true;
+    }
+    public bool WhenCannotExecute()
+    {
+        return true;
     }
 }

@@ -217,5 +217,13 @@ public class Wizard : BaseActorNode, ISelectable, IHaveHealth, IMove, IHaveRunti
         }
         return null;
     }
+
+    public void HighlightTarget()
+    {
+    }
+
+    public void DeHighlightTarget()
+    {
+    }
 }
 

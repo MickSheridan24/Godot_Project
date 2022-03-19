@@ -15,7 +15,12 @@ public class StartFarmingTask : ITask
         return actor.Position == farm.Position();
     }
 
-    public void Execute()
+    public bool WhenCannotExecute()
+    {
+        return false;
+    }
+
+    public bool Execute()
     {
         var farmOrder = new FarmOrder(actor.state.player, farm);
 
@@ -30,5 +35,6 @@ public class StartFarmingTask : ITask
         var continuousTask = new ContinuousTask(() => actor.Position == farm.Position(), tickOrder, actor.state.tickHandler);
         actor.state.tickHandler.AddOrder(tickOrder);
         actor.state.continuousActionHandler.Add(continuousTask);
+        return true;
     }
 }

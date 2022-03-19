@@ -18,6 +18,11 @@ config/name="Mavisithor_Beaconizath"
 run/main_scene="res://Scenes/Main.tscn"
 config/icon="res://icon.png"
 
+[debug]
+
+shapes/collision/shape_color=Color( 0.0588235, 0.807843, 0.933333, 0.603922 )
+shapes/collision/max_contacts_displayed=100
+
 [display]
 
 window/size/width=1920

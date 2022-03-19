@@ -1,4 +1,4 @@
-[gd_scene load_steps=4 format=2]
+[gd_scene load_steps=5 format=2]
 
 [ext_resource path="res://addons/regular_polygon2d_node/RegularPolygon2D.gd" type="Script" id=1]
 [ext_resource path="res://src/Shaders/actor_shader_basic.tres" type="Shader" id=2]
@@ -9,6 +9,9 @@ shader_param/isFlash = false
 shader_param/isSelected = false
 shader_param/isTargetedFriend = null
 shader_param/isTargetedFoe = null
+
+[sub_resource type="CircleShape2D" id=3]
+radius = 29.2175
 
 [node name="Node2D" type="Node2D"]
 material = SubResource( 2 )
@@ -59,3 +62,7 @@ centered = true
 num_sides = 4
 polygon_color = Color( 0.811765, 0.839216, 0.835294, 1 )
 border_size = 5.0
+
+[node name="Collision" type="CollisionShape2D" parent="."]
+position = Vector2( -0.566929, -2.55118 )
+shape = SubResource( 3 )

@@ -14,6 +14,8 @@ public class Cottage : IStructure, IMenuState
     public PlayerState player { get; private set; }
 
 
+
+
     public Cottage(PlayerState player)
     {
         this.player = player;
@@ -36,7 +38,13 @@ public class Cottage : IStructure, IMenuState
     protected void OverrideModel()
     {
         var modelNode = (Node2D)snModel.Instance();
+        modelNode.Name = "Model";
         node.AddChild(modelNode);
+
+        node.OverrideHitboxes();
+
+        node.size = new Vector2(160, 480);
+        node.Update();
 
     }
 

@@ -1,23 +1,72 @@
-[gd_scene load_steps=2 format=2]
+[gd_scene load_steps=13 format=2]
 
 [ext_resource path="res://addons/regular_polygon2d_node/RegularPolygon2D.gd" type="Script" id=1]
+[ext_resource path="res://src/Shaders/actor_shader_basic.tres" type="Shader" id=2]
+
+[sub_resource type="ShaderMaterial" id=2]
+shader = ExtResource( 2 )
+shader_param/isFlash = false
+shader_param/isSelected = false
+shader_param/isTargetedFriend = false
+shader_param/isTargetedFoe = false
+
+[sub_resource type="Gradient" id=3]
+offsets = PoolRealArray( 0, 0.104895, 0.622378 )
+colors = PoolColorArray( 0.607843, 0.560784, 0.0509804, 1, 0.832716, 0.812642, 0.595173, 1, 0.851913, 0.834142, 0.641629, 1 )
+
+[sub_resource type="GradientTexture" id=4]
+gradient = SubResource( 3 )
+
+[sub_resource type="Gradient" id=5]
+offsets = PoolRealArray( 0 )
+colors = PoolColorArray( 0, 0, 0, 1 )
+
+[sub_resource type="GradientTexture" id=6]
+gradient = SubResource( 5 )
+
+[sub_resource type="Gradient" id=7]
+offsets = PoolRealArray( 0 )
+colors = PoolColorArray( 0.258824, 0.486275, 0.576471, 1 )
+
+[sub_resource type="GradientTexture" id=8]
+gradient = SubResource( 7 )
+
+[sub_resource type="Gradient" id=9]
+offsets = PoolRealArray( 0 )
+colors = PoolColorArray( 0, 0, 0, 1 )
+
+[sub_resource type="GradientTexture" id=10]
+gradient = SubResource( 9 )
+
+[sub_resource type="CircleShape2D" id=1]
+radius = 22.7205
 
 [node name="LaborerModel" type="Node2D"]
+material = SubResource( 2 )
 scale = Vector2( 1.4, 1.4 )
 
 [node name="Hat" type="Node2D" parent="."]
+use_parent_material = true
 position = Vector2( 0, -10 )
 scale = Vector2( 1, 0.5 )
 z_index = 1
 script = ExtResource( 1 )
 centered = true
 polygon_color = Color( 0.607843, 0.560784, 0.0509804, 1 )
+polygon_texture = SubResource( 4 )
+border_texture = SubResource( 6 )
 border_size = 2.0
 
 [node name="RegularPolygon2D" type="Node2D" parent="."]
+use_parent_material = true
 scale = Vector2( 0.75, 0.75 )
 script = ExtResource( 1 )
 centered = true
 num_sides = 4
 polygon_color = Color( 0.258824, 0.486275, 0.576471, 1 )
+polygon_texture = SubResource( 8 )
+border_texture = SubResource( 10 )
 border_size = 2.0
+
+[node name="Collision" type="CollisionShape2D" parent="."]
+shape = SubResource( 1 )

@@ -95,14 +95,17 @@ public class Enemy : BaseActorNode, IElevatable, IMove, ITarget, IDamageable, IH
     //IDamageable
     public void Damage(int power, eDamageType type)
     {
-        if (!state.statusHandler.HasStatus(eStatusEffect.INTANGIBLE))
+        if (!IsFreed())
         {
-            switch (type)
+            if (!state.statusHandler.HasStatus(eStatusEffect.INTANGIBLE))
             {
-                default:
-                    state.AddStatus(eStatusEffect.INTANGIBLE, 5);
-                    TakeDamage(power);
-                    break;
+                switch (type)
+                {
+                    default:
+                        state.AddStatus(eStatusEffect.INTANGIBLE, 5);
+                        TakeDamage(power);
+                        break;
+                }
             }
         }
     }
@@ -248,5 +251,15 @@ public class Enemy : BaseActorNode, IElevatable, IMove, ITarget, IDamageable, IH
             return new AttackTask(node as ICanAttack, this);
         }
         return null;
+    }
+
+    public void HighlightTarget()
+    {
+        Shade("isTargetedFoe", true);
+    }
+
+    public void DeHighlightTarget()
+    {
+        Shade("isTargetedFoe", false);
     }
 }

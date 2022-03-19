@@ -1,37 +1,14 @@
 [gd_scene load_steps=16 format=2]
 
 [ext_resource path="res://addons/regular_polygon2d_node/RegularPolygon2D.gd" type="Script" id=1]
+[ext_resource path="res://src/Shaders/actor_shader_basic.tres" type="Shader" id=2]
 
-[sub_resource type="Shader" id=1]
-code = "shader_type canvas_item;
-
-uniform bool isFlash;
-uniform bool isSelected;
-uniform bool isTargetedFriend;
-uniform bool isTargetedFoe;
-
-void fragment(){
-	
-	if(isFlash == true){
-			COLOR = texture(TEXTURE, UV);
-			COLOR.a = 0.5;
-			COLOR.b = COLOR.b * 2.5;		
-			COLOR.r = COLOR.r * 2.5;		
-			COLOR.g = COLOR.g * 2.5;		
-	}
-	if(isSelected == true){
-			COLOR = texture(TEXTURE, UV);
-			COLOR.b = COLOR.b * 1.5;	
-			COLOR.a = COLOR.a * 1.2;		
-	}
-}"
-
-[sub_resource type="ShaderMaterial" id=2]
-shader = SubResource( 1 )
-shader_param/isFlash = false
-shader_param/isSelected = false
+[sub_resource type="ShaderMaterial" id=15]
+shader = ExtResource( 2 )
+shader_param/isFlash = null
+shader_param/isSelected = null
 shader_param/isTargetedFriend = null
-shader_param/isTargetedFoe = null
+shader_param/isTargetedFoe = false
 
 [sub_resource type="Gradient" id=3]
 offsets = PoolRealArray( 0 )
@@ -76,7 +53,7 @@ colors = PoolColorArray( 0, 0, 0, 1 )
 gradient = SubResource( 11 )
 
 [node name="Node2D" type="Node2D"]
-material = SubResource( 2 )
+material = SubResource( 15 )
 
 [node name="Head" type="Node2D" parent="."]
 use_parent_material = true

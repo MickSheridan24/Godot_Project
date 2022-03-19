@@ -28,7 +28,7 @@ public class ProjectileBase
 
     protected void SetEffectRadius(int r)
     {
-        (node.effectRadius.GetNode<CollisionShape2D>("CollisionShape2D").GetShape() as CircleShape2D).Radius = r;
+        (node.effectRadius.GetNode<CollisionShape2D>("CollisionShape2D").Shape as CircleShape2D).Radius = r;
     }
 
     protected IEnumerable<Node> FindEffected<T>(Node exclude = null)

@@ -14,12 +14,36 @@ public class AttackTask : ITask
     }
     public bool CanExecute()
     {
-        return enemy.Position.WithinRange(actor.Position, new Vector2(actor.Range, actor.Range));
+        return !enemy.IsFreed() && enemy.Position.WithinRange(actor.Position, new Vector2(actor.Range, actor.Range));
     }
 
-    public void Execute()
+    public bool WhenCannotExecute()
     {
-        var attackOrder = new AttackOrder(actor, enemy, CanExecute);
+        if (enemy.IsFreed())
+        {
+            return true;
+        }
+        else if (actor is IMove)
+        {
+            (actor as IMove).destination = enemy.Position;
+            return false;
+        }
+        else
+        {
+            return false;
+        }
+    }
 
+    public bool Execute()
+    {
+        if (!enemy.IsFreed())
+        {
+            new AttackOrder(actor, enemy, () => true).Execute();
+            return false;
+        }
+        else
+        {
+            return true;
+        }
     }
 }

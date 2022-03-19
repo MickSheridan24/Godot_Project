@@ -18,6 +18,10 @@ public class BaseActorNode : KinematicBody2D
 
     public Node2D Model => GetNode<Node2D>("Model");
 
+    public CollisionShape2D ModelCollision => Model.HasNode("Collision") ? Model.GetNode<CollisionShape2D>("Collision") : null;
+    public CollisionShape2D LocalCollision { get => GetNode<CollisionShape2D>("Collision"); set => AddChild(value); }
+
+
     public ShaderMaterial ModelMat => Model.Material as ShaderMaterial;
 
 

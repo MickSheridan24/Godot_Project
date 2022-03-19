@@ -14,7 +14,7 @@ public class FireballProjectile : ProjectileBase, IProjectile
     public void HandleImpact(KinematicCollision2D collision)
     {
 
-        var collider = collision.GetCollider() as Node;
+        var collider = collision.Collider as Node;
         TryDamage(collider, eDamageType.FIRE);
 
         foreach (var effected in FindEffected<IDamageable>(collider))
@@ -29,7 +29,7 @@ public class FireballProjectile : ProjectileBase, IProjectile
     {
         SetEffectRadius(FireballSpell.effectRadius);
         var tex = GD.Load<Texture>("res://assets/Fireball.png");
-        node.sprite.SetTexture(tex);
+        node.sprite.Texture = tex;
     }
 
     public void HandleRayCollision()

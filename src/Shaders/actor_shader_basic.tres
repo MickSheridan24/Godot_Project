@@ -22,4 +22,10 @@ void fragment(){
 			COLOR.b = COLOR.b * 1.5;	
 			COLOR.a = COLOR.a * 1.2;		
 	}
+	else if(isTargetedFoe == true){
+		COLOR.r = COLOR.r * 4.0;
+		COLOR.b = COLOR.b / 1.5;
+		COLOR.g = COLOR.g / 1.5;	
+		COLOR.a = COLOR.a * 1.2;
+	}
 }"
