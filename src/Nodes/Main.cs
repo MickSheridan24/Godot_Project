@@ -14,6 +14,7 @@ public class Main : Node2D, IHaveRuntime
 
     public override void _Ready()
     {
+        Input.SetMouseMode(Input.MouseMode.Confined);
         runtime = new Runtime();
         runtime.RegisterWizard(wizard);
         runtime.RegisterWorld(World);

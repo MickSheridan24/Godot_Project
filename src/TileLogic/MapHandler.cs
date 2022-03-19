@@ -16,22 +16,32 @@ public class MapHandler
         theme = new TileTheme();
     }
 
-    public void GenerateTiles(int size)
+    public void GenerateTiles(int size, TileMap level)
     {
         this.size = size;
         for (int x = size * -1; x < size; x++)
         {
             for (int y = size * -1; y < size; y++)
             {
-                GenerateTile(x, y, eTileType.DIRT);
+                var type = rng.Next(2) == 0 ? eTileType.GRASS : eTileType.DIRT;
+                if (rng.Next(2) == 0) GenerateTile(x, y, type, level);
+
             }
         }
     }
 
-    private void GenerateTile(int x, int y, eTileType type)
+    private void GenerateTile(int x, int y, eTileType type, TileMap level)
     {
         var tile = new TileEntity(new Vector2(x, y), (eTileType)type, theme);
         tiles.Add(tile);
+        level.SetCellv(tile.coordsM, GetTileId(level, type));
+
+    }
+
+    private int GetTileId(TileMap map, eTileType tileType)
+    {
+        var tile = map.TileSet.FindTileByName(tileType.ToString());
+        return tile;
     }
 
     private void GenerateRandomTile(int x, int y)
@@ -43,7 +53,7 @@ public class MapHandler
 
     public void AddGrass()
     {
-        var fieldCount = Math.Ceiling((double)(size / 5));
+        var fieldCount = Math.Ceiling((double)(size / 2));
 
         var origins = new List<Vector2>();
 
@@ -96,7 +106,7 @@ public class MapHandler
                     current = next;
                 }
             }
-            certainty -= 5;
+            certainty -= 1;
         }
         return retList;
     }

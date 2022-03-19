@@ -1,8 +1,17 @@
-[gd_scene load_steps=2 format=2]
+[gd_scene load_steps=4 format=2]
 
 [ext_resource path="res://addons/regular_polygon2d_node/RegularPolygon2D.gd" type="Script" id=1]
+[ext_resource path="res://src/Shaders/actor_shader_basic.tres" type="Shader" id=2]
+
+[sub_resource type="ShaderMaterial" id=2]
+shader = ExtResource( 2 )
+shader_param/isFlash = false
+shader_param/isSelected = false
+shader_param/isTargetedFriend = null
+shader_param/isTargetedFoe = null
 
 [node name="Node2D" type="Node2D"]
+material = SubResource( 2 )
 scale = Vector2( 1.4, 1.4 )
 
 [node name="Head" type="Node2D" parent="."]
@@ -11,7 +20,7 @@ z_index = 1
 script = ExtResource( 1 )
 centered = true
 num_sides = 5
-polygon_color = Color( 0.270588, 0.690196, 0.698039, 1 )
+polygon_color = Color( 0.141176, 0.631373, 0.619608, 1 )
 border_size = 2.0
 polygon_rotation = 36.0
 
@@ -21,7 +30,7 @@ scale = Vector2( 0.75, 0.5 )
 script = ExtResource( 1 )
 centered = true
 num_sides = 6
-polygon_color = Color( 0.682353, 0.854902, 0.843137, 1 )
+polygon_color = Color( 0.360784, 0.427451, 0.415686, 1 )
 border_size = 2.0
 polygon_rotation = -360.0
 
@@ -31,13 +40,13 @@ scale = Vector2( 0.45, 0.45 )
 z_index = 1
 script = ExtResource( 1 )
 num_sides = 25
-polygon_color = Color( 0.686275, 0.917647, 0.905882, 1 )
+polygon_color = Color( 0.360784, 0.427451, 0.415686, 1 )
 border_size = 3.0
 
 [node name="RegularPolygon2D" type="Node2D" parent="RegularPolygon2D"]
 position = Vector2( 2, 1 )
 script = ExtResource( 1 )
-polygon_color = Color( 0.454902, 0.678431, 0.662745, 1 )
+polygon_color = Color( 0.0156863, 0.513726, 0.54902, 1 )
 border_size = 2.0
 polygon_rotation = 239.106
 
@@ -48,5 +57,5 @@ z_index = 1
 script = ExtResource( 1 )
 centered = true
 num_sides = 4
-polygon_color = Color( 0.286275, 0.364706, 0.368627, 1 )
+polygon_color = Color( 0.811765, 0.839216, 0.835294, 1 )
 border_size = 5.0

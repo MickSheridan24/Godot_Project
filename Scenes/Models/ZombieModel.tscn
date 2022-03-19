@@ -28,46 +28,52 @@ void fragment(){
 
 [sub_resource type="ShaderMaterial" id=2]
 shader = SubResource( 1 )
-shader_param/isFlash = null
-shader_param/isSelected = null
+shader_param/isFlash = false
+shader_param/isSelected = false
 shader_param/isTargetedFriend = null
 shader_param/isTargetedFoe = null
 
 [sub_resource type="Gradient" id=3]
-colors = PoolColorArray( 0.0431373, 0.329412, 0.0784314, 1, 0.0431373, 0.329412, 0.0784314, 1 )
+offsets = PoolRealArray( 0 )
+colors = PoolColorArray( 0.0941176, 0.294118, 0.117647, 1 )
 
 [sub_resource type="GradientTexture" id=4]
 gradient = SubResource( 3 )
 
+[sub_resource type="Gradient" id=13]
+offsets = PoolRealArray( 0 )
+colors = PoolColorArray( 0, 0, 0, 1 )
+
+[sub_resource type="GradientTexture" id=14]
+gradient = SubResource( 13 )
+
 [sub_resource type="Gradient" id=5]
-colors = PoolColorArray( 0, 0, 0, 1, 0, 0, 0, 1 )
+offsets = PoolRealArray( 0 )
+colors = PoolColorArray( 0.109804, 0.176471, 0.117647, 1 )
 
 [sub_resource type="GradientTexture" id=6]
 gradient = SubResource( 5 )
 
 [sub_resource type="Gradient" id=7]
-colors = PoolColorArray( 0.0784314, 0.188235, 0.129412, 1, 0.0784314, 0.188235, 0.129412, 1 )
+offsets = PoolRealArray( 0 )
+colors = PoolColorArray( 0, 0, 0, 1 )
 
 [sub_resource type="GradientTexture" id=8]
 gradient = SubResource( 7 )
 
 [sub_resource type="Gradient" id=9]
-colors = PoolColorArray( 0, 0, 0, 1, 0, 0, 0, 1 )
+offsets = PoolRealArray( 0 )
+colors = PoolColorArray( 0.172549, 0.164706, 0.0196078, 1 )
 
 [sub_resource type="GradientTexture" id=10]
 gradient = SubResource( 9 )
 
 [sub_resource type="Gradient" id=11]
-colors = PoolColorArray( 0.223529, 0.227451, 0.137255, 1, 0.223529, 0.227451, 0.137255, 1 )
+offsets = PoolRealArray( 0 )
+colors = PoolColorArray( 0, 0, 0, 1 )
 
 [sub_resource type="GradientTexture" id=12]
 gradient = SubResource( 11 )
-
-[sub_resource type="Gradient" id=13]
-colors = PoolColorArray( 0, 0, 0, 1, 0, 0, 0, 1 )
-
-[sub_resource type="GradientTexture" id=14]
-gradient = SubResource( 13 )
 
 [node name="Node2D" type="Node2D"]
 material = SubResource( 2 )
@@ -78,9 +84,9 @@ z_index = 1
 script = ExtResource( 1 )
 centered = true
 num_sides = 5
-polygon_color = Color( 0.0431373, 0.329412, 0.0784314, 1 )
+polygon_color = Color( 0.0941176, 0.294118, 0.117647, 1 )
 polygon_texture = SubResource( 4 )
-border_texture = SubResource( 6 )
+border_texture = SubResource( 14 )
 border_size = 2.0
 polygon_rotation = 180.0
 
@@ -88,9 +94,9 @@ polygon_rotation = 180.0
 use_parent_material = true
 script = ExtResource( 1 )
 centered = true
-polygon_color = Color( 0.0784314, 0.188235, 0.129412, 1 )
-polygon_texture = SubResource( 8 )
-border_texture = SubResource( 10 )
+polygon_color = Color( 0.109804, 0.176471, 0.117647, 1 )
+polygon_texture = SubResource( 6 )
+border_texture = SubResource( 8 )
 border_size = 2.0
 
 [node name="RegularPolygon2D" type="Node2D" parent="."]
@@ -98,7 +104,7 @@ use_parent_material = true
 position = Vector2( 0, 17 )
 script = ExtResource( 1 )
 centered = true
-polygon_color = Color( 0.223529, 0.227451, 0.137255, 1 )
-polygon_texture = SubResource( 12 )
-border_texture = SubResource( 14 )
+polygon_color = Color( 0.172549, 0.164706, 0.0196078, 1 )
+polygon_texture = SubResource( 10 )
+border_texture = SubResource( 12 )
 border_size = 2.0

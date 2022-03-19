@@ -1,61 +1,42 @@
 [gd_scene load_steps=12 format=2]
 
 [ext_resource path="res://addons/regular_polygon2d_node/RegularPolygon2D.gd" type="Script" id=1]
-
-[sub_resource type="Shader" id=1]
-code = "shader_type canvas_item;
-
-uniform bool isFlash;
-uniform bool isSelected;
-uniform bool isTargetedFriend;
-uniform bool isTargetedFoe;
-
-void fragment(){
-	
-	if(isFlash == true){
-			COLOR = texture(TEXTURE, UV);
-			COLOR.a = 0.5;
-			COLOR.b = COLOR.b * 2.5;		
-			COLOR.r = COLOR.r * 2.5;		
-			COLOR.g = COLOR.g * 2.5;		
-	}
-	else if(isSelected == true){
-			COLOR = texture(TEXTURE, UV);
-			COLOR.b = COLOR.b * 1.5;	
-			COLOR.a = COLOR.a * 1.2;		
-	}
-}"
+[ext_resource path="res://src/Shaders/actor_shader_basic.tres" type="Shader" id=2]
 
 [sub_resource type="ShaderMaterial" id=2]
-shader = SubResource( 1 )
+shader = ExtResource( 2 )
 shader_param/isFlash = false
-shader_param/isSelected = true
+shader_param/isSelected = false
 shader_param/isTargetedFriend = null
 shader_param/isTargetedFoe = null
 
 [sub_resource type="Gradient" id=3]
-colors = PoolColorArray( 0.0745098, 0.509804, 0.517647, 1, 0.0745098, 0.509804, 0.517647, 1 )
+offsets = PoolRealArray( 0 )
+colors = PoolColorArray( 0.054902, 0.690196, 0.690196, 1 )
 
 [sub_resource type="GradientTexture" id=4]
 gradient = SubResource( 3 )
 
-[sub_resource type="Gradient" id=7]
-colors = PoolColorArray( 0, 0, 0, 1, 0, 0, 0, 1 )
+[sub_resource type="Gradient" id=8]
+offsets = PoolRealArray( 0 )
+colors = PoolColorArray( 0, 0, 0, 1 )
 
-[sub_resource type="GradientTexture" id=8]
-gradient = SubResource( 7 )
+[sub_resource type="GradientTexture" id=9]
+gradient = SubResource( 8 )
 
-[sub_resource type="Gradient" id=5]
-colors = PoolColorArray( 0.247059, 0.423529, 0.419608, 1, 0.247059, 0.423529, 0.419608, 1 )
+[sub_resource type="Gradient" id=10]
+offsets = PoolRealArray( 0 )
+colors = PoolColorArray( 0.0392157, 0.427451, 0.439216, 1 )
 
-[sub_resource type="GradientTexture" id=6]
-gradient = SubResource( 5 )
+[sub_resource type="GradientTexture" id=5]
+gradient = SubResource( 10 )
 
-[sub_resource type="Gradient" id=9]
-colors = PoolColorArray( 0, 0, 0, 1, 0, 0, 0, 1 )
+[sub_resource type="Gradient" id=6]
+offsets = PoolRealArray( 0 )
+colors = PoolColorArray( 0, 0, 0, 1 )
 
-[sub_resource type="GradientTexture" id=10]
-gradient = SubResource( 9 )
+[sub_resource type="GradientTexture" id=7]
+gradient = SubResource( 6 )
 
 [node name="WizardModel" type="Node2D"]
 material = SubResource( 2 )
@@ -66,9 +47,9 @@ position = Vector2( 0, -30 )
 scale = Vector2( 1.5, 1.3 )
 script = ExtResource( 1 )
 centered = true
-polygon_color = Color( 0.0745098, 0.509804, 0.517647, 1 )
+polygon_color = Color( 0.054902, 0.690196, 0.690196, 1 )
 polygon_texture = SubResource( 4 )
-border_texture = SubResource( 8 )
+border_texture = SubResource( 9 )
 border_size = 2.0
 
 [node name="RegularPolygon2D" type="Node2D" parent="."]
@@ -77,7 +58,7 @@ z_index = -1
 script = ExtResource( 1 )
 centered = true
 num_sides = 4
-polygon_color = Color( 0.247059, 0.423529, 0.419608, 1 )
-polygon_texture = SubResource( 6 )
-border_texture = SubResource( 10 )
+polygon_color = Color( 0.0392157, 0.427451, 0.439216, 1 )
+polygon_texture = SubResource( 5 )
+border_texture = SubResource( 7 )
 border_size = 2.0

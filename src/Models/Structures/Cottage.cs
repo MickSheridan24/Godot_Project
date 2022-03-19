@@ -31,7 +31,7 @@ public class Cottage : IStructure, IMenuState
         return;
     }
 
-    protected PackedScene snModel => (PackedScene)ResourceLoader.Load("res://scenes/Models/CottageModel.tscn");
+    protected PackedScene snModel => (PackedScene)ResourceLoader.Load("res://scenes/Models/TowerModel.tscn");
 
     protected void OverrideModel()
     {

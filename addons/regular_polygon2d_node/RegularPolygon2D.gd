@@ -11,7 +11,7 @@ export(Texture) var polygon_texture setget polygon_texture_set, polygon_texture_
 export(Texture) var border_texture setget border_texture_set, border_texture_get
 
 export(float) var border_size setget border_size_set, border_size_get
-var border_color = Color(0,0,0)
+export(Color) var border_color = Color(0,0,0)
 
 export(float, -360, 360) var polygon_rotation setget polygon_rotation_set, polygon_rotation_get
 
@@ -74,6 +74,11 @@ func centered_get():
 
 func border_color_set(color):
 	border_color = color
+	var grad = Gradient.new()
+	var texture = GradientTexture.new()
+	grad.colors = [color. color]
+	texture.gradient = grad
+	border_texture = texture
 	update()
 
 func border_color_get():
