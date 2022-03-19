@@ -15,11 +15,15 @@ public class World : Node2D, IHaveRuntime, IHaveSize
 
     private TileSet L3tileset => level3.Get("tile_set") as TileSet;
     private TileMap level4 => GetNode("Level4") as TileMap;
+
+
+
     private TileSet L4tileset => level4.Get("tile_set") as TileSet;
 
 
 
     private List<TileMap> AllLevels;
+
 
     private List<TileChangeOrder> ChangeOrders;
 
@@ -30,13 +34,34 @@ public class World : Node2D, IHaveRuntime, IHaveSize
     private MapHandler mapHandler;
     private Highlight rightHighlight => GetNode<Highlight>("RightHighlight");
     private Highlight leftHighlight => GetNode<Highlight>("LeftHighlight");
+    private DragSelect dragSelect => GetNode<DragSelect>("DragSelect");
+    internal void startDrag()
+    {
+        dragSelect.BeginDrag();
+        dragSelect.Update();
+    }
+    internal void endDrag()
+    {
+        GroupSelect(dragSelect.position, dragSelect.position + dragSelect.size);
+        dragSelect.EndDrag();
+        dragSelect.Update();
+    }
+
+    private void GroupSelect(Vector2 position, Vector2 dest)
+    {
+        var minions = runtime.entityFinder.FindMinions(position, dest).ToList<ISelectable>();
+        if (minions.Count > 0)
+        {
+            var selectable = new GroupSelection(minions);
+            runtime.currentSelection = selectable;
+        }
+    }
+
     public Vector2 size => new Vector2(40, 40);
 
     public List<SimpleProjectile> projectileQueue { get; set; }
     private PackedScene snSimpleProjectile => (PackedScene)ResourceLoader.Load("res://scenes/SimpleProjectile.tscn");
     private PackedScene snStructureNode => (PackedScene)ResourceLoader.Load("res://scenes/Structure.tscn");
-
-
     private bool update;
     public override void _Ready()
     {
@@ -55,9 +80,7 @@ public class World : Node2D, IHaveRuntime, IHaveSize
             level2, level3, level4
         };
 
-        mapHandler.GenerateTiles(50);
         mapHandler.AddGrass();
-        mapHandler.tiles.ForEach(t => level3.SetCellv(t.coordsM, GetTileId(level3, t.tileType)));
 
 
     }
@@ -131,7 +154,7 @@ public class World : Node2D, IHaveRuntime, IHaveSize
 
 
 
-    public void CreateStructure(Vector2 vector2, IStructure str)
+    public void CreateStructure(Vector2 vector2, IStructure str, eTeam team)
     {
         var node = (StructureNode)snStructureNode.Instance();
 
@@ -140,7 +163,7 @@ public class World : Node2D, IHaveRuntime, IHaveSize
 
         AddChild(node);
         node.Position = vector2;
-        node.Configure();
+        node.Configure(team);
     }
 
     public eCollisionLayers GetElevation(Vector2 v)
@@ -272,6 +295,7 @@ public class World : Node2D, IHaveRuntime, IHaveSize
             leftHighlight.position = runtime.LeftTarget?.GetTargetPosition() ?? Vector2.Zero;
             leftHighlight.Update();
         }
+
     }
 
 

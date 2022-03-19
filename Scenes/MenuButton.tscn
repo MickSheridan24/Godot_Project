@@ -1,13 +1,20 @@
-[gd_scene load_steps=2 format=2]
+[gd_scene load_steps=4 format=2]
 
 [ext_resource path="res://src/Nodes/MenuButton.cs" type="Script" id=1]
+[ext_resource path="res://src/UILogic/UIHighlight.cs" type="Script" id=2]
 
-[node name="MenuButton" type="ColorRect"]
+[sub_resource type="StyleBoxFlat" id=1]
+bg_color = Color( 0.12549, 0.376471, 0.776471, 1 )
+
+[node name="Button" type="Button"]
 anchor_right = 1.0
 anchor_bottom = 1.0
 margin_right = -1750.0
 margin_bottom = -950.0
-color = Color( 0.972549, 0.0470588, 0.239216, 1 )
+rect_min_size = Vector2( 50, 50 )
+custom_styles/normal = SubResource( 1 )
+text = "Q"
 script = ExtResource( 1 )
-[connection signal="mouse_entered" from="." to="." method="_on_MenuButton_mouse_entered"]
-[connection signal="mouse_exited" from="." to="." method="_on_MenuButton_mouse_exited"]
+
+[node name="Highlight" type="Control" parent="."]
+script = ExtResource( 2 )

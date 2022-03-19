@@ -7,12 +7,14 @@ public class Enemy : BaseActorNode, IElevatable, IMove, ITarget, IDamageable, IH
                      IConductElectricity, IFreeable, ISufferStatusEffects, IHaveHealth, IHaveSize, ISelectable
 {
     public string name { get; set; }
-    public AnimationPlayer animation => sprite.GetNode<AnimationPlayer>("AnimationPlayer");
+
     public Vector2 speed { get; set; }
 
     private int DamageStateCounter;
 
     private IOrder order;
+
+    public eTeam Team => eTeam.HOSTILE;
 
     public Vector2 size => new Vector2(40, 40);
     public int Health => state.health.current;
@@ -24,6 +26,8 @@ public class Enemy : BaseActorNode, IElevatable, IMove, ITarget, IDamageable, IH
     public string EntityName => "Enemy";
 
     public string Description => "Very Dangerous. Should Avoid";
+
+    public TargetingSystem Targeting => state.Targeting;
 
     public override void _Ready()
     {
@@ -43,8 +47,6 @@ public class Enemy : BaseActorNode, IElevatable, IMove, ITarget, IDamageable, IH
         InitState();
         state.elevationHandler.HandleElevation();
         state.statusHandler.HandleStatuses();
-
-        OverrideSpriteColor();
 
         selectionIndicator.ProcessSelection();
     }
@@ -93,12 +95,18 @@ public class Enemy : BaseActorNode, IElevatable, IMove, ITarget, IDamageable, IH
     //IDamageable
     public void Damage(int power, eDamageType type)
     {
-        switch (type)
+        if (!IsFreed())
         {
-            default:
-                state.AddStatus(eStatusEffect.INTANGIBLE, 1);
-                TakeDamage(power);
-                break;
+            if (!state.statusHandler.HasStatus(eStatusEffect.INTANGIBLE))
+            {
+                switch (type)
+                {
+                    default:
+                        state.AddStatus(eStatusEffect.INTANGIBLE, 5);
+                        TakeDamage(power);
+                        break;
+                }
+            }
         }
     }
 
@@ -127,7 +135,7 @@ public class Enemy : BaseActorNode, IElevatable, IMove, ITarget, IDamageable, IH
         SetCollisionLayerBit((int)eCollisionLayers.ENTITY, false);
         SetCollisionLayerBit((int)eCollisionLayers.HOSTILE, false);
         SetCollisionLayerBit((int)eCollisionLayers.INTANGIBLE, true);
-        sprite.Modulate = new SpriteTheme().cEnemyHit;
+        Shade("isFlash", true);
     }
 
     public void EndIntangible()
@@ -135,28 +143,22 @@ public class Enemy : BaseActorNode, IElevatable, IMove, ITarget, IDamageable, IH
         SetCollisionLayerBit((int)eCollisionLayers.ENTITY, true);
         SetCollisionLayerBit((int)eCollisionLayers.HOSTILE, true);
         SetCollisionLayerBit((int)eCollisionLayers.INTANGIBLE, false);
-        sprite.Modulate = new SpriteTheme().cEnemy;
+        Shade("isFlash", false);
     }
 
 
     public void ExecQueueFree()
     {
-        if (runtime.LeftTarget == this)
-        {
-            runtime.ClearLeftTarget();
-        }
 
-        if (runtime.RightTarget == this)
-        {
-            runtime.ClearRightTarget();
-        }
+        runtime.RemoveEntity(this);
+
 
         CallDeferred("free");
     }
 
     public void HandleCollision(KinematicCollision2D collision)
     {
-        var collider = collision.GetCollider();
+        var collider = collision.Collider;
 
         if (collider is TileMap)
         {
@@ -170,7 +172,7 @@ public class Enemy : BaseActorNode, IElevatable, IMove, ITarget, IDamageable, IH
 
     private void HandleTileCollision(KinematicCollision2D collision)
     {
-        var collider = collision.GetCollider() as TileMap;
+        var collider = collision.Collider as TileMap;
 
         var level = runtime.World.GetLayer(collider);
 
@@ -212,50 +214,6 @@ public class Enemy : BaseActorNode, IElevatable, IMove, ITarget, IDamageable, IH
 
 
 
-    private void HandleAnimation()
-    {
-        var dir = Position.DirectionTo(destination).ToEightDir();
-        var anim = "";
-        if (dir == Vector2.Down)
-        {
-            sprite.Frame = 0;
-            anim = "Walk_Down";
-        }
-        else if (dir == Vector2.Right)
-        {
-            sprite.Frame = 2;
-            anim = "Walk_Right";
-        }
-        else if (dir == Vector2.Up)
-        {
-            sprite.Frame = 4;
-            anim = "Walk_Up";
-        }
-        else if (dir == Vector2.Left)
-        {
-            sprite.Frame = 6;
-            anim = "Walk_Left";
-        }
-        if (moveable.moving && animation.CurrentAnimation == "" && anim != "")
-        {
-            GD.Print(anim);
-            animation.Play(anim, -1, 1000);
-        }
-        else if (animation.IsPlaying())
-        {
-            animation.Stop();
-        }
-    }
-
-
-    private void OverrideSpriteColor()
-    {
-        var theme = new SpriteTheme();
-        var defaultColor = theme.cEnemy;
-        sprite.Modulate = state.statusHandler.HasStatus(eStatusEffect.INTANGIBLE) ? theme.cEnemyHit : defaultColor;
-    }
-
-
     public void RightClick(InputEventMouseButton @event)
     {
         return;
@@ -279,5 +237,29 @@ public class Enemy : BaseActorNode, IElevatable, IMove, ITarget, IDamageable, IH
     public IMenuState GetMenuState()
     {
         return null;
+    }
+
+    public ITask GetFriendlyTask(BaseActorNode node)
+    {
+        throw new NotImplementedException();
+    }
+
+    public ITask GetHostileTask(BaseActorNode node)
+    {
+        if (node is ICanAttack)
+        {
+            return new AttackTask(node as ICanAttack, this);
+        }
+        return null;
+    }
+
+    public void HighlightTarget()
+    {
+        Shade("isTargetedFoe", true);
+    }
+
+    public void DeHighlightTarget()
+    {
+        Shade("isTargetedFoe", false);
     }
 }

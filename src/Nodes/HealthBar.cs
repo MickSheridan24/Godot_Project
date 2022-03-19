@@ -9,7 +9,7 @@ public class HealthBar : Node2D
 
     public override void _Process(float f)
     {
-        bar.SetMax(source.MaxHealth);
-        bar.SetValue(source.Health);
+        bar.MaxValue = source.MaxHealth;
+        bar.Value = source.Health;
     }
 }

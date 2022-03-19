@@ -77,7 +77,15 @@ public static class Extensions
         }
     }
 
+    public static Vector2 ToVector(this int num)
+    {
+        return new Vector2(num, num);
+    }
 
+    public static Vector2 ToVector(this float num)
+    {
+        return new Vector2(num, num);
+    }
     public static float GetScale(this Vector2 vector)
     {
         return vector.x + vector.y;
@@ -100,10 +108,6 @@ public static class Extensions
         return vector.InBounds(dest - size / 2, dest + size / 2);
     }
 
-    public static Vector2 ToVector(this int s)
-    {
-        return new Vector2(s, s);
-    }
 
 
     public static bool InMap(this Vector2 vector, int mapSize)
@@ -125,7 +129,7 @@ public static class Extensions
         var keyEvent = (e as InputEventKey);
         if (keyEvent != null && keyEvent.Pressed && !keyEvent.IsEcho())
         {
-            return keyEvent.Scancode;
+            return (int)keyEvent.Scancode;
         }
         return -1;
     }
@@ -146,6 +150,14 @@ public static class Extensions
     {
         var wr = WeakRef.WeakRef(node);
         return wr.GetRef() == null;
+    }
+
+        
+   public static List<T> ToList<T>(this Godot.Collections.Array arr) where T : class
+    {
+        var array = new T[arr.Count];
+        arr.CopyTo(array, 0);
+        return array.ToList();
     }
 
 }

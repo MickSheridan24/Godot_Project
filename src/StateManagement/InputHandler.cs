@@ -5,43 +5,74 @@ public class InputHandler
 {
     private Runtime runtime;
 
+    private bool dragging;
     public InputHandler(Runtime runtime)
     {
         this.runtime = runtime;
+        dragging = false;
     }
     public bool HandleInput(InputEvent @event, Vector2 mousePos, ISelectable effectedNode = null)
     {
         var inputHandled = true;
-        if (@event.LeftClickJustPressed())
+
+
+
+        if (!dragging)
         {
-            if (Input.IsKeyPressed((int)KeyList.Space))
+            if (@event.LeftClickJustPressed())
             {
-                HandleSpaceLeft(@event, mousePos, effectedNode);
+                if (Input.IsKeyPressed((int)KeyList.Space))
+                {
+                    HandleSpaceLeft(@event, mousePos, effectedNode);
+                }
+                else
+                {
+                    ClearTargets();
+                    HandleLeftClickEvent(@event, mousePos, effectedNode);
+                }
             }
-            else
+            else if (@event.RightClickJustPressed())
             {
-                HandleLeftClickEvent(@event, mousePos, effectedNode);
+                if (Input.IsKeyPressed((int)KeyList.Space))
+                {
+                    HandleSpaceRight(@event, mousePos, effectedNode);
+                }
+                else
+                {
+                    ClearTargets();
+                    HandleRightClickEvent(@event, mousePos, effectedNode);
+                }
+
+            }
+            else if (@event.GetKeyJustPressed() != 0)
+            {
+                HandleKeyEvent(@event.GetKeyJustPressed(), @event);
             }
         }
-        else if (@event.RightClickJustPressed())
+        if (!dragging && @event is InputEventMouseButton && @event.IsPressed())
         {
-            if (Input.IsKeyPressed((int)KeyList.Space))
-            {
-                HandleSpaceRight(@event, mousePos, effectedNode);
-            }
-            else HandleRightClickEvent(@event, mousePos, effectedNode);
+            runtime.World.startDrag();
+            dragging = true;
         }
-        else if (@event.GetKeyJustPressed() != 0)
+        else if (dragging && @event is InputEventMouseButton)
         {
-            HandleKeyEvent(@event.GetKeyJustPressed());
+            dragging = false;
+            runtime.World.endDrag();
         }
         return inputHandled;
     }
 
-
-    private void HandleKeyEvent(int key)
+    private void ClearTargets()
     {
-        if (key == (int)KeyList.Space && !runtime.IsCasting)
+        if (runtime.currentSelection is IHaveTarget && !runtime.WizardIsSelected())
+        {
+            (runtime.currentSelection as IHaveTarget).ClearTargets();
+        }
+    }
+
+    private void HandleKeyEvent(int key, InputEvent @event)
+    {
+        if (key == (int)KeyList.W && !runtime.IsCasting)
         {
             runtime.SelectWizard();
         }
@@ -53,23 +84,31 @@ public class InputHandler
 
     private void HandleSpaceLeft(InputEvent @event, Vector2 mousePos, ISelectable effectedNode)
     {
-        if (runtime.WizardIsSelected())
+        if (runtime.currentSelection is IHaveTarget)
         {
             var target = effectedNode is ITarget ? effectedNode as ITarget
                                                  : new VectorTarget(mousePos);
 
-            runtime.SetLeftTarget(target);
+            var targeter = runtime.currentSelection as IHaveTarget;
+            if (targeter.CanTarget(target))
+            {
+                targeter.SetLeftTarget(target);
+            }
         }
         else HandleLeftClickEvent(@event, mousePos, effectedNode);
     }
     private void HandleSpaceRight(InputEvent @event, Vector2 mousePos, ISelectable effectedNode)
     {
-        if (runtime.WizardIsSelected())
+        if (runtime.currentSelection is IHaveTarget)
         {
             var target = effectedNode is ITarget ? effectedNode as ITarget
                                                  : new VectorTarget(mousePos);
 
-            runtime.SetRightTarget(target);
+            var targeter = runtime.currentSelection as IHaveTarget;
+            if (targeter.CanTarget(target))
+            {
+                targeter.SetRightTarget(target);
+            }
         }
         else HandleRightClickEvent(@event, mousePos, effectedNode);
     }

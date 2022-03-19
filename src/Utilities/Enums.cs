@@ -51,7 +51,8 @@ public enum eStat
 {
     SPEED,
     HEALTH,
-    DAMAGE
+    DAMAGE,
+    RANGE
 }
 
 public enum eStatusEffect
@@ -59,4 +60,11 @@ public enum eStatusEffect
     JOLTED,
     BURNING,
     INTANGIBLE
+}
+
+public enum eTeam
+{
+    FRIENDLY,
+    HOSTILE,
+    NEUTRAL
 }

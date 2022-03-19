@@ -1,9 +1,9 @@
 using Godot;
 using System;
 
-public class UI : Control, IHaveRuntime
+public class UI : CanvasLayer, IHaveRuntime
 {
-    public Runtime runtime => GetParent().GetParent<IHaveRuntime>().runtime;
+    public Runtime runtime => GetParent<IHaveRuntime>().runtime;
     public UIState state => runtime.UIState;
     public UITheme theme;
     public override void _Ready()

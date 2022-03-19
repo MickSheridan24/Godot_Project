@@ -11,13 +11,14 @@ public class EnemyState : BaseActorState
 
 
 
-    public EnemyState(IAI AI, Enemy enemy) : base(enemy)
+    public EnemyState(IAI AI, Enemy enemy) : base(enemy, enemy.runtime.enemyPlayerState)
     {
         isClimbing = false;
         ai = AI;
         health = Stat.Health(400);
         speed = Stat.Speed(85);
         damage = Stat.Damage(50);
+        range = Stat.Range(50);
     }
 
 

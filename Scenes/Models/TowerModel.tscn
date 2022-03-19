@@ -1,0 +1,149 @@
+[gd_scene load_steps=23 format=2]
+
+[ext_resource path="res://addons/regular_polygon2d_node/RegularPolygon2D.gd" type="Script" id=1]
+[ext_resource path="res://src/Shaders/actor_shader_basic.tres" type="Shader" id=2]
+
+[sub_resource type="ShaderMaterial" id=1]
+shader = ExtResource( 2 )
+shader_param/isFlash = false
+shader_param/isSelected = false
+shader_param/isTargetedFriend = false
+shader_param/isTargetedFoe = null
+
+[sub_resource type="Gradient" id=2]
+colors = PoolColorArray( 0.203922, 0.282353, 0.282353, 1, 0.203922, 0.282353, 0.282353, 1 )
+
+[sub_resource type="GradientTexture" id=3]
+gradient = SubResource( 2 )
+
+[sub_resource type="Gradient" id=4]
+offsets = PoolRealArray( 0, 0.98, 1 )
+colors = PoolColorArray( 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1 )
+
+[sub_resource type="GradientTexture" id=5]
+gradient = SubResource( 4 )
+
+[sub_resource type="Gradient" id=6]
+offsets = PoolRealArray( 0 )
+colors = PoolColorArray( 0.443137, 0.596078, 0.592157, 1 )
+
+[sub_resource type="GradientTexture" id=7]
+gradient = SubResource( 6 )
+
+[sub_resource type="Gradient" id=8]
+offsets = PoolRealArray( 0 )
+colors = PoolColorArray( 0, 0, 0, 1 )
+
+[sub_resource type="GradientTexture" id=9]
+gradient = SubResource( 8 )
+
+[sub_resource type="Gradient" id=10]
+offsets = PoolRealArray( 0 )
+colors = PoolColorArray( 0.203922, 0.282353, 0.282353, 1 )
+
+[sub_resource type="GradientTexture" id=11]
+gradient = SubResource( 10 )
+
+[sub_resource type="Gradient" id=12]
+offsets = PoolRealArray( 0 )
+colors = PoolColorArray( 0, 0, 0, 1 )
+
+[sub_resource type="GradientTexture" id=13]
+gradient = SubResource( 12 )
+
+[sub_resource type="Gradient" id=15]
+offsets = PoolRealArray( 0 )
+colors = PoolColorArray( 0.376471, 0.333333, 0.211765, 1 )
+
+[sub_resource type="GradientTexture" id=14]
+gradient = SubResource( 15 )
+
+[sub_resource type="Gradient" id=16]
+offsets = PoolRealArray( 0 )
+colors = PoolColorArray( 0, 0, 0, 1 )
+
+[sub_resource type="GradientTexture" id=17]
+gradient = SubResource( 16 )
+
+[sub_resource type="RectangleShape2D" id=18]
+extents = Vector2( 23.5969, 18.2482 )
+
+[sub_resource type="CircleShape2D" id=19]
+radius = 52.0914
+
+[sub_resource type="RectangleShape2D" id=20]
+extents = Vector2( 23.4395, 55.0593 )
+
+[node name="Node2D" type="Node2D"]
+material = SubResource( 1 )
+position = Vector2( 0, -0.943878 )
+scale = Vector2( 3, 3 )
+
+[node name="RegularPolygon2D" type="Node2D" parent="."]
+use_parent_material = true
+position = Vector2( 0, 26 )
+scale = Vector2( 1, 2 )
+script = ExtResource( 1 )
+centered = true
+num_sides = 4
+polygon_color = Color( 0.215686, 0.298039, 0.298039, 1 )
+polygon_texture = SubResource( 3 )
+border_texture = SubResource( 5 )
+border_size = 2.0
+polygon_rotation = 45.0
+
+[node name="RegularPolygon2D2" type="Node2D" parent="."]
+use_parent_material = true
+position = Vector2( 0, -21 )
+scale = Vector2( 0.7, 0.25 )
+script = ExtResource( 1 )
+centered = true
+num_sides = 23
+polygon_color = Color( 0.470588, 0.635294, 0.627451, 1 )
+polygon_texture = SubResource( 7 )
+border_texture = SubResource( 9 )
+border_size = 5.0
+polygon_rotation = -45.283
+
+[node name="RegularPolygon2D3" type="Node2D" parent="."]
+use_parent_material = true
+position = Vector2( 0, 72 )
+scale = Vector2( 0.7, 0.25 )
+script = ExtResource( 1 )
+centered = true
+num_sides = 24
+polygon_color = Color( 0.215686, 0.298039, 0.298039, 1 )
+polygon_texture = SubResource( 11 )
+border_texture = SubResource( 13 )
+border_size = 4.0
+
+[node name="RegularPolygon2D4" type="Node2D" parent="."]
+use_parent_material = true
+position = Vector2( 0, 66 )
+script = ExtResource( 1 )
+centered = true
+num_sides = 5
+size = 34.0
+polygon_color = Color( 0.376471, 0.333333, 0.211765, 1 )
+polygon_texture = SubResource( 14 )
+border_texture = SubResource( 17 )
+border_size = 3.0
+
+[node name="Collidable" type="StaticBody2D" parent="."]
+position = Vector2( -0.314616, 0 )
+
+[node name="Collision" type="CollisionShape2D" parent="Collidable"]
+position = Vector2( 0.367188, 59.9361 )
+shape = SubResource( 18 )
+
+[node name="SpawnArea" type="Area2D" parent="."]
+
+[node name="Spawn" type="CollisionShape2D" parent="SpawnArea"]
+position = Vector2( -1.25884, 62.2957 )
+shape = SubResource( 19 )
+
+[node name="SelectableArea" type="Area2D" parent="."]
+
+[node name="SelectionArea" type="CollisionShape2D" parent="SelectableArea"]
+position = Vector2( 0.524503, 26.9005 )
+shape = SubResource( 20 )

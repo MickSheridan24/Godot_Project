@@ -11,15 +11,19 @@ public class Runtime
     public Vector2 hoveredCell;
     public Vector2 MousePosition { get; set; }
     public CastManager castManager { get; set; }
-    public ITarget currentTarget => targeting.rightTarget;
     public DebugInfo Debug { get; set; }
     public World World { get; private set; }
 
-    public ITarget RightTarget => targeting.rightTarget;
-    public ITarget LeftTarget => targeting.leftTarget;
-    private TargetingSystem targeting;
-    public PlayerState playerState;
+    public ITarget RightTarget => targeting?.rightTarget;
+    public ITarget LeftTarget => targeting?.leftTarget;
 
+
+    private TargetingSystem targeting => currentSelection?.Targeting;
+    public PlayerState playerState;
+    public PlayerState enemyPlayerState;
+
+    public EntityFinder entityFinder;
+    public EntityRegistry entityRegistry;
     public UIEffectHandler uIEffectHandler { get; private set; }
 
     public bool IsCasting;
@@ -29,12 +33,30 @@ public class Runtime
     {
 
         this.UIState = new UIState();
-        targeting = new TargetingSystem();
 
         playerState = new PlayerState();
+
+
+        enemyPlayerState = new PlayerState();
         uIEffectHandler = new UIEffectHandler();
 
         inputHandler = new InputHandler(this);
+        entityRegistry = new EntityRegistry();
+        entityFinder = new EntityFinder(World, entityRegistry);
+    }
+
+    internal bool IsSelected(ISelectable selectable)
+    {
+        if (currentSelection == selectable)
+        {
+            return true;
+        }
+        else if (currentSelection is GroupSelection)
+        {
+            var group = currentSelection as GroupSelection;
+            return group.Has(selectable);
+        }
+        return false;
     }
 
     public void ClearRightTarget()
@@ -47,10 +69,40 @@ public class Runtime
         targeting.RemoveLeftTarget();
     }
 
+    internal void DeSelect()
+    {
+        if (currentSelection != null)
+        {
+            currentSelection.DeSelect();
+        }
+    }
+
     public EnemyState CreateEnemyState(Enemy enemy)
     {
-        var AI = new ZombieAI(enemy, wizardNode);
-        return new EnemyState(AI, enemy);
+        var AI = new SmartZombieAI(enemy, wizardNode, 1250);
+        var state = new EnemyState(AI, enemy);
+        AI.state = state;
+        return state;
+    }
+
+    internal void RemoveEntity(BaseActorNode node)
+    {
+
+
+        entityRegistry.Remove(node);
+        if (currentSelection == node)
+        {
+            currentSelection = null;
+        }
+        if (LeftTarget == node)
+        {
+            ClearLeftTarget();
+        }
+
+        if (RightTarget == node)
+        {
+            ClearRightTarget();
+        }
     }
 
     public void SetLeftTarget(ITarget t)
@@ -76,7 +128,6 @@ public class Runtime
     public void RegisterWizard(Wizard wizard)
     {
         wizardNode = wizard;
-        targeting.targeter = wizardNode;
         WizardState = new GoodWizard(wizardNode);
         playerState.wizardState = WizardState;
         playerState.bank = WizardState.InitResourceBank();
@@ -86,24 +137,29 @@ public class Runtime
     internal void RegisterNPC(NPC npc)
     {
         npc.state = new NPCState(npc);
+        entityRegistry.Add(npc);
     }
 
+    internal void RegisterEnemy(Enemy enemy)
+    {
+        enemy.state = CreateEnemyState(enemy);
+        entityRegistry.Add(enemy);
+    }
 
     public void SetSelection(ISelectable selected)
     {
+        DeSelect();
+
         if (WizardIsSelected() && selected != wizardNode)
         {
             targeting.Clear();
         }
         this.currentSelection = selected;
-        GD.Print("SELECTED: " + this.currentSelection);
     }
 
     public void ClearSelection()
     {
         SetSelection(null);
-        IsCasting = false;
-        GD.Print("SELECTED: " + this.currentSelection);
     }
 
     public void RegisterUI(UI ui)

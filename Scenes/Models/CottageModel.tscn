@@ -1,0 +1,51 @@
+[gd_scene load_steps=4 format=2]
+
+[ext_resource path="res://addons/regular_polygon2d_node/RegularPolygon2D.gd" type="Script" id=1]
+[ext_resource path="res://src/Shaders/actor_shader_basic.tres" type="Shader" id=2]
+
+[sub_resource type="ShaderMaterial" id=1]
+shader = ExtResource( 2 )
+shader_param/isFlash = false
+shader_param/isSelected = false
+shader_param/isTargetedFriend = null
+shader_param/isTargetedFoe = null
+
+[node name="Node2D" type="Node2D"]
+material = SubResource( 1 )
+scale = Vector2( 1.5, 1.5 )
+
+[node name="Base" type="Node2D" parent="."]
+use_parent_material = true
+scale = Vector2( 3, 2 )
+script = ExtResource( 1 )
+centered = true
+num_sides = 4
+border_size = 2.0
+polygon_rotation = 45.0
+
+[node name="Roof" type="Node2D" parent="."]
+use_parent_material = true
+position = Vector2( 0, -60 )
+scale = Vector2( 3, 1 )
+script = ExtResource( 1 )
+centered = true
+border_size = 2.0
+
+[node name="Door" type="Node2D" parent="."]
+use_parent_material = true
+position = Vector2( 7, -11 )
+scale = Vector2( 0.75, 1 )
+z_index = 1
+script = ExtResource( 1 )
+num_sides = 4
+border_size = 2.0
+polygon_rotation = 45.0
+
+[node name="RegularPolygon2D" type="Node2D" parent="Door"]
+use_parent_material = true
+position = Vector2( 9.9, 3 )
+scale = Vector2( 0.71, 0.25 )
+z_index = -1
+script = ExtResource( 1 )
+num_sides = 38
+border_size = 2.0

@@ -1,24 +1,46 @@
 using Godot;
 using System;
 
-public class NPC : BaseActorNode, ISelectable, IHaveHealth, IMove, IHaveRuntime, ICaster,
-                      IElevatable, ITarget, IDamageable, ISufferStatusEffects, IHaveSize
+public abstract class NPC : BaseActorNode, ISelectable, IHaveHealth, IMove, IHaveRuntime, ICaster,
+                      IElevatable, ITarget, IDamageable, ISufferStatusEffects, IHaveSize, IHaveTarget
 {
     public string EntityName => state.Name;
     public string Description => state.Description;
     public int Health => state.health.current;
     public int MaxHealth => state.health.standard;
 
+    public eTeam Team => eTeam.FRIENDLY;
     public Vector2 size => new Vector2(32, 32);
     public Vector2 speed => state.speed.current.ToVector();
 
     public SelectionIndicator selectionIndicator => GetNode<SelectionIndicator>("SelectionIndicator");
 
+    public TargetingSystem Targeting => state.Targeting;
+
+    public float Range => 100;
+
+    public eDamageType damageType => eDamageType.PHYSICAL;
+
+    public int CurrentDamage => (state as NPCState).damage.current;
+
+
+
+    public override void _Ready()
+    {
+        base._Ready();
+        OverrideModel();
+    }
+
     public override void _Process(float d)
     {
         state.elevationHandler.HandleElevation();
-        OverrideSpriteColor();
         selectionIndicator.ProcessSelection();
+    }
+
+    protected virtual void OverrideModel()
+    {
+
+        AddChild(ModelCollision.Duplicate());
     }
 
     public void BecomeIntangible()
@@ -26,7 +48,7 @@ public class NPC : BaseActorNode, ISelectable, IHaveHealth, IMove, IHaveRuntime,
         SetCollisionLayerBit((int)eCollisionLayers.ENTITY, false);
         SetCollisionLayerBit((int)eCollisionLayers.FRIENDLY, false);
         SetCollisionLayerBit((int)eCollisionLayers.INTANGIBLE, true);
-        sprite.Modulate = new SpriteTheme().cEnemyHit;
+        Shade("isFlash", true);
     }
 
     public void EndIntangible()
@@ -34,18 +56,17 @@ public class NPC : BaseActorNode, ISelectable, IHaveHealth, IMove, IHaveRuntime,
         SetCollisionLayerBit((int)eCollisionLayers.ENTITY, true);
         SetCollisionLayerBit((int)eCollisionLayers.FRIENDLY, true);
         SetCollisionLayerBit((int)eCollisionLayers.INTANGIBLE, false);
+        Shade("isFlash", false);
     }
 
 
-    private void OverrideSpriteColor()
-    {
-        var defaultColor = theme.NPC;
-        sprite.Modulate = state.statusHandler.HasStatus(eStatusEffect.INTANGIBLE) ? theme.cEnemyHit : defaultColor;
-    }
     public void RightClick(InputEventMouseButton mouse)
     {
-        var dest = GetGlobalMousePosition();
-        SetDestination(dest);
+        if (!IsFreed())
+        {
+            var dest = GetGlobalMousePosition();
+            SetDestination(dest);
+        }
     }
     public Rect2 GetSelectionArea()
     {
@@ -63,6 +84,7 @@ public class NPC : BaseActorNode, ISelectable, IHaveHealth, IMove, IHaveRuntime,
 
     public void ExecQueueFree()
     {
+        state.runtime.RemoveEntity(this);
         CallDeferred("queue_free");
     }
 
@@ -84,7 +106,7 @@ public class NPC : BaseActorNode, ISelectable, IHaveHealth, IMove, IHaveRuntime,
 
     public void HandleCollision(KinematicCollision2D collision)
     {
-        var collider = collision.GetCollider();
+        var collider = collision.Collider;
 
         if (collider is Enemy)
         {
@@ -108,7 +130,7 @@ public class NPC : BaseActorNode, ISelectable, IHaveHealth, IMove, IHaveRuntime,
             switch (type)
             {
                 default:
-                    state.AddStatus(eStatusEffect.INTANGIBLE, 2);
+                    state.AddStatus(eStatusEffect.INTANGIBLE, 5);
                     TakeDamage(power);
                     break;
             }
@@ -123,5 +145,68 @@ public class NPC : BaseActorNode, ISelectable, IHaveHealth, IMove, IHaveRuntime,
     public IMenuState GetMenuState()
     {
         return null;
+    }
+
+    public bool CanTarget(ITarget target)
+    {
+        return target is StructureNode || target is BaseActorNode;
+    }
+
+    public void SetLeftTarget(ITarget target)
+    {
+        Targeting.SetLeftTarget(target);
+        SetTask(target);
+
+    }
+
+    public void SetRightTarget(ITarget target)
+    {
+        Targeting.SetRightTarget(target);
+        SetTask(target);
+    }
+
+    private void SetTask(ITarget target)
+    {
+        SetDestination(target.GetTargetPosition());
+
+        if (target.Team == Team)
+        {
+            var task = target.GetFriendlyTask(this);
+            state.taskQueue.Add(task, "CURRENT");
+        }
+        else if (target.Team != eTeam.NEUTRAL)
+        {
+            var task = target.GetHostileTask(this);
+            state.taskQueue.Add(task, "CURRENT");
+        }
+
+    }
+
+    public void ClearTargets()
+    {
+        Targeting.Clear();
+        state.taskQueue.Clear();
+    }
+
+    public virtual ITask GetFriendlyTask(BaseActorNode node)
+    {
+        return new DoNothingTask();
+    }
+
+    public virtual ITask GetHostileTask(BaseActorNode node)
+    {
+        if (node is ICanAttack)
+        {
+            return new AttackTask(node as ICanAttack, this);
+        }
+        return null;
+    }
+
+    public void HighlightTarget()
+    {
+    }
+
+    public void DeHighlightTarget()
+    {
     }
 }

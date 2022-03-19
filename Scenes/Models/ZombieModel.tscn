@@ -1,0 +1,87 @@
+[gd_scene load_steps=16 format=2]
+
+[ext_resource path="res://addons/regular_polygon2d_node/RegularPolygon2D.gd" type="Script" id=1]
+[ext_resource path="res://src/Shaders/actor_shader_basic.tres" type="Shader" id=2]
+
+[sub_resource type="ShaderMaterial" id=15]
+shader = ExtResource( 2 )
+shader_param/isFlash = null
+shader_param/isSelected = null
+shader_param/isTargetedFriend = null
+shader_param/isTargetedFoe = false
+
+[sub_resource type="Gradient" id=3]
+offsets = PoolRealArray( 0 )
+colors = PoolColorArray( 0.0941176, 0.294118, 0.117647, 1 )
+
+[sub_resource type="GradientTexture" id=4]
+gradient = SubResource( 3 )
+
+[sub_resource type="Gradient" id=13]
+offsets = PoolRealArray( 0 )
+colors = PoolColorArray( 0, 0, 0, 1 )
+
+[sub_resource type="GradientTexture" id=14]
+gradient = SubResource( 13 )
+
+[sub_resource type="Gradient" id=5]
+offsets = PoolRealArray( 0 )
+colors = PoolColorArray( 0.109804, 0.176471, 0.117647, 1 )
+
+[sub_resource type="GradientTexture" id=6]
+gradient = SubResource( 5 )
+
+[sub_resource type="Gradient" id=7]
+offsets = PoolRealArray( 0 )
+colors = PoolColorArray( 0, 0, 0, 1 )
+
+[sub_resource type="GradientTexture" id=8]
+gradient = SubResource( 7 )
+
+[sub_resource type="Gradient" id=9]
+offsets = PoolRealArray( 0 )
+colors = PoolColorArray( 0.172549, 0.164706, 0.0196078, 1 )
+
+[sub_resource type="GradientTexture" id=10]
+gradient = SubResource( 9 )
+
+[sub_resource type="Gradient" id=11]
+offsets = PoolRealArray( 0 )
+colors = PoolColorArray( 0, 0, 0, 1 )
+
+[sub_resource type="GradientTexture" id=12]
+gradient = SubResource( 11 )
+
+[node name="Node2D" type="Node2D"]
+material = SubResource( 15 )
+
+[node name="Head" type="Node2D" parent="."]
+use_parent_material = true
+z_index = 1
+script = ExtResource( 1 )
+centered = true
+num_sides = 5
+polygon_color = Color( 0.0941176, 0.294118, 0.117647, 1 )
+polygon_texture = SubResource( 4 )
+border_texture = SubResource( 14 )
+border_size = 2.0
+polygon_rotation = 180.0
+
+[node name="Hair" type="Node2D" parent="."]
+use_parent_material = true
+script = ExtResource( 1 )
+centered = true
+polygon_color = Color( 0.109804, 0.176471, 0.117647, 1 )
+polygon_texture = SubResource( 6 )
+border_texture = SubResource( 8 )
+border_size = 2.0
+
+[node name="RegularPolygon2D" type="Node2D" parent="."]
+use_parent_material = true
+position = Vector2( 0, 17 )
+script = ExtResource( 1 )
+centered = true
+polygon_color = Color( 0.172549, 0.164706, 0.0196078, 1 )
+polygon_texture = SubResource( 10 )
+border_texture = SubResource( 12 )
+border_size = 2.0

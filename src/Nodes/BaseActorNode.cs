@@ -1,26 +1,61 @@
+using System;
 using Godot;
 
 public class BaseActorNode : KinematicBody2D
 {
 
     public Runtime runtime => GetParent<IHaveRuntime>().runtime;
-    public BaseActorState state;
+    public BaseActorState state { get; set; }
 
 
 
     //NodeInfo
-    protected Sprite sprite => GetNode<Sprite>("Sprite");
-    public Vector2 spritePosition => sprite.Position;
     protected WeakRef weakref;
+
     public SpriteTheme theme => new SpriteTheme();
 
+    private bool active;
 
+    public Node2D Model => GetNode<Node2D>("Model");
+
+    public CollisionShape2D ModelCollision => Model.HasNode("Collision") ? Model.GetNode<CollisionShape2D>("Collision") : null;
+    public CollisionShape2D LocalCollision { get => GetNode<CollisionShape2D>("Collision"); set => AddChild(value); }
+
+
+    public ShaderMaterial ModelMat => Model.Material as ShaderMaterial;
+
+
+    public void Shade(string param, bool b)
+    {
+        ModelMat.SetShaderParam(param, b);
+    }
+
+
+
+    public bool debug { get; set; }
+
+
+    public void Activate()
+    {
+        active = true;
+        Visible = true;
+    }
 
 
 
     // Moveable 
     public Moveable moveable;
     public Vector2 destination { get; set; }
+
+    internal void InitiatePosition(Vector2 pos)
+    {
+        if (debug)
+        {
+            GD.Print("InitiatePostition");
+        }
+        GlobalPosition = pos;
+        destination = pos;
+    }
 
     public bool MovingTarget { get; set; }
 
@@ -29,12 +64,15 @@ public class BaseActorNode : KinematicBody2D
     //Elevateable
 
     public bool isFallDisabled { get; set; }
-
+    public int EntityId { get; internal set; }
 
     public override void _Ready()
     {
-        moveable = new Moveable(this as IMove);
-        destination = Position;
+        if (debug)
+        {
+            GD.Print("Debugging BaseActorNode");
+        }
+        moveable = new Moveable(this as IMove, debug);
         MovingTarget = true;
         isFallDisabled = false;
         weakref = WeakRef(this);
@@ -44,19 +82,31 @@ public class BaseActorNode : KinematicBody2D
     {
         HandleMove(delta);
         state?.tickHandler.Tick();
+        state.continuousActionHandler.Process();
+        state.taskQueue.Process();
     }
 
 
     public bool IsFreed()
     {
-        return weakref.GetRef() == null;
+        return weakref?.GetRef() == null;
     }
 
 
     // ISelectable
     public void Select()
     {
+
+        runtime.DeSelect();
         runtime.currentSelection = this as ISelectable;
+        ModelMat.SetShaderParam("isSelected", true);
+    }
+
+
+
+    public void DeSelect()
+    {
+        ModelMat.SetShaderParam("isSelected", false);
     }
 
     // IMoveable

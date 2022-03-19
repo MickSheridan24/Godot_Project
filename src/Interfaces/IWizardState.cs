@@ -12,7 +12,7 @@ public interface IWizardState
     string Description { get; }
 
     List<ISpell> GetAllUnlockedSpells();
-    void AddStatus(eStatusEffect iNTANGIBLE, int v);
+    void AddStatus(eStatusEffect iNTANGIBLE, double v);
     bool HandleDamage(int damage);
     IResourceBank InitResourceBank();
 }

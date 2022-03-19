@@ -2,11 +2,10 @@ using Godot;
 using System;
 
 public class Wizard : BaseActorNode, ISelectable, IHaveHealth, IMove, IHaveRuntime, ICaster,
-                      IElevatable, ITarget, IDamageable, ISufferStatusEffects
+                      IElevatable, ITarget, IDamageable, ISufferStatusEffects, IHaveTarget
 {
 
 
-    private AnimationPlayer animation => sprite.GetNode<AnimationPlayer>("AnimationPlayer");
     public Vector2 speed => state.speed.current.ToVector();
 
     private PackedScene snSimpleProjectile => (PackedScene)ResourceLoader.Load("res://scenes/SimpleProjectile.tscn");
@@ -20,12 +19,13 @@ public class Wizard : BaseActorNode, ISelectable, IHaveHealth, IMove, IHaveRunti
     public Vector2 size => new Vector2(32, 32);
 
 
+
     //overrides
 
     public override void _Process(float d)
     {
         state.elevationHandler.HandleElevation();
-        OverrideSpriteColor();
+        state.statusHandler.HandleStatuses();
         aimLine.dest = runtime?.RightTarget?.GetTargetPosition() ?? aimLine.dest;
         aimLine.Update();
     }
@@ -34,16 +34,45 @@ public class Wizard : BaseActorNode, ISelectable, IHaveHealth, IMove, IHaveRunti
 
     //ISelectable
 
+    public TargetingSystem Targeting { get => state.Targeting; }
+    public eTeam Team => eTeam.FRIENDLY;
+
     public void RightClick(InputEventMouseButton mouse)
     {
-        var dest = GetGlobalMousePosition();
-        SetDestination(dest);
+        if (!IsFreed())
+        {
+            var dest = GetGlobalMousePosition();
+            SetDestination(dest);
+        }
     }
 
     public Rect2 GetSelectionArea()
     {
         return new Rect2(GlobalPosition - size / 2, size);
     }
+
+    //IHaveTarget 
+
+    public bool CanTarget(ITarget target)
+    {
+        return true; //Can target anything
+    }
+
+    public void SetLeftTarget(ITarget target)
+    {
+        Targeting.SetLeftTarget(target);
+    }
+
+    public void SetRightTarget(ITarget target)
+    {
+        Targeting.SetRightTarget(target);
+    }
+
+    public void ClearTargets()
+    {
+        Targeting.Clear();
+    }
+
 
     //IMove
 
@@ -77,12 +106,6 @@ public class Wizard : BaseActorNode, ISelectable, IHaveHealth, IMove, IHaveRunti
     }
 
 
-    //private
-    private void OverrideSpriteColor()
-    {
-        var defaultColor = runtime.currentSelection == this ? theme.selected : theme.unselected;
-        sprite.Modulate = state.statusHandler.HasStatus(eStatusEffect.INTANGIBLE) ? theme.cEnemyHit : defaultColor;
-    }
 
     private void SetTarget(ITarget t)
     {
@@ -90,12 +113,12 @@ public class Wizard : BaseActorNode, ISelectable, IHaveHealth, IMove, IHaveRunti
     }
     public void HandleCollision(KinematicCollision2D collision)
     {
-        var collider = collision.GetCollider();
+        var collider = collision.Collider;
 
-        if (collider is Enemy)
-        {
-            Damage((collider as Enemy).GetDamage, eDamageType.PHYSICAL);
-        }
+        /*if (collider is Enemy)
+		{
+			Damage((collider as Enemy).GetDamage, eDamageType.PHYSICAL);
+		}*/
     }
 
     public void Damage(int power, eDamageType type)
@@ -105,7 +128,7 @@ public class Wizard : BaseActorNode, ISelectable, IHaveHealth, IMove, IHaveRunti
             switch (type)
             {
                 default:
-                    state.AddStatus(eStatusEffect.INTANGIBLE, 2);
+                    state.AddStatus(eStatusEffect.INTANGIBLE, 6);
                     TakeDamage(power);
                     break;
             }
@@ -151,10 +174,11 @@ public class Wizard : BaseActorNode, ISelectable, IHaveHealth, IMove, IHaveRunti
 
     public void BecomeIntangible()
     {
+        GD.Print("INTANGIBLE");
         SetCollisionLayerBit((int)eCollisionLayers.ENTITY, false);
         SetCollisionLayerBit((int)eCollisionLayers.FRIENDLY, false);
         SetCollisionLayerBit((int)eCollisionLayers.INTANGIBLE, true);
-        sprite.Modulate = new SpriteTheme().cEnemyHit;
+        ModelMat.SetShaderParam("isFlash", true);
     }
 
     public void EndIntangible()
@@ -162,6 +186,7 @@ public class Wizard : BaseActorNode, ISelectable, IHaveHealth, IMove, IHaveRunti
         SetCollisionLayerBit((int)eCollisionLayers.ENTITY, true);
         SetCollisionLayerBit((int)eCollisionLayers.FRIENDLY, true);
         SetCollisionLayerBit((int)eCollisionLayers.INTANGIBLE, false);
+        ModelMat.SetShaderParam("isFlash", false);
     }
 
     public void RemoveEffect(eStatusEffect eff)
@@ -177,6 +202,28 @@ public class Wizard : BaseActorNode, ISelectable, IHaveHealth, IMove, IHaveRunti
     public IMenuState GetMenuState()
     {
         return null;
+    }
+
+    public ITask GetFriendlyTask(BaseActorNode node)
+    {
+        throw new NotImplementedException();
+    }
+
+    public ITask GetHostileTask(BaseActorNode node)
+    {
+        if (node is ICanAttack)
+        {
+            return new AttackTask(node as ICanAttack, this);
+        }
+        return null;
+    }
+
+    public void HighlightTarget()
+    {
+    }
+
+    public void DeHighlightTarget()
+    {
     }
 }
 

@@ -2,9 +2,20 @@ using Godot;
 
 public class NPCState : BaseActorState
 {
-    public NPCState(NPC node) : base(node)
-    {
-        speed = Stat.Speed(115);
-        health = Stat.Health(100);
-    }
+
+	public Stat damage { get; set; }
+	public NPCState(NPC node, bool debug = false) : base(node, node.runtime.playerState, debug)
+	{
+		speed = Stat.Speed(115);
+		health = Stat.Health(100);
+		damage = Stat.Damage(50);
+
+	}
+
+	public NPCState(NPC node, IHaveRuntime parent, bool debug = false) : base(node, parent, parent.runtime.playerState, debug)
+	{
+		speed = Stat.Speed(115);
+		health = Stat.Health(100);
+		damage = Stat.Damage(50);
+	}
 }
