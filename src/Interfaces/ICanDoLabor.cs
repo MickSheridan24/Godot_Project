@@ -9,5 +9,6 @@ namespace Mavisithor_Beaconizath.src.Interfaces
         BaseActorState state { get; }
 
         Vector2 Position { get; set; }
+        Vector2 GlobalPosition { get; set; }
     }
 }

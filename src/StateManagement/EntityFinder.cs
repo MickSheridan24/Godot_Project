@@ -21,7 +21,7 @@ public class EntityFinder
             for (var x = 0; x < registry.NPCs.Count; x++)
             {
                 var e = registry.NPCs[x];
-                if (!e.entity.IsFreed() && e.entity.Position > origin && e.entity.Position < target)
+                if (!e.entity.IsFreed() && e.entity.GlobalPosition > origin && e.entity.GlobalPosition < target)
                 {
                     ret.Add(e.entity as NPC);
                 }

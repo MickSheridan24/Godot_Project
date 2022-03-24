@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using Godot;
 
 public class Runtime
@@ -17,14 +18,22 @@ public class Runtime
     public ITarget RightTarget => targeting?.rightTarget;
     public ITarget LeftTarget => targeting?.leftTarget;
 
+    private List<IEnemySpawner> spawners = new List<IEnemySpawner>();
 
     private TargetingSystem targeting => currentSelection?.Targeting;
     public PlayerState playerState;
     public PlayerState enemyPlayerState;
 
+    internal void RegisterTower(StructureNode cottage)
+    {
+        this.Tower = cottage;
+    }
+
+    public int MasterClock = 0;
     public EntityFinder entityFinder;
     public EntityRegistry entityRegistry;
     public UIEffectHandler uIEffectHandler { get; private set; }
+    public StructureNode Tower { get; set; }
 
     public bool IsCasting;
     public InputHandler inputHandler;
@@ -79,7 +88,7 @@ public class Runtime
 
     public EnemyState CreateEnemyState(Enemy enemy)
     {
-        var AI = new SmartZombieAI(enemy, wizardNode, 1250);
+        var AI = new SmartZombieAI(enemy, Tower, 1250);
         var state = new EnemyState(AI, enemy);
         AI.state = state;
         return state;
@@ -146,6 +155,54 @@ public class Runtime
         entityRegistry.Add(enemy);
     }
 
+    internal void RegisterEnemySpawner(IEnemySpawner spawner)
+    {
+        this.spawners.Add(spawner);
+        spawner.World = this.World;
+        spawner.Registry = this.entityRegistry;
+        spawner.Runtime = this;
+    }
+
+
+
+    public void TimerUp()
+    {
+        MasterClock++;
+        Spawn();
+    }
+
+    internal void Spawn()
+    {
+        var toRemove = new List<IEnemySpawner>();
+        foreach (var spawner in spawners)
+        {
+            if (spawner.IsExhausted(MasterClock))
+            {
+                toRemove.Add(spawner);
+            }
+            else if (spawner.CanSpawn(MasterClock))
+            {
+                spawner.Spawn(GetRandomEnemySpawn(2000, 1000));
+            }
+        }
+        toRemove.ForEach(tr => spawners.Remove(tr));
+    }
+
+    private Vector2 GetRandomEnemySpawn(int minDistance, int spread)
+    {
+        var origin = Vector2.Zero;
+
+        var rand = new Random();
+
+        var magnitudeX = minDistance + rand.Next(spread);
+        var magnitudeY = minDistance + rand.Next(spread);
+
+        var dirX = rand.Next(2) == 0 ? -1 : 1;
+        var dirY = rand.Next(2) == 0 ? -1 : 1;
+
+        return new Vector2(magnitudeX * dirX, magnitudeY * dirY);
+    }
+
     public void SetSelection(ISelectable selected)
     {
         DeSelect();
@@ -182,7 +239,7 @@ public class Runtime
     public void InitCast()
     {
         castManager = new CastManager(WizardState);
-        wizardNode.destination = wizardNode.Position;
+        wizardNode.destination = wizardNode.GlobalPosition;
     }
     public void ToggleCasting()
     {

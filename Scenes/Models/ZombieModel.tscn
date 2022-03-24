@@ -52,7 +52,7 @@ colors = PoolColorArray( 0, 0, 0, 1 )
 [sub_resource type="GradientTexture" id=12]
 gradient = SubResource( 11 )
 
-[node name="Node2D" type="Node2D"]
+[node name="Node2D" type="KinematicBody2D"]
 material = SubResource( 15 )
 
 [node name="Head" type="Node2D" parent="."]

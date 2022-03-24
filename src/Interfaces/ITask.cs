@@ -1,8 +1,8 @@
+using System.Collections.Generic;
+
 public interface ITask
 {
-    bool CanExecute();
-
-    bool WhenCannotExecute();
-
+    IEnumerable<IOrder> Orders { get; set; }
     bool Execute();
+    bool IsComplete();
 }

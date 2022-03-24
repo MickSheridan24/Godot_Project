@@ -13,6 +13,9 @@ public abstract class NPC : BaseActorNode, ISelectable, IHaveHealth, IMove, IHav
     public Vector2 size => new Vector2(32, 32);
     public Vector2 speed => state.speed.current.ToVector();
 
+    public RayCast2D RayCast => GetNode<RayCast2D>("RayCast");
+
+
     public SelectionIndicator selectionIndicator => GetNode<SelectionIndicator>("SelectionIndicator");
 
     public TargetingSystem Targeting => state.Targeting;
@@ -40,7 +43,6 @@ public abstract class NPC : BaseActorNode, ISelectable, IHaveHealth, IMove, IHav
     protected virtual void OverrideModel()
     {
 
-        AddChild(ModelCollision.Duplicate());
     }
 
     public void BecomeIntangible()
@@ -208,5 +210,10 @@ public abstract class NPC : BaseActorNode, ISelectable, IHaveHealth, IMove, IHav
 
     public void DeHighlightTarget()
     {
+    }
+
+    public Area2D GetTargetArea()
+    {
+        return GetNode<Area2D>("Attackable");
     }
 }

@@ -1,4 +1,5 @@
 
+using System;
 using Godot;
 using Mavisithor_Beaconizath.src.Interfaces;
 
@@ -16,7 +17,11 @@ public class Farm : IStructure, IMenuState
 
     private Texture text = GD.Load<Texture>("res://assets/Farm.png");
 
+    public Stat healthStat { get; set; } = Stat.Health(1000);
+    public StatusHandler statusHandler { get; set; }
 
+    public int Health => healthStat.current;
+    public int MaxHealth => healthStat.standard;
     public Farm(PlayerState player)
     {
         tickHandler = new TickHandler();
@@ -26,12 +31,14 @@ public class Farm : IStructure, IMenuState
     public void ConfigureNode(StructureNode structureNode)
     {
         this.node = structureNode;
+        statusHandler = new StatusHandler(node);
         OverrideModel();
         node.RemoveCollisions();
     }
 
 
     protected PackedScene snModel => (PackedScene)ResourceLoader.Load("res://scenes/Models/FarmModel.tscn");
+
 
     protected void OverrideModel()
     {
@@ -41,7 +48,7 @@ public class Farm : IStructure, IMenuState
     }
     public Vector2 Position()
     {
-        return node.Position;
+        return node.GlobalPosition;
     }
 
     public void RightClick(Vector2 position)
@@ -63,18 +70,29 @@ public class Farm : IStructure, IMenuState
         partialMenu.button3.Visible = false;
         partialMenu.button4.Visible = false;
     }
-
-    public ITask GetFriendlyTask(BaseActorNode node)
+    public ITask GetFriendlyTask(BaseActorNode node, StructureNode self)
     {
-        if (node is ICanDoLabor)
+        throw new NotImplementedException();
+    }
+
+    public ITask GetHostileTask(BaseActorNode node, StructureNode self)
+    {
+        if (node is ICanAttack)
         {
-            return new StartFarmingTask(node as ICanDoLabor, this);
+            return new AttackTask(node as ICanAttack, self);
         }
-        else return new DoNothingTask();
+        return null;
     }
 
-    public ITask GetHostileTask(BaseActorNode node)
+    public bool HandleDamage(int damage)
     {
-        throw new System.NotImplementedException();
+        healthStat.current -= damage;
+        return healthStat.current > 0;
     }
+    public void AddStatus(eStatusEffect s, double duration)
+    {
+        statusHandler.AddStatus(StatusEffect.Create(s));
+        tickHandler.AddOrder(new RemoveStatusOrder(node as ISufferStatusEffects, s), duration);
+    }
+
 }

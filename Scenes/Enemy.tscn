@@ -1,4 +1,4 @@
-[gd_scene load_steps=7 format=2]
+[gd_scene load_steps=8 format=2]
 
 [ext_resource path="res://src/Nodes/Enemy.cs" type="Script" id=1]
 [ext_resource path="res://Scenes/SelectionIndicator.tscn" type="PackedScene" id=3]
@@ -9,9 +9,12 @@
 [sub_resource type="CircleShape2D" id=6]
 radius = 32.1857
 
+[sub_resource type="CircleShape2D" id=7]
+radius = 29.8351
+
 [node name="Enemy" type="KinematicBody2D"]
-collision_layer = 3
-collision_mask = 13
+collision_layer = 15
+collision_mask = 15
 script = ExtResource( 1 )
 
 [node name="SelectionIndicator" parent="." instance=ExtResource( 3 )]
@@ -27,3 +30,16 @@ position = Vector2( -1.29401, 0.812993 )
 shape = SubResource( 6 )
 
 [node name="Model" parent="." instance=ExtResource( 6 )]
+
+[node name="RayCast" type="RayCast2D" parent="."]
+enabled = true
+collision_mask = 15
+collide_with_areas = true
+
+[node name="Attackable" type="Area2D" parent="."]
+collision_layer = 15
+collision_mask = 15
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Attackable"]
+position = Vector2( -0.0425568, 0.534103 )
+shape = SubResource( 7 )

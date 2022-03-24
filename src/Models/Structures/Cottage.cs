@@ -1,3 +1,4 @@
+using System.Runtime.InteropServices.ComTypes;
 using System;
 using Godot;
 
@@ -13,7 +14,13 @@ public class Cottage : IStructure, IMenuState
 
     public PlayerState player { get; private set; }
 
+    public Stat healthStat { get; set; } = Stat.Health(1000);
 
+
+    public int Health => healthStat.current;
+    public int MaxHealth => healthStat.standard;
+
+    public StatusHandler statusHandler { get; set; }
 
 
     public Cottage(PlayerState player)
@@ -25,6 +32,7 @@ public class Cottage : IStructure, IMenuState
     public void ConfigureNode(StructureNode structureNode)
     {
         this.node = structureNode;
+        statusHandler = new StatusHandler(node);
         OverrideModel();
     }
 
@@ -33,18 +41,12 @@ public class Cottage : IStructure, IMenuState
         return;
     }
 
-    protected PackedScene snModel => (PackedScene)ResourceLoader.Load("res://scenes/Models/TowerModel.tscn");
+
 
     protected void OverrideModel()
     {
-        var modelNode = (Node2D)snModel.Instance();
-        modelNode.Name = "Model";
-        node.AddChild(modelNode);
 
-        node.OverrideHitboxes();
-
-        node.size = new Vector2(160, 480);
-        node.Update();
+        return;
 
     }
 
@@ -94,15 +96,29 @@ public class Cottage : IStructure, IMenuState
 
     }
 
+    public void AddStatus(eStatusEffect s, double duration)
+    {
+        statusHandler.AddStatus(StatusEffect.Create(s));
+        tickHandler.AddOrder(new RemoveStatusOrder(node as ISufferStatusEffects, s), duration);
+    }
 
-    public ITask GetFriendlyTask(BaseActorNode node)
+    public bool HandleDamage(int damage)
+    {
+        healthStat.current -= damage;
+        return healthStat.current > 0;
+    }
+    public ITask GetFriendlyTask(BaseActorNode node, StructureNode self)
     {
         throw new NotImplementedException();
     }
 
-    public ITask GetHostileTask(BaseActorNode node)
+    public ITask GetHostileTask(BaseActorNode node, StructureNode self)
     {
-        throw new NotImplementedException();
+        if (node is ICanAttack)
+        {
+            return new AttackTask(node as ICanAttack, self);
+        }
+        return null;
     }
 
 }

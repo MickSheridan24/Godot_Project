@@ -6,17 +6,16 @@ using System.Threading.Tasks;
 
 public class DoNothingTask : ITask
 {
-    public bool CanExecute()
-    {
-        return true;
-    }
+    public IEnumerable<IOrder> Orders { get; set; }
 
     public bool Execute()
     {
         return true;
     }
-    public bool WhenCannotExecute()
+
+    public bool IsComplete()
     {
-        return true;
+        return false;
     }
+
 }

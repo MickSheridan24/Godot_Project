@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 
 public class Enemy : BaseActorNode, IElevatable, IMove, ITarget, IDamageable, IHaveRuntime,
-                     IConductElectricity, IFreeable, ISufferStatusEffects, IHaveHealth, IHaveSize, ISelectable
+                     IConductElectricity, IFreeable, ISufferStatusEffects, IHaveHealth, IHaveSize, ISelectable, ICanAttack
 {
     public string name { get; set; }
 
@@ -14,11 +14,13 @@ public class Enemy : BaseActorNode, IElevatable, IMove, ITarget, IDamageable, IH
 
     private IOrder order;
 
+
     public eTeam Team => eTeam.HOSTILE;
 
     public Vector2 size => new Vector2(40, 40);
     public int Health => state.health.current;
     public int MaxHealth => state.health.standard;
+
 
     public int GetDamage => GetState().damage.current;
     public SelectionIndicator selectionIndicator => GetNode<SelectionIndicator>("SelectionIndicator");
@@ -28,6 +30,16 @@ public class Enemy : BaseActorNode, IElevatable, IMove, ITarget, IDamageable, IH
     public string Description => "Very Dangerous. Should Avoid";
 
     public TargetingSystem Targeting => state.Targeting;
+
+    public float Range => 50;
+
+    public int CurrentDamage => (state as EnemyState).damage.current;
+
+    public eDamageType damageType => eDamageType.PHYSICAL;
+
+    RayCast2D ICanAttack.RayCast => GetNode<RayCast2D>("RayCast");
+
+
 
     public override void _Ready()
     {
@@ -43,21 +55,22 @@ public class Enemy : BaseActorNode, IElevatable, IMove, ITarget, IDamageable, IH
 
     public override void _Process(float d)
     {
+        base._Process(d);
 
         InitState();
         state.elevationHandler.HandleElevation();
         state.statusHandler.HandleStatuses();
 
         selectionIndicator.ProcessSelection();
+        Update();
     }
     public override void _PhysicsProcess(float d)
     {
-        order = GetState()?.RequestAction(d);
-        state?.Tick();
-        if (order != null)
+        if (!IsFreed())
         {
-            order.Execute();
-            order = null;
+            base._PhysicsProcess(d);
+            GetState()?.RequestAction(d);
+            state?.Tick();
         }
     }
 
@@ -123,7 +136,7 @@ public class Enemy : BaseActorNode, IElevatable, IMove, ITarget, IDamageable, IH
     //ITarget
     public Vector2 GetTargetPosition()
     {
-        if (IsInsideTree()) return Position;
+        if (IsInsideTree()) return GlobalPosition;
         else return Vector2.Zero;
     }
 
@@ -149,11 +162,11 @@ public class Enemy : BaseActorNode, IElevatable, IMove, ITarget, IDamageable, IH
 
     public void ExecQueueFree()
     {
-
         runtime.RemoveEntity(this);
+        IsDead = true;
 
-
-        CallDeferred("free");
+        //CallDeferred("free");
+        QueueFree();
     }
 
     public void HandleCollision(KinematicCollision2D collision)
@@ -261,5 +274,10 @@ public class Enemy : BaseActorNode, IElevatable, IMove, ITarget, IDamageable, IH
     public void DeHighlightTarget()
     {
         Shade("isTargetedFoe", false);
+    }
+
+    public Area2D GetTargetArea()
+    {
+        return GetNode<Area2D>("Attackable");
     }
 }

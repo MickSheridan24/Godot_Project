@@ -162,7 +162,7 @@ public class World : Node2D, IHaveRuntime, IHaveSize
 
 
         AddChild(node);
-        node.Position = vector2;
+        node.GlobalPosition = vector2;
         node.Configure(team);
     }
 

@@ -4,6 +4,8 @@ public interface ITarget
 {
     bool MovingTarget { get; }
     Vector2 GetTargetPosition();
+
+    Area2D GetTargetArea();
     bool IsFreed();
 
     eTeam Team { get; }

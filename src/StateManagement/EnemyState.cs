@@ -16,7 +16,7 @@ public class EnemyState : BaseActorState
         isClimbing = false;
         ai = AI;
         health = Stat.Health(400);
-        speed = Stat.Speed(85);
+        speed = Stat.Speed(25);
         damage = Stat.Damage(50);
         range = Stat.Range(50);
     }

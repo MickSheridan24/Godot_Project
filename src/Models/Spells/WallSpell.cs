@@ -56,7 +56,7 @@ public class WallSpell : Spell, ISpell
         }
         else
         {
-            V1 = caster.Position;
+            V1 = caster.GlobalPosition;
         }
     }
 
