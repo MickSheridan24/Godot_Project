@@ -97,7 +97,7 @@ public abstract class NPC : BaseActorNode, ISelectable, IHaveHealth, IMove, IHav
 
     public Vector2 GetTargetPosition()
     {
-        if (IsInsideTree()) return Position;
+        if (!IsFreed() && IsInsideTree()) return Position;
         else return Vector2.Zero;
     }
 
@@ -110,10 +110,6 @@ public abstract class NPC : BaseActorNode, ISelectable, IHaveHealth, IMove, IHav
     {
         var collider = collision.Collider;
 
-        if (collider is Enemy)
-        {
-            Damage((collider as Enemy).GetDamage, eDamageType.PHYSICAL);
-        }
     }
     public void CompleteClimb()
     {
@@ -127,16 +123,8 @@ public abstract class NPC : BaseActorNode, ISelectable, IHaveHealth, IMove, IHav
     public void Damage(int power, eDamageType type)
     {
 
-        if (!state.statusHandler.HasStatus(eStatusEffect.INTANGIBLE))
-        {
-            switch (type)
-            {
-                default:
-                    state.AddStatus(eStatusEffect.INTANGIBLE, 5);
-                    TakeDamage(power);
-                    break;
-            }
-        }
+        TakeDamage(power);
+
     }
 
     public PartialMenu GetPartial()
@@ -214,6 +202,10 @@ public abstract class NPC : BaseActorNode, ISelectable, IHaveHealth, IMove, IHav
 
     public Area2D GetTargetArea()
     {
+        if (!HasNode("Attackable"))
+        {
+            int x = 1;
+        }
         return GetNode<Area2D>("Attackable");
     }
 }

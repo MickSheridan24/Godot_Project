@@ -35,10 +35,10 @@ public class AttackTask : ITask
         {
             new StandByOrder(() => !cooldownTick.complete),
             new AttackOrder(actor, enemy, CanExecute),
-            new SetDestinationOrder(actor as IMove, enemy.Position, () => actor is IMove)
+            new SetDestinationOrder(actor as IMove, actor.ToLocal(enemy.GlobalPosition), () => actor is IMove)
         };
 
-        new SetDestinationOrder(actor as IMove, enemy.Position, () => actor is IMove).Execute();
+        new SetDestinationOrder(actor as IMove, actor.ToLocal(enemy.GlobalPosition), () => actor is IMove).Execute();
 
     }
 
@@ -54,12 +54,12 @@ public class AttackTask : ITask
 
     private bool CanExecute()
     {
-        var area = enemy.GetTargetArea();
+        var area = (enemy as ITarget).GetTargetArea();
         actor.RayCast.CastTo = actor.Range * actor.Position.DirectionTo(actor.ToLocal(enemy.GlobalPosition));
         actor.RayCast.CollideWithAreas = true;
         var collider = actor.RayCast.GetCollider();
 
-        if (!enemy.IsFreed() && collider == area)
+        if (!enemy.IsFreed() && collider != null && collider == area)
         {
             ResetAttackCooldown();
             return true;
@@ -72,8 +72,8 @@ public class AttackTask : ITask
         cooldownTick = new TickOrder()
         {
             order = new StandByOrder(() => true),
-            ticks = 25,
-            defaultTicks = 25,
+            ticks = 15,
+            defaultTicks = 15,
             complete = false
         };
         tickHandler.AddOrder(cooldownTick);

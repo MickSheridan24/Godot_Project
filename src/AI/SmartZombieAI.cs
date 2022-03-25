@@ -28,13 +28,13 @@ public class SmartZombieAI : IAI
         //task is null
         if (task == null)
         {
-            if (finalTarget.IsFreed())
+            if (finalTarget == null || finalTarget.IsFreed())
             {
                 finalTarget = findNewDistraction();
             }
             else
             {
-                task = new AttackTask(this as ICanAttack, finalTarget as IDamageable);
+                task = new AttackTask(node as ICanAttack, finalTarget as IDamageable);
             }
         }
         //Was I able to attack?
@@ -53,11 +53,11 @@ public class SmartZombieAI : IAI
                 }
                 else
                 {
-                    //Can I be distracted
+                    // Can I be distracted
                     if (!node.ToLocal(currentTarget.GetTargetPosition()).WithinRange(node.Position, new Vector2(75, 75)))
                     {
                         var distraction = findNewDistraction();
-                        if (distraction != null && distraction is IDamageable)
+                        if (distraction != null && distraction != currentTarget && distraction is IDamageable)
                         {
                             currentTarget = distraction;
                             task = new AttackTask(this.node as ICanAttack, currentTarget as IDamageable);
@@ -72,58 +72,9 @@ public class SmartZombieAI : IAI
         return new StandByOrder();
     }
 
-
-
-    // public IOrder Request(EnemyState enemyState, float d)
-    // {
-    //     if (finalTarget.IsFreed() || finalTarget == null)
-    //     {
-    //         return new StandByOrder();
-    //     }
-    //     else if (state != null)
-    //     {
-    //         if (currentTarget == null || currentTarget.IsFreed())
-    //         {
-    //             //Try to find new Distraction 
-    //             currentTarget = findNewDistraction();
-    //             if (currentTarget != null)
-    //             {
-    //                 //Success, set destination
-    //                 state.taskQueue.Add(currentTarget.GetHostileTask(node), "ATTACK");
-    //                 var setDest = new SetDestinationOrder(move, currentTarget.GetTargetPosition());
-    //                 var moveOrd = new MoveOrder(move, d);
-    //                 return new CombinedOrder(new List<IOrder> { setDest, moveOrd });
-    //             }
-    //             else if (move.destination != finalTarget.GetTargetPosition())
-    //             {
-    //                 //Failure set final target
-    //                 state.taskQueue.Add(finalTarget.GetHostileTask(node), "ATTACK");
-    //                 var setDest = new SetDestinationOrder(move, finalTarget.GetTargetPosition());
-    //                 var moveOrd = new MoveOrder(move, d);
-    //                 return new CombinedOrder(new List<IOrder> { setDest, moveOrd });
-    //             }
-    //             else if (!move.GlobalPosition.WithinRange(finalTarget.GetTargetPosition(), state.range.current.ToVector()))
-    //             {
-    //                 //Failure, continue towards final target
-    //                 var setDest = new SetDestinationOrder(move, finalTarget.GetTargetPosition());
-    //                 var moveOrd = new MoveOrder(move, d);
-    //                 return new CombinedOrder(new List<IOrder> { setDest, moveOrd });
-    //             }
-    //         }
-    //         else if (!move.GlobalPosition.WithinRange(currentTarget.GetTargetPosition(), state.range.current.ToVector()))
-    //         {
-    //             var setDest = new SetDestinationOrder(move, currentTarget.GetTargetPosition());
-    //             var moveOrd = new MoveOrder(move, d);
-    //             return new CombinedOrder(new List<IOrder> { setDest, moveOrd });
-    //         }
-
-    //     }
-    //     return new StandByOrder();
-    // }
-
     private ITarget findNewDistraction()
     {
-        var targets = state?.runtime?.entityFinder?.FindMinions(move.GlobalPosition, range.ToVector()) ?? new List<NPC>();
+        var targets = state?.runtime?.entityFinder?.FindMinions(node.GlobalPosition, range.ToVector()) ?? new List<NPC>();
 
         if (targets.Count > 0)
         {
