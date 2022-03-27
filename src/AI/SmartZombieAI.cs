@@ -9,59 +9,64 @@ public class SmartZombieAI : IAI
     public BaseActorState state;
     private ITarget finalTarget;
     private float range;
+    private AttackTask task;
     private ITarget currentTarget;
 
-    public SmartZombieAI(BaseActorNode node, ITarget target, float range)
+    public SmartZombieAI(Enemy node, ITarget target, float range)
     {
         this.node = node;
         this.state = node.state;
         this.finalTarget = target;
         this.move = node as IMove;
         this.range = range;
+        this.currentTarget = target;
+        this.task = new AttackTask(node as ICanAttack, target as IDamageable);
     }
 
     public IOrder Request(EnemyState enemyState, float d)
     {
-        if (finalTarget.IsFreed() || finalTarget == null)
+        //task is null
+        if (task == null)
         {
-            return new StandByOrder();
+            if (finalTarget == null || finalTarget.IsFreed())
+            {
+                finalTarget = findNewDistraction();
+            }
+            else
+            {
+                task = new AttackTask(node as ICanAttack, finalTarget as IDamageable);
+            }
         }
-        else if (state != null)
+        //Was I able to attack?
+        else
         {
-            if (currentTarget == null || currentTarget.IsFreed())
+            if (task.IsComplete())
             {
-                //Try to find new Distraction 
-                currentTarget = findNewDistraction();
-                if (currentTarget != null)
+                task = null;
+            }
+            else
+            {
+                task.Execute();
+                if (task.IsComplete())
                 {
-                    //Success, set destination
-                    state.taskQueue.Add(currentTarget.GetHostileTask(node), "ATTACK");
-                    var setDest = new SetDestinationOrder(move, currentTarget.GetTargetPosition());
-                    var moveOrd = new MoveOrder(move, d);
-                    return new CombinedOrder(new List<IOrder> { setDest, moveOrd });
+                    task = null;
                 }
-                else if (move.destination != finalTarget.GetTargetPosition())
+                else
                 {
-                    //Failure set final target
-                    state.taskQueue.Add(finalTarget.GetHostileTask(node), "ATTACK");
-                    var setDest = new  SetDestinationOrder(move, finalTarget.GetTargetPosition());
-                    var moveOrd = new MoveOrder(move, d);
-                    return new CombinedOrder(new List<IOrder> { setDest, moveOrd });
-                }
-                else if (!move.Position.WithinRange(finalTarget.GetTargetPosition(), state.range.current.ToVector()))
-                {
-                    //Failure, continue towards final target
-                    var setDest = new SetDestinationOrder(move, finalTarget.GetTargetPosition());
-                    var moveOrd = new MoveOrder(move, d);
-                    return new CombinedOrder(new List<IOrder> { setDest, moveOrd });
+                    // Can I be distracted
+                    if (!node.ToLocal(currentTarget.GetTargetPosition()).WithinRange(node.Position, new Vector2(75, 75)))
+                    {
+                        var distraction = findNewDistraction();
+                        if (distraction != null && distraction != currentTarget && distraction is IDamageable)
+                        {
+                            currentTarget = distraction;
+                            task = new AttackTask(this.node as ICanAttack, currentTarget as IDamageable);
+                        }
+                    }
                 }
             }
-            else if (!move.Position.WithinRange(currentTarget.GetTargetPosition(), state.range.current.ToVector()))
-            {
-                var setDest = new SetDestinationOrder(move, currentTarget.GetTargetPosition());
-                var moveOrd = new MoveOrder(move, d);
-                return new CombinedOrder(new List<IOrder> { setDest, moveOrd });
-            }
+
+
 
         }
         return new StandByOrder();
@@ -69,7 +74,7 @@ public class SmartZombieAI : IAI
 
     private ITarget findNewDistraction()
     {
-        var targets = state?.runtime?.entityFinder?.FindMinions(move.Position, range.ToVector()) ?? new List<NPC>();
+        var targets = state?.runtime?.entityFinder?.FindMinions(node.GlobalPosition, range.ToVector()) ?? new List<NPC>();
 
         if (targets.Count > 0)
         {

@@ -7,11 +7,12 @@ public class LightningProjectile : ProjectileBase, IProjectile
     private int spawncount;
     private bool isLaunching;
 
+
     public LightningProjectile(int count)
     {
         projectileType = eProjectileType.LIGHTNING;
         speed = new Vector2(0, 0);
-        range = new Vector2(600, 600);
+        range = new Vector2(1600, 1600);
         spawncount = count;
         isLaunching = false;
     }
@@ -42,11 +43,11 @@ public class LightningProjectile : ProjectileBase, IProjectile
 
     private void TryConduct(Node target)
     {
-        if (target != null && target is IConductElectricity)
+        if (target != null && target is IConductElectricity && spawncount > 0)
         {
             var conductor = (target as IConductElectricity);
-            var conduit = FindConduit(conductor);
             conductor.AddJoltedEffect(2);
+            var conduit = FindConduit(conductor);
             if (conduit != null)
             {
                 Conduct(conductor, conduit);
@@ -71,8 +72,8 @@ public class LightningProjectile : ProjectileBase, IProjectile
 
     private void Conduct(IConductElectricity conductor, IConductElectricity conduit)
     {
-        var dir = conductor.GetTargetPosition().DirectionTo(conduit.GetTargetPosition());
-        CreateConductor(dir, conductor.GetTargetPosition());
+        var dir = conductor.Position.DirectionTo(conductor.ToLocal(conduit.GlobalPosition));
+        CreateConductor(dir, conductor.Position);
     }
 
 
@@ -81,11 +82,11 @@ public class LightningProjectile : ProjectileBase, IProjectile
 
     private void CreateConductor(Vector2 v, Vector2 p)
     {
-        var newProj = new LightningProjectile(5)
+        var newProj = new LightningProjectile(spawncount - 1)
         {
             direction = v,
             start = p,
-            damage = damage / 3
+            damage = damage
         };
         node.runtime.World.CreateProjectile(newProj, node.caster);
     }
@@ -94,7 +95,7 @@ public class LightningProjectile : ProjectileBase, IProjectile
     {
         var collider = node.raycast.GetCollider() as Node2D;
 
-        var isConductable = collider?.GetParent<IConductElectricity>() != null;
+        var isConductable = collider?.GetParent() is IConductElectricity;
 
 
         if (collider != null && isConductable)
@@ -108,10 +109,9 @@ public class LightningProjectile : ProjectileBase, IProjectile
     {
         var dest = start + node.direction * range;
         node.raycast.CastTo = dest;
-
+        SetEffectRadius(LightningSpell.effectRadius);
         node.sprite.Set("modulate", theme.cLightning);
 
-        (node.effectRadius.GetNode<CollisionShape2D>("CollisionShape2D").Shape as CircleShape2D).Radius = 100;
 
 
     }

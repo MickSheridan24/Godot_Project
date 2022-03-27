@@ -7,8 +7,9 @@ public class Main : Node2D, IHaveRuntime
     public Wizard wizard => GetNode<Wizard>("Wizard");
     public World World => GetNode<World>("World");
 
-    public Enemy enemy => GetNode<Enemy>("Enemy");
     public StructureNode Cottage => GetNode<StructureNode>("Structure");
+
+    public Timer Timer => GetNode<Timer>("Timer");
 
 
 
@@ -17,11 +18,15 @@ public class Main : Node2D, IHaveRuntime
         Input.SetMouseMode(Input.MouseMode.Confined);
         runtime = new Runtime();
         runtime.RegisterWizard(wizard);
+        runtime.RegisterTower(Cottage);
+
         runtime.RegisterWorld(World);
-        runtime.RegisterEnemy(enemy);
+        runtime.RegisterEnemySpawner(new ZombieSpawner());
 
         Cottage.state = new Cottage(runtime.playerState);
         Cottage.Configure(eTeam.FRIENDLY);
+
+        Timer.Start();
     }
 
     public override void _Input(InputEvent @event)
@@ -31,6 +36,13 @@ public class Main : Node2D, IHaveRuntime
         {
             GetTree().SetInputAsHandled();
         }
+    }
+
+    public void OnTimerTick()
+    {
+
+        runtime.Spawn();
+
     }
 
 }

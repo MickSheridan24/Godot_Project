@@ -1,7 +1,7 @@
 
 using Godot;
 
-public interface IStructure
+public interface IStructure : IHaveHealth
 {
     string Name { get; }
     string Description { get; }
@@ -13,9 +13,16 @@ public interface IStructure
     TickHandler tickHandler { get; }
     TargetingSystem Targeting { get; }
 
-    ITask GetFriendlyTask(BaseActorNode node);
-    ITask GetHostileTask(BaseActorNode node);
+    ITask GetFriendlyTask(BaseActorNode node, StructureNode structureNode);
+    ITask GetHostileTask(BaseActorNode node, StructureNode structureNode);
 
     PlayerState player { get; }
+
+    StatusHandler statusHandler { get; set; }
+
+    void AddStatus(eStatusEffect s, double duration);
+
+    bool HandleDamage(int damage);
+
 }
 

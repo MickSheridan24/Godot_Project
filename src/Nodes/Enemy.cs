@@ -4,7 +4,8 @@ using System.Collections.Generic;
 using System.Linq;
 
 public class Enemy : BaseActorNode, IElevatable, IMove, ITarget, IDamageable, IHaveRuntime,
-                     IConductElectricity, IFreeable, ISufferStatusEffects, IHaveHealth, IHaveSize, ISelectable
+                     IConductElectricity, IFreeable, ISufferStatusEffects, IHaveHealth, IHaveSize, ISelectable,
+                      ICanAttack, ICanFreeze
 {
     public string name { get; set; }
 
@@ -14,11 +15,13 @@ public class Enemy : BaseActorNode, IElevatable, IMove, ITarget, IDamageable, IH
 
     private IOrder order;
 
+
     public eTeam Team => eTeam.HOSTILE;
 
     public Vector2 size => new Vector2(40, 40);
     public int Health => state.health.current;
     public int MaxHealth => state.health.standard;
+
 
     public int GetDamage => GetState().damage.current;
     public SelectionIndicator selectionIndicator => GetNode<SelectionIndicator>("SelectionIndicator");
@@ -29,35 +32,48 @@ public class Enemy : BaseActorNode, IElevatable, IMove, ITarget, IDamageable, IH
 
     public TargetingSystem Targeting => state.Targeting;
 
+    public float Range => 50;
+
+    public int CurrentDamage => (state as EnemyState).damage.current;
+
+    public eDamageType damageType => eDamageType.PHYSICAL;
+
+    RayCast2D ICanAttack.RayCast => GetNode<RayCast2D>("RayCast");
+
+
+
     public override void _Ready()
     {
         destination = Position;
         isFallDisabled = false;
-        speed = new Vector2(40, 40);
+        speed = new Vector2(140, 140);
         moveable = new Moveable(this);
         MovingTarget = true;
         DamageStateCounter = 0;
+
+        Model.Material = ((Material)Model.GetMaterial().Duplicate());
 
         weakref = WeakRef(this);
     }
 
     public override void _Process(float d)
     {
+        base._Process(d);
 
         InitState();
         state.elevationHandler.HandleElevation();
         state.statusHandler.HandleStatuses();
 
         selectionIndicator.ProcessSelection();
+        Update();
     }
     public override void _PhysicsProcess(float d)
     {
-        order = GetState()?.RequestAction(d);
-        state?.Tick();
-        if (order != null)
+        if (!IsFreed())
         {
-            order.Execute();
-            order = null;
+            base._PhysicsProcess(d);
+            GetState()?.RequestAction(d);
+            state?.Tick();
         }
     }
 
@@ -114,6 +130,8 @@ public class Enemy : BaseActorNode, IElevatable, IMove, ITarget, IDamageable, IH
     {
         if (!state.HandleDamage(damage))
         {
+            runtime.playerState.bank.knowledge++;
+            runtime.playerState.bank.insight++;
             ExecQueueFree();
         }
     }
@@ -123,7 +141,7 @@ public class Enemy : BaseActorNode, IElevatable, IMove, ITarget, IDamageable, IH
     //ITarget
     public Vector2 GetTargetPosition()
     {
-        if (IsInsideTree()) return Position;
+        if (IsInsideTree()) return GlobalPosition;
         else return Vector2.Zero;
     }
 
@@ -149,11 +167,11 @@ public class Enemy : BaseActorNode, IElevatable, IMove, ITarget, IDamageable, IH
 
     public void ExecQueueFree()
     {
-
         runtime.RemoveEntity(this);
+        IsDead = true;
 
-
-        CallDeferred("free");
+        //CallDeferred("free");
+        QueueFree();
     }
 
     public void HandleCollision(KinematicCollision2D collision)
@@ -163,10 +181,6 @@ public class Enemy : BaseActorNode, IElevatable, IMove, ITarget, IDamageable, IH
         if (collider is TileMap)
         {
             HandleTileCollision(collision);
-        }
-        if (collider is Wizard)
-        {
-            (collider as Wizard).Damage(GetDamage, eDamageType.PHYSICAL);
         }
     }
 
@@ -261,5 +275,15 @@ public class Enemy : BaseActorNode, IElevatable, IMove, ITarget, IDamageable, IH
     public void DeHighlightTarget()
     {
         Shade("isTargetedFoe", false);
+    }
+
+    public Area2D GetTargetArea()
+    {
+        return GetNode<Area2D>("Attackable");
+    }
+
+    public void AddFreezingEffect(int dur)
+    {
+        state.statusHandler.AddStatus(new FreezingEffec)
     }
 }

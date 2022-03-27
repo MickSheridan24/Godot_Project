@@ -23,6 +23,8 @@ public class StatusEffect
                 return new IntangibleEffect();
             case eStatusEffect.JOLTED:
                 return new JoltedEffect();
+            case eStatusEffect.FREEZING:
+                return new FreezingEffect();
             default:
                 return null;
         }

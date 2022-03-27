@@ -13,7 +13,7 @@ public class EntityFinder
         this.world = world;
         this.registry = registry;
     }
-    public List<NPC> FindMinions(Vector2 origin, Vector2 target)
+    public List<NPC> FindMinions(Vector2 origin, Vector2 range)
     {
         var ret = new List<NPC>();
         if (registry.NPCs.Count > 0)
@@ -21,7 +21,9 @@ public class EntityFinder
             for (var x = 0; x < registry.NPCs.Count; x++)
             {
                 var e = registry.NPCs[x];
-                if (!e.entity.IsFreed() && e.entity.Position > origin && e.entity.Position < target)
+
+                var dir = origin.DirectionTo(e.entity.GlobalPosition);
+                if (!e.entity.IsFreed() && e.entity.GlobalPosition.InBounds(origin, origin + range * dir))
                 {
                     ret.Add(e.entity as NPC);
                 }

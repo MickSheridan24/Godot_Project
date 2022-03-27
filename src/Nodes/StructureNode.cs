@@ -1,14 +1,14 @@
+using System.Runtime.InteropServices.ComTypes;
 using Godot;
 using System;
 using System.Linq;
 using System.Collections.Generic;
-public class StructureNode : Node2D, ISelectable, ITarget, IHaveRuntime, IHaveSize, IHaveSpawnArea
+public class StructureNode : Node2D, ISelectable, ITarget, IHaveRuntime,
+ IHaveSize, IHaveSpawnArea, IHaveHealth, IDamageable, ISufferStatusEffects
 {
     private WeakRef weakref;
 
-
     public IStructure state { get; set; }
-    public Sprite sprite => GetNode<Sprite>("Sprite");
     public StaticBody2D area => GetNode<StaticBody2D>("Collidable");
     public Runtime runtime => GetParent<IHaveRuntime>().runtime;
     public string EntityName => state.Name;
@@ -23,7 +23,7 @@ public class StructureNode : Node2D, ISelectable, ITarget, IHaveRuntime, IHaveSi
     private Highlight rightHighlight => GetNode<Highlight>("RightHighlight");
     private Highlight leftHighlight => GetNode<Highlight>("LeftHighlight");
     private Highlight selectHighlight => GetNode<Highlight>("SelectHighlight");
-
+    public virtual int Radius => 100;
     private Vector2 _size = new Vector2(160, 160);
     public Vector2 size { get => _size; set => _size = value; }
 
@@ -31,7 +31,8 @@ public class StructureNode : Node2D, ISelectable, ITarget, IHaveRuntime, IHaveSi
 
     public Node2D Model => GetNode<Node2D>("Model");
 
-
+    public int Health => state.Health;
+    public int MaxHealth => state.MaxHealth;
 
     public override void _Ready()
     {
@@ -51,19 +52,6 @@ public class StructureNode : Node2D, ISelectable, ITarget, IHaveRuntime, IHaveSi
         selectHighlight.Visible = runtime.currentSelection == this;
 
         state.tickHandler.Tick();
-
-    }
-
-    public void OverrideHitboxes()
-    {
-
-        var spawnPoint = Model.GetNode("SpawnArea").Duplicate();
-        var collidePoint = Model.GetNode<StaticBody2D>("Collidable").Duplicate();
-
-        AddChild(spawnPoint);
-        AddChild(collidePoint);
-
-
 
     }
 
@@ -102,7 +90,7 @@ public class StructureNode : Node2D, ISelectable, ITarget, IHaveRuntime, IHaveSi
 
     public void RightClick(InputEventMouseButton mouse)
     {
-        state.RightClick(mouse.Position);
+        state.RightClick(mouse.GlobalPosition);
     }
 
     public void Select()
@@ -142,12 +130,12 @@ public class StructureNode : Node2D, ISelectable, ITarget, IHaveRuntime, IHaveSi
 
     public ITask GetFriendlyTask(BaseActorNode node)
     {
-        return state.GetFriendlyTask(node);
+        return state.GetFriendlyTask(node, this);
     }
 
     public ITask GetHostileTask(BaseActorNode node)
     {
-        return state.GetHostileTask(node);
+        return state.GetHostileTask(node, this);
     }
 
     public Vector2? FindOpenPosition(Vector2 nodeSize)
@@ -199,7 +187,7 @@ public class StructureNode : Node2D, ISelectable, ITarget, IHaveRuntime, IHaveSi
 
     private bool ObstacleObstructs(IHaveSize obstacle, Vector2 vector, Vector2 size)
     {
-        return new Rect2(obstacle.Position, obstacle.size).Intersects(new Rect2(vector, size));
+        return new Rect2(obstacle.GlobalPosition, obstacle.size).Intersects(new Rect2(vector, size));
     }
 
     public void HighlightTarget()
@@ -210,6 +198,45 @@ public class StructureNode : Node2D, ISelectable, ITarget, IHaveRuntime, IHaveSi
     public void DeHighlightTarget()
     {
 
+    }
+
+    public void Damage(int power, eDamageType type)
+    {
+        TakeDamage(power);
+    }
+
+    public void TakeDamage(int amount)
+    {
+        if (!state.HandleDamage(amount))
+        {
+            ExecQueueFree();
+        }
+    }
+
+    public void ExecQueueFree()
+    {
+        runtime.Tower = null;
+        CallDeferred("queue_free");
+    }
+
+    public void BecomeIntangible()
+    {
+
+    }
+
+    public void EndIntangible()
+    {
+
+    }
+
+    public void RemoveEffect(eStatusEffect eff)
+    {
+        state.statusHandler.RemoveStatus(eff);
+    }
+
+    public Area2D GetTargetArea()
+    {
+        return GetNode<Area2D>("Attackable");
     }
 }
 

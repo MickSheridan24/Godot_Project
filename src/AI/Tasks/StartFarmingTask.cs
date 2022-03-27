@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+using System.Linq;
 using Mavisithor_Beaconizath.src.Interfaces;
 
 public class StartFarmingTask : ITask
@@ -5,36 +7,43 @@ public class StartFarmingTask : ITask
     private ICanDoLabor actor;
     private Farm farm;
 
+    public IEnumerable<IOrder> Orders { get; set; }
+
+    private TickOrder cooldownTick;
+
     public StartFarmingTask(ICanDoLabor actor, Farm farm)
     {
         this.actor = actor;
         this.farm = farm;
-    }
-    public bool CanExecute()
-    {
-        return actor.Position == farm.Position();
-    }
 
-    public bool WhenCannotExecute()
-    {
-        return false;
+
+        cooldownTick = new TickOrder()
+        {
+            order = new StandByOrder(() => true),
+            ticks = 10,
+            defaultTicks = 10,
+            complete = true
+        };
+
+        Orders = new List<IOrder>(){
+            new StandByOrder(() => !cooldownTick.complete),
+            new FarmOrder(actor.state.player, farm, CanExecute),
+            new SetDestinationOrder(actor as IMove, farm.Position(), () => actor is IMove)
+        };
     }
 
     public bool Execute()
     {
-        var farmOrder = new FarmOrder(actor.state.player, farm);
+        return Orders.Any(o => o.Execute());
+    }
 
-        var tickOrder = new TickOrder()
-        {
-            order = farmOrder,
-            ticks = 1,
-            defaultTicks = 1,
-            complete = false
-        };
+    public bool IsComplete()
+    {
+        return false;
+    }
 
-        var continuousTask = new ContinuousTask(() => actor.Position == farm.Position(), tickOrder, actor.state.tickHandler);
-        actor.state.tickHandler.AddOrder(tickOrder);
-        actor.state.continuousActionHandler.Add(continuousTask);
-        return true;
+    private bool CanExecute()
+    {
+        return actor.GlobalPosition == farm.Position();
     }
 }

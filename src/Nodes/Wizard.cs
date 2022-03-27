@@ -18,8 +18,6 @@ public class Wizard : BaseActorNode, ISelectable, IHaveHealth, IMove, IHaveRunti
     public string Description => state.Description;
     public Vector2 size => new Vector2(32, 32);
 
-
-
     //overrides
 
     public override void _Process(float d)
@@ -114,11 +112,6 @@ public class Wizard : BaseActorNode, ISelectable, IHaveHealth, IMove, IHaveRunti
     public void HandleCollision(KinematicCollision2D collision)
     {
         var collider = collision.Collider;
-
-        /*if (collider is Enemy)
-		{
-			Damage((collider as Enemy).GetDamage, eDamageType.PHYSICAL);
-		}*/
     }
 
     public void Damage(int power, eDamageType type)
@@ -224,6 +217,14 @@ public class Wizard : BaseActorNode, ISelectable, IHaveHealth, IMove, IHaveRunti
 
     public void DeHighlightTarget()
     {
+
+
     }
+
+    public Area2D GetTargetArea()
+    {
+        return GetNode<Area2D>("Attackable");
+    }
+
 }
 

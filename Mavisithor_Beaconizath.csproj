@@ -18,12 +18,15 @@
     <Compile Include="src\AI\Orders/AttackOrder.cs" />
     <Compile Include="src\AI\Tasks\DoNothingTask.cs" />
     <Compile Include="src\Interfaces\ICanAttack.cs" />
+    <Compile Include="src\Interfaces\IEnemySpawner.cs" />
     <Compile Include="src\AI\Tasks/AttackTask.cs" />
     <Compile Include="src\Nodes\NPCs\Laborer.cs" />
     <Compile Include="src\Nodes\NPCs\Soldier.cs" />
+    <Compile Include="src\Nodes\Structures\TowerNode.cs" />
     <Compile Include="src\UILogic\UIHighlight.cs" />
     <Compile Include="src\Nodes\GroupSelection.cs" />
     <Compile Include="src\StateManagement\EntityRegistry.cs" />
+    <Compile Include="src\StateManagement\Spawners\ZombieSpawner.cs" />
     <Compile Include="src\StateManagement\EntityFinder.cs" />
     <Compile Include="src\Interfaces\IHaveSpawnArea.cs" />
     <Compile Include="src\AI\Orders\FarmOrder.cs" />
@@ -108,8 +111,10 @@
     <Compile Include="src\Models\Spells\FarmSpell.cs" />
     <Compile Include="src\Models\Projectiles\FireballProjectile.cs" />
     <Compile Include="src\Models\Projectiles\LightningProjectile.cs" />
+    <Compile Include="src\Models\Projectiles\BlizzardProjectile.cs" />
     <Compile Include="src\Models\StatusEffects\JoltedEffect.cs" />
     <Compile Include="src\Models\StatusEffects\IntangibleEffect.cs" />
+    <Compile Include="src\Models\StatusEffects\FreezingEffect.cs" />
     <Compile Include="src\Models\Archetypes\GoodWizard.cs" />
     <Compile Include="src\Models\SpellCastResult.cs" />
     <Compile Include="src\Models\VectorTarget.cs" />
@@ -118,6 +123,7 @@
     <Compile Include="src\Interfaces\ISelectable.cs" />
     <Compile Include="src\Interfaces\ISpell.cs" />
     <Compile Include="src\Interfaces\IHaveRuntime.cs" />
+    <Compile Include="src\Interfaces\ICanFreeze.cs" />
     <Compile Include="src\Interfaces\IProjectile.cs" />
     <Compile Include="src\Interfaces\IMove.cs" />
     <Compile Include="src\Interfaces\ITarget.cs" />

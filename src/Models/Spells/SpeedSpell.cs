@@ -17,7 +17,7 @@ public class SpeedSpell : Spell, ISpell
 
         if (stats.speed.current == stats.speed.standard)
         {
-            stats.speed.current *= 2;
+            stats.speed.AddEffect("speedBoost", (int i) => i * 2, true);
             stats.tickHandler.AddOrder(new EndBuffOrder(stats.speed), 10);
         }
     }

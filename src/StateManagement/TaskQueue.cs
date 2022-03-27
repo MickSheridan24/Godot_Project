@@ -22,16 +22,13 @@ public class TaskQueue
         {
             foreach (var key in dict.Keys)
             {
-                if (dict[key].CanExecute())
-                {
-                    if (dict[key].Execute())
-                    {
-                        keysToRemove.Add(key);
-                    }
-                }
-                else if (dict[key].WhenCannotExecute())
+                if (dict[key].IsComplete())
                 {
                     keysToRemove.Add(key);
+                }
+                else
+                {
+                    dict[key].Execute();
                 }
             }
             foreach (var key in keysToRemove)

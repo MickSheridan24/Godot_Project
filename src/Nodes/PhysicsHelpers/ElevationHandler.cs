@@ -44,7 +44,7 @@ public class ElevationHandler
 
     public void HandleElevation(int customLevel = -1)
     {
-        var currentElev = customLevel == -1 ? runtime.World.GetElevation(subject.Position)
+        var currentElev = customLevel == -1 ? runtime.World.GetElevation(subject.GlobalPosition)
                                             : (eCollisionLayers)customLevel;
 
         if (Level != currentElev && !subject.isFallDisabled)

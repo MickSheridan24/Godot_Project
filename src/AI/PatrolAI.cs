@@ -19,17 +19,17 @@ public class PatrolAI : IAI
 
     public IOrder Request(EnemyState enemyState, float d)
     {
-        if (node.destination != node.Position && node.CanMove())
+        if (node.destination != node.GlobalPosition && node.CanMove())
         {
             return new MoveOrder(node, d);
         }
         else if (node.CanMove())
         {
-            return new SetDestinationOrder(node, GetNewDest());
+            return new SetDestinationOrder(node, GetNewDest(), () => true);
         }
         else
         {
-            return new StandByOrder();
+            return new StandByOrder(() => true);
         }
     }
 
@@ -38,6 +38,6 @@ public class PatrolAI : IAI
         flip = !flip;
         var flipV = flip ? new Vector2(-1, -1) : new Vector2(1, 1);
 
-        return node.Position + (diff * flipV * dir);
+        return node.GlobalPosition + (diff * flipV * dir);
     }
 }

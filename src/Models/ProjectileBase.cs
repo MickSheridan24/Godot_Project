@@ -14,6 +14,7 @@ public class ProjectileBase
     public IProjectileNode node { get; set; }
 
     public SpriteTheme theme => new SpriteTheme();
+    public int? duration { get; set; }
 
 
 
@@ -29,6 +30,7 @@ public class ProjectileBase
     protected void SetEffectRadius(int r)
     {
         (node.effectRadius.GetNode<CollisionShape2D>("CollisionShape2D").Shape as CircleShape2D).Radius = r;
+        node.effectRadius.Update();
     }
 
     protected IEnumerable<Node> FindEffected<T>(Node exclude = null)

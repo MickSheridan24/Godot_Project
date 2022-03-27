@@ -5,6 +5,9 @@ public class Soldier : NPC, ICanAttack
 {
     protected PackedScene snModel => (PackedScene)ResourceLoader.Load("res://scenes/Models/SoldierModel.tscn");
 
+
+
+
     public override void _Ready()
     {
         base._Ready();

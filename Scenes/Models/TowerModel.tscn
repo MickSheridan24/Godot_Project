@@ -1,4 +1,4 @@
-[gd_scene load_steps=23 format=2]
+[gd_scene load_steps=20 format=2]
 
 [ext_resource path="res://addons/regular_polygon2d_node/RegularPolygon2D.gd" type="Script" id=1]
 [ext_resource path="res://src/Shaders/actor_shader_basic.tres" type="Shader" id=2]
@@ -65,15 +65,6 @@ colors = PoolColorArray( 0, 0, 0, 1 )
 [sub_resource type="GradientTexture" id=17]
 gradient = SubResource( 16 )
 
-[sub_resource type="RectangleShape2D" id=18]
-extents = Vector2( 23.5969, 18.2482 )
-
-[sub_resource type="CircleShape2D" id=19]
-radius = 52.0914
-
-[sub_resource type="RectangleShape2D" id=20]
-extents = Vector2( 23.4395, 55.0593 )
-
 [node name="Node2D" type="Node2D"]
 material = SubResource( 1 )
 position = Vector2( 0, -0.943878 )
@@ -128,22 +119,3 @@ polygon_color = Color( 0.376471, 0.333333, 0.211765, 1 )
 polygon_texture = SubResource( 14 )
 border_texture = SubResource( 17 )
 border_size = 3.0
-
-[node name="Collidable" type="StaticBody2D" parent="."]
-position = Vector2( -0.314616, 0 )
-
-[node name="Collision" type="CollisionShape2D" parent="Collidable"]
-position = Vector2( 0.367188, 59.9361 )
-shape = SubResource( 18 )
-
-[node name="SpawnArea" type="Area2D" parent="."]
-
-[node name="Spawn" type="CollisionShape2D" parent="SpawnArea"]
-position = Vector2( -1.25884, 62.2957 )
-shape = SubResource( 19 )
-
-[node name="SelectableArea" type="Area2D" parent="."]
-
-[node name="SelectionArea" type="CollisionShape2D" parent="SelectableArea"]
-position = Vector2( 0.524503, 26.9005 )
-shape = SubResource( 20 )

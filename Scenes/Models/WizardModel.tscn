@@ -38,7 +38,7 @@ colors = PoolColorArray( 0, 0, 0, 1 )
 [sub_resource type="GradientTexture" id=7]
 gradient = SubResource( 6 )
 
-[node name="WizardModel" type="Node2D"]
+[node name="WizardModel" type="KinematicBody2D"]
 material = SubResource( 2 )
 
 [node name="Hat" type="Node2D" parent="."]

@@ -7,8 +7,7 @@ public class BaseActorNode : KinematicBody2D
     public Runtime runtime => GetParent<IHaveRuntime>().runtime;
     public BaseActorState state { get; set; }
 
-
-
+    protected bool IsDead { get; set; }
     //NodeInfo
     protected WeakRef weakref;
 
@@ -16,7 +15,7 @@ public class BaseActorNode : KinematicBody2D
 
     private bool active;
 
-    public Node2D Model => GetNode<Node2D>("Model");
+    public KinematicBody2D Model => GetNode<KinematicBody2D>("Model");
 
     public CollisionShape2D ModelCollision => Model.HasNode("Collision") ? Model.GetNode<CollisionShape2D>("Collision") : null;
     public CollisionShape2D LocalCollision { get => GetNode<CollisionShape2D>("Collision"); set => AddChild(value); }
@@ -59,7 +58,7 @@ public class BaseActorNode : KinematicBody2D
 
     public bool MovingTarget { get; set; }
 
-
+    public int Radius => 60;
 
     //Elevateable
 
@@ -89,7 +88,7 @@ public class BaseActorNode : KinematicBody2D
 
     public bool IsFreed()
     {
-        return weakref?.GetRef() == null;
+        return IsDead || weakref?.GetRef() == null;
     }
 
 

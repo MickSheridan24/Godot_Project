@@ -19,27 +19,34 @@ public class Moveable
             GD.Print("Debugging Movement, " + d);
         }
         KinematicCollision2D collision;
-        if (subject.Position != subject.destination)
-        {
-            var delta = (subject.Position.DirectionTo(subject.destination)) * d * subject.speed;
 
-            if ((subject.destination.Rounded() - (subject.Position + delta).Rounded()).Abs() <= new Vector2(1, 1))
+        var dest = subject.destination;
+
+        if (subject.Position != dest)
+        {
+            var delta = (subject.Position.DirectionTo(dest)) * d * subject.speed;
+
+            if ((dest.Rounded() - (subject.Position + delta).Rounded()).Abs() <= new Vector2(1, 1))
             {
-                collision = subject.MoveAndCollide(subject.destination - subject.Position);
-                if (subject.Position != subject.destination)
+                collision = subject.MoveAndCollide(dest - subject.Position);
+
+
+                if (subject.Position != dest)
                 {
-                    subject.Position = subject.destination;
+                    subject.Position = dest;
                 }
                 moving = false;
             }
             else
             {
                 collision = subject.MoveAndCollide(delta);
+
                 moving = true;
             }
             if (collision != null)
             {
                 subject.HandleCollision(collision);
+
                 moving = false;
             }
         }

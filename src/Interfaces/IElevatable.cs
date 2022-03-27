@@ -11,6 +11,7 @@ public interface IElevatable
 
     bool GetCollisionMaskBit(int n);
     Vector2 Position { get; set; }
+    Vector2 GlobalPosition { get; set; }
 
     void Elevate(eCollisionLayers level);
 

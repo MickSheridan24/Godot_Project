@@ -5,6 +5,8 @@ public class VectorTarget : ITarget
     private Vector2 position { get; set; }
     public bool MovingTarget { get; set; }
 
+    public int Radius => 0;
+
     public eTeam Team => eTeam.NEUTRAL;
 
     public VectorTarget(Vector2 v)
@@ -17,6 +19,8 @@ public class VectorTarget : ITarget
     {
         return position;
     }
+
+
 
     public bool IsFreed()
     {
@@ -39,5 +43,10 @@ public class VectorTarget : ITarget
 
     public void DeHighlightTarget()
     {
+    }
+
+    public Area2D GetTargetArea()
+    {
+        return null;
     }
 }

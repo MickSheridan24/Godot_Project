@@ -2,6 +2,7 @@
 public interface ISufferStatusEffects
 {
 
+    BaseActorState state { get; }
 
     void TakeDamage(int amount);
     void BecomeIntangible();
