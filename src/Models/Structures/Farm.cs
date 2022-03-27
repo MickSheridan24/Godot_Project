@@ -56,12 +56,6 @@ public class Farm : IStructure, IMenuState
         return;
     }
 
-    private void OverrideSpriteColor()
-    {
-        var theme = new SpriteTheme();
-        var defaultColor = theme.cEnemy;
-        node.sprite.Modulate = theme.cFarm;
-    }
 
     public void ConfigureButtons(PartialMenu partialMenu)
     {
@@ -86,7 +80,7 @@ public class Farm : IStructure, IMenuState
 
     public bool HandleDamage(int damage)
     {
-        healthStat.current -= damage;
+        healthStat.FlatChange(-1 * damage);
         return healthStat.current > 0;
     }
     public void AddStatus(eStatusEffect s, double duration)

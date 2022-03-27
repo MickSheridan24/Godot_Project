@@ -7,7 +7,7 @@ public class FireballProjectile : ProjectileBase, IProjectile
     {
         projectileType = eProjectileType.FIREBALL;
         speed = new Vector2(400, 400);
-        range = new Vector2(300, 300);
+        range = new Vector2(500, 500);
 
         damage = 300;
     }

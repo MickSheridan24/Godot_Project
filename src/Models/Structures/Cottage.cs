@@ -104,7 +104,7 @@ public class Cottage : IStructure, IMenuState
 
     public bool HandleDamage(int damage)
     {
-        healthStat.current -= damage;
+        healthStat.FlatChange(-1 * damage);
         return healthStat.current > 0;
     }
     public ITask GetFriendlyTask(BaseActorNode node, StructureNode self)

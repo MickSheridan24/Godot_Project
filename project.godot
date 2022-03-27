@@ -127,10 +127,6 @@ BUTTON_WHEEL_DOWN={
 2d_physics/layer_4="Inert"
 2d_physics/layer_5="Intangible"
 
-[mono]
-
-debugger_agent/wait_for_debugger=true
-
 [rendering]
 
 environment/default_environment="res://default_env.tres"

@@ -3,7 +3,7 @@ using Godot;
 public class ZombieSpawner : IEnemySpawner
 {
 
-    private int Threshold = 10;
+    private int Threshold = 1;
     private int TotalCount = 0;
     public World World { get; set; }
     public EntityRegistry Registry { get; set; }
@@ -15,7 +15,7 @@ public class ZombieSpawner : IEnemySpawner
         Threshold--;
         if (Threshold <= 0)
         {
-            Threshold = 10;
+            Threshold = 1;
             return true;
         }
         return false;

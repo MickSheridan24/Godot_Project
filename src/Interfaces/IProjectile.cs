@@ -10,6 +10,8 @@ public interface IProjectile
     Vector2 start { get; set; }
     Vector2 range { get; set; }
 
+    int? duration { get; set; }
+
     int damage { get; set; }
 
     void HandleImpact(KinematicCollision2D collision);

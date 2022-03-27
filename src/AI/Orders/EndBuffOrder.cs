@@ -10,7 +10,6 @@ public class EndBuffOrder : IOrder
 
     public bool Execute()
     {
-        stat.current = stat.standard;
         return true;
     }
 }

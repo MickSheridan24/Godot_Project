@@ -59,6 +59,7 @@ public enum eStatusEffect
 {
     JOLTED,
     BURNING,
+    FREEZING,
     INTANGIBLE
 }
 

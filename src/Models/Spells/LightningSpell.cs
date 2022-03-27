@@ -3,6 +3,7 @@ using Godot;
 
 public class LightningSpell : Spell, ISpell
 {
+    public static int effectRadius = 1000;
     public LightningSpell()
     {
         name = "Cast Lightning";
@@ -12,11 +13,14 @@ public class LightningSpell : Spell, ISpell
     public void Cast(Wizard caster)
     {
         var target = caster.runtime.RightTarget;
-        var targetPos = target?.GetTargetPosition() ?? caster.GlobalPosition + new Vector2(1, 1);
-        var projectileDetails = new LightningProjectile(20)
+
+        var pos = caster.ToLocal(caster.Position);
+
+        var targetPos = target != null ? caster.ToLocal(target.GetTargetPosition()) : caster.GlobalPosition + new Vector2(1, 1);
+        var projectileDetails = new LightningProjectile(6)
         {
-            direction = caster.GlobalPosition.GetDirectionTo(target.GetTargetPosition()),
-            start = caster.GlobalPosition,
+            direction = pos.DirectionTo(targetPos),
+            start = pos,
             damage = 100
         };
         caster.CreateProjectile(projectileDetails);
