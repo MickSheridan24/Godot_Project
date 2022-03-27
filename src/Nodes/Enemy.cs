@@ -4,7 +4,8 @@ using System.Collections.Generic;
 using System.Linq;
 
 public class Enemy : BaseActorNode, IElevatable, IMove, ITarget, IDamageable, IHaveRuntime,
-                     IConductElectricity, IFreeable, ISufferStatusEffects, IHaveHealth, IHaveSize, ISelectable, ICanAttack
+                     IConductElectricity, IFreeable, ISufferStatusEffects, IHaveHealth, IHaveSize, ISelectable,
+                      ICanAttack, ICanFreeze
 {
     public string name { get; set; }
 
@@ -45,10 +46,12 @@ public class Enemy : BaseActorNode, IElevatable, IMove, ITarget, IDamageable, IH
     {
         destination = Position;
         isFallDisabled = false;
-        speed = new Vector2(40, 40);
+        speed = new Vector2(140, 140);
         moveable = new Moveable(this);
         MovingTarget = true;
         DamageStateCounter = 0;
+
+        Model.Material = ((Material)Model.GetMaterial().Duplicate());
 
         weakref = WeakRef(this);
     }
@@ -127,6 +130,8 @@ public class Enemy : BaseActorNode, IElevatable, IMove, ITarget, IDamageable, IH
     {
         if (!state.HandleDamage(damage))
         {
+            runtime.playerState.bank.knowledge++;
+            runtime.playerState.bank.insight++;
             ExecQueueFree();
         }
     }
@@ -176,10 +181,6 @@ public class Enemy : BaseActorNode, IElevatable, IMove, ITarget, IDamageable, IH
         if (collider is TileMap)
         {
             HandleTileCollision(collision);
-        }
-        if (collider is Wizard)
-        {
-            (collider as Wizard).Damage(GetDamage, eDamageType.PHYSICAL);
         }
     }
 
@@ -279,5 +280,10 @@ public class Enemy : BaseActorNode, IElevatable, IMove, ITarget, IDamageable, IH
     public Area2D GetTargetArea()
     {
         return GetNode<Area2D>("Attackable");
+    }
+
+    public void AddFreezingEffect(int dur)
+    {
+        state.statusHandler.AddStatus(new FreezingEffec)
     }
 }

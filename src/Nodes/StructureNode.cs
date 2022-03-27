@@ -3,10 +3,10 @@ using Godot;
 using System;
 using System.Linq;
 using System.Collections.Generic;
-public class StructureNode : Node2D, ISelectable, ITarget, IHaveRuntime, IHaveSize, IHaveSpawnArea, IHaveHealth, IDamageable, ISufferStatusEffects
+public class StructureNode : Node2D, ISelectable, ITarget, IHaveRuntime,
+ IHaveSize, IHaveSpawnArea, IHaveHealth, IDamageable, ISufferStatusEffects
 {
     private WeakRef weakref;
-
 
     public IStructure state { get; set; }
     public StaticBody2D area => GetNode<StaticBody2D>("Collidable");
