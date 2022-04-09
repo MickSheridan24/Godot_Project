@@ -21,7 +21,7 @@ public class SimpleProjectile : KinematicBody2D, IProjectileNode
 
 
     private Vector2 remainingDistance;
-    private int? duration;
+    protected int? duration;
 
     public void Config(IProjectile projectileDetails, ICaster wiz)
     {
@@ -51,16 +51,20 @@ public class SimpleProjectile : KinematicBody2D, IProjectileNode
     {
         HandlePoint();
     }
-    public override void _Process(float d)
-    {
-        HandleOther();
-        HandleRayCast();
-    }
+
     public override void _PhysicsProcess(float d)
     {
         if (remainingDistance > Vector2.Zero)
         {
             HandleMove(d);
+        }
+
+        HandleOther();
+        HandleRayCast();
+        duration = state.duration;
+        if (duration <= 0)
+        {
+            ExecQueueFree();
         }
     }
 

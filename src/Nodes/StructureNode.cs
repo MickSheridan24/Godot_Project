@@ -4,7 +4,7 @@ using System;
 using System.Linq;
 using System.Collections.Generic;
 public class StructureNode : Node2D, ISelectable, ITarget, IHaveRuntime,
- IHaveSize, IHaveSpawnArea, IHaveHealth, IDamageable, ISufferStatusEffects
+ IHaveSize, IHaveSpawnArea, IHaveHealth, IDamageable
 {
     private WeakRef weakref;
 

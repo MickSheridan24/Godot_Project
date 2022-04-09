@@ -9,7 +9,6 @@ public class Enemy : BaseActorNode, IElevatable, IMove, ITarget, IDamageable, IH
 {
     public string name { get; set; }
 
-    public Vector2 speed { get; set; }
 
     private int DamageStateCounter;
 
@@ -40,18 +39,17 @@ public class Enemy : BaseActorNode, IElevatable, IMove, ITarget, IDamageable, IH
 
     RayCast2D ICanAttack.RayCast => GetNode<RayCast2D>("RayCast");
 
-
+    public Vector2 speed => state.speed.CalcCurrent().ToVector();
 
     public override void _Ready()
     {
         destination = Position;
         isFallDisabled = false;
-        speed = new Vector2(140, 140);
         moveable = new Moveable(this);
         MovingTarget = true;
         DamageStateCounter = 0;
 
-        Model.Material = ((Material)Model.GetMaterial().Duplicate());
+        Model.Material = ((Material)Model.Material.Duplicate());
 
         weakref = WeakRef(this);
     }
@@ -284,6 +282,6 @@ public class Enemy : BaseActorNode, IElevatable, IMove, ITarget, IDamageable, IH
 
     public void AddFreezingEffect(int dur)
     {
-        state.statusHandler.AddStatus(new FreezingEffec)
+        state.statusHandler.AddStatus(new FreezingEffect());
     }
 }
