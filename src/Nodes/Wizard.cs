@@ -91,6 +91,9 @@ public class Wizard : BaseActorNode, ISelectable, IHaveHealth, IMove, IHaveRunti
             case eProjectileType.LIGHTNING:
                 CreateSimpleProjectile(projectileDetails);
                 break;
+            case eProjectileType.BLIZZARD:
+                CreateSimpleProjectile(projectileDetails);
+                break;
             default:
                 break;
         }
@@ -100,7 +103,7 @@ public class Wizard : BaseActorNode, ISelectable, IHaveHealth, IMove, IHaveRunti
     {
         var projectile = (SimpleProjectile)snSimpleProjectile.Instance();
         projectile.Config(projectileDetails, this);
-        AddChild(projectile);
+        runtime.World.AddChild(projectile);
     }
 
 

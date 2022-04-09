@@ -23,7 +23,8 @@ public enum eSpell
     EARTH_WALL,
     SPEED,
     CREATE_GRASS,
-    CREATE_FARM
+    CREATE_FARM,
+    BLIZZARD
 }
 public enum eDamageType
 {
@@ -36,7 +37,8 @@ public enum eDamageType
 public enum eProjectileType
 {
     FIREBALL,
-    LIGHTNING
+    LIGHTNING,
+    BLIZZARD
 }
 
 

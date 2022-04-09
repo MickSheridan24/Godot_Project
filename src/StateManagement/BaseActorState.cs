@@ -54,7 +54,7 @@ public class BaseActorState
 
     public bool HandleDamage(int damage)
     {
-        health.current -= damage;
+        health.FlatChange(-1 * damage);
         return health.current > 0;
     }
     public void AddStatus(eStatusEffect s, double duration)

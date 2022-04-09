@@ -109,12 +109,15 @@
     <Compile Include="src\Models\Spells\GrassSpell.cs" />
     <Compile Include="src\Models\Spells\SpeedSpell.cs" />
     <Compile Include="src\Models\Spells\FarmSpell.cs" />
+    <Compile Include="src\Models\Spells\BlizzardSpell.cs" />
     <Compile Include="src\Models\Projectiles\FireballProjectile.cs" />
     <Compile Include="src\Models\Projectiles\LightningProjectile.cs" />
     <Compile Include="src\Models\Projectiles\BlizzardProjectile.cs" />
     <Compile Include="src\Models\StatusEffects\JoltedEffect.cs" />
     <Compile Include="src\Models\StatusEffects\IntangibleEffect.cs" />
     <Compile Include="src\Models\StatusEffects\FreezingEffect.cs" />
+
+    <Compile Include="src\Models\Books\*" />
     <Compile Include="src\Models\Archetypes\GoodWizard.cs" />
     <Compile Include="src\Models\SpellCastResult.cs" />
     <Compile Include="src\Models\VectorTarget.cs" />
@@ -126,6 +129,7 @@
     <Compile Include="src\Interfaces\ICanFreeze.cs" />
     <Compile Include="src\Interfaces\IProjectile.cs" />
     <Compile Include="src\Interfaces\IMove.cs" />
+    <Compile Include="src\Interfaces\ITech.cs" />
     <Compile Include="src\Interfaces\ITarget.cs" />
     <Compile Include="src\Interfaces\IOrder.cs" />
     <Compile Include="src\Interfaces\IFreeable.cs" />

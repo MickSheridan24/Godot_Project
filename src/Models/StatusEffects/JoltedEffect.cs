@@ -7,7 +7,7 @@ public class JoltedEffect : StatusEffect, IStatusEffect
     {
         maxDuration = 10;
     }
-    public void Enact(ISufferStatusEffects target)
+    public bool Enact(ISufferStatusEffects target)
     {
         tick--;
         if (tick <= 0)
@@ -15,6 +15,7 @@ public class JoltedEffect : StatusEffect, IStatusEffect
             target.TakeDamage(5);
         }
         tick = 60;
+        return true;
     }
 
     public void Reverse(ISufferStatusEffects target)

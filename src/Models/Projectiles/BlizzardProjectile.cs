@@ -7,7 +7,8 @@ public class BlizzardProjectile : ProjectileBase, IProjectile
 
     public void ConfigureNode()
     {
-        duration = 100;
+        projectileType = eProjectileType.BLIZZARD;
+        duration = 1000;
         var dest = start;
         SetEffectRadius(700);
         node.sprite.Set("modulate", theme.Blizzard);
@@ -29,10 +30,11 @@ public class BlizzardProjectile : ProjectileBase, IProjectile
             }
 
         }
+        duration--;
     }
 
     public void HandleRayCollision()
     {
-        throw new System.NotImplementedException();
+        return;
     }
 }

@@ -202,10 +202,6 @@ public abstract class NPC : BaseActorNode, ISelectable, IHaveHealth, IMove, IHav
 
     public Area2D GetTargetArea()
     {
-        if (!HasNode("Attackable"))
-        {
-            int x = 1;
-        }
         return GetNode<Area2D>("Attackable");
     }
 }

@@ -32,7 +32,6 @@ public class Cottage : IStructure, IMenuState
     public void ConfigureNode(StructureNode structureNode)
     {
         this.node = structureNode;
-        statusHandler = new StatusHandler(node);
         OverrideModel();
     }
 

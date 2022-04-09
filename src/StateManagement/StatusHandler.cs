@@ -15,9 +15,14 @@ public class StatusHandler
 
     public void HandleStatuses()
     {
+        var toRemove = new List<IStatusEffect>();
         foreach (var status in statuses)
         {
-            status.Enact(node);
+            if (!status.Enact(node))
+            {
+                status.Reverse(node);
+                toRemove.Add(status);
+            }
         }
     }
 

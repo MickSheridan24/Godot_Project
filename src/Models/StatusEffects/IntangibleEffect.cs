@@ -7,13 +7,14 @@ public class IntangibleEffect : StatusEffect, IStatusEffect
         maxDuration = 10;
         enacted = false;
     }
-    public void Enact(ISufferStatusEffects target)
+    public bool Enact(ISufferStatusEffects target)
     {
         if (!enacted)
         {
             target.BecomeIntangible();
             enacted = true;
         }
+        return true;
     }
 
     public void Reverse(ISufferStatusEffects target)
